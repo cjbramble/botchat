@@ -12,3 +12,5 @@ function.zip
 *.tfstate*
 __pycache__/
 .venv/
+
+/Bot_Chat_Build_Guide
