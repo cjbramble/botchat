@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Observability and CI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-step">
+<div class="shell">
+  <aside class="rail" aria-label="Guide pages">
+    <a class="brand" href="index.html">botchat<small>a microservices build guide</small></a>
+    <div class="progress" aria-live="polite">
+      <div class="progress-row"><span>progress</span><span class="prog-text">0 / 16 steps</span></div>
+      <div class="bar"><span class="prog-bar"></span></div>
+    </div>
+    <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html" aria-current="page" class="active"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+    </ol></nav>
+    <p class="rail-foot">Progress is saved in this browser only.</p>
+  </aside>
+
+  <div class="col">
+    <details class="mobile-nav">
+      <summary>All pages · <span class="prog-text">0 / 16 steps</span></summary>
+      <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html" aria-current="page" class="active"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+      </ol></nav>
+    </details>
+    <div class="content-grid">
+      <main>
+        <article>
+          <header class="page-head"><p class="kicker"><span class="step-no">Step 14</span><span class="meta-time">1–2 weeks</span></p><h1>Observability and CI</h1><p class="lede">Follow one guess through every service in a single trace, and make every push prove that all four parts still build and pass their tests.</p><label class="mark"><input type="checkbox" data-step="step-14.html"> Mark this step done</label></header>
+<p>A trace that follows one bot's guess from its WebSocket, through gRPC, SNS, SQS and the Lambda, and back into chat is the best demo this project can produce. CI makes sure that demo keeps working.</p>
+<div class="admonition learn">
+<p class="admonition-title">Learn first</p>
+<ul>
+<li><a href="https://opentelemetry.io/docs/concepts/" target="_blank" rel="noopener">OpenTelemetry concepts</a>: traces, spans, context propagation, the <code>traceparent</code> header.</li>
+<li>Per language: <a href="https://opentelemetry.io/docs/languages/go/" target="_blank" rel="noopener">Go</a> and <a href="https://pkg.go.dev/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc" target="_blank" rel="noopener">otelgrpc</a>; <a href="https://opentelemetry.io/docs/languages/erlang/" target="_blank" rel="noopener">Erlang/Elixir</a>; <a href="https://opentelemetry.io/docs/languages/python/" target="_blank" rel="noopener">Python</a>.</li>
+<li><a href="https://www.jaegertracing.io/docs/latest/getting-started/" target="_blank" rel="noopener">Jaeger getting started</a> to view traces locally.</li>
+<li><a href="https://docs.github.com/en/actions/writing-workflows/quickstart" target="_blank" rel="noopener">GitHub Actions quickstart</a> and <a href="https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore" target="_blank" rel="noopener">path filters</a>.</li>
+</ul>
+</div>
+<h2 id="s14-1-run-jaeger-locally-full-code">14.1 Run Jaeger locally (full code)</h2>
+<div class="language-yaml hl has-file"><div class="file">docker-compose.yml <span class="file-note">add a service</span></div><pre><span></span><code><span class="w">  </span><span class="nt">jaeger</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jaegertracing/jaeger:latest</span><span class="w">   </span><span class="c1"># pin a 2.x tag from Docker Hub</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"16686:16686"</span><span class="w">                    </span><span class="c1"># UI: http://localhost:16686</span>
+</code></pre></div>
+<p>Every service exports to <code>http://jaeger:4317</code> (OTLP over gRPC) via the standard <code>OTEL_EXPORTER_OTLP_ENDPOINT</code> environment variable, and names itself with <code>OTEL_SERVICE_NAME</code>.</p>
+<h2 id="s14-2-trace-the-game-full-code">14.2 Trace the game (full code)</h2>
+<div class="language-bash hl"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>game
+go<span class="w"> </span>get<span class="w"> </span>go.opentelemetry.io/otel<span class="w"> </span>go.opentelemetry.io/otel/sdk<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc
+</code></pre></div>
+<div class="language-go hl has-file"><div class="file">cmd/server/otel.go</div><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">"context"</span>
+
+<span class="w">    </span><span class="s">"go.opentelemetry.io/otel"</span>
+<span class="w">    </span><span class="s">"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"</span>
+<span class="w">    </span><span class="s">"go.opentelemetry.io/otel/propagation"</span>
+<span class="w">    </span><span class="nx">sdktrace</span><span class="w"> </span><span class="s">"go.opentelemetry.io/otel/sdk/trace"</span>
+<span class="p">)</span>
+
+<span class="c1">// setupTracing reads OTEL_EXPORTER_OTLP_ENDPOINT and OTEL_SERVICE_NAME from the environment.</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">setupTracing</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">shutdown</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">exp</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">otlptracegrpc</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">tp</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">sdktrace</span><span class="p">.</span><span class="nx">NewTracerProvider</span><span class="p">(</span><span class="nx">sdktrace</span><span class="p">.</span><span class="nx">WithBatcher</span><span class="p">(</span><span class="nx">exp</span><span class="p">))</span>
+<span class="w">    </span><span class="nx">otel</span><span class="p">.</span><span class="nx">SetTracerProvider</span><span class="p">(</span><span class="nx">tp</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">otel</span><span class="p">.</span><span class="nx">SetTextMapPropagator</span><span class="p">(</span><span class="nx">propagation</span><span class="p">.</span><span class="nx">TraceContext</span><span class="p">{})</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">tp</span><span class="p">.</span><span class="nx">Shutdown</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Then create the server with a stats handler, and every RPC gets a span whose parent comes from the caller's <code>traceparent</code>:</p>
+<div class="language-go hl"><pre><span></span><code><span class="nx">s</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">grpc</span><span class="p">.</span><span class="nx">NewServer</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">grpc</span><span class="p">.</span><span class="nx">StatsHandler</span><span class="p">(</span><span class="nx">otelgrpc</span><span class="p">.</span><span class="nx">NewServerHandler</span><span class="p">()),</span>
+<span class="w">    </span><span class="nx">grpc</span><span class="p">.</span><span class="nx">UnaryInterceptor</span><span class="p">(</span><span class="nx">unary</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">grpc</span><span class="p">.</span><span class="nx">StreamInterceptor</span><span class="p">(</span><span class="nx">stream</span><span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="s14-3-carry-the-trace-through-sns-and-sqs">14.3 Carry the trace through SNS and SQS</h2>
+<p>gRPC propagates trace context for you. Queues don't: you put it in a message attribute yourself.</p>
+<div class="language-go hl has-file"><div class="file">internal/events/events.go <span class="file-note">in <code>SNSPublisher.Publish</code></span></div><pre><span></span><code><span class="nx">carrier</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">propagation</span><span class="p">.</span><span class="nx">MapCarrier</span><span class="p">{}</span>
+<span class="nx">otel</span><span class="p">.</span><span class="nx">GetTextMapPropagator</span><span class="p">().</span><span class="nx">Inject</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">carrier</span><span class="p">)</span><span class="w"> </span><span class="c1">// adds "traceparent" (and maybe "tracestate")</span>
+
+<span class="nx">attrs</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kt">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">types</span><span class="p">.</span><span class="nx">MessageAttributeValue</span><span class="p">{</span>
+<span class="w">    </span><span class="s">"type"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nx">DataType</span><span class="p">:</span><span class="w"> </span><span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">"String"</span><span class="p">),</span><span class="w"> </span><span class="nx">StringValue</span><span class="p">:</span><span class="w"> </span><span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">Type</span><span class="p">)},</span>
+<span class="p">}</span>
+<span class="k">for</span><span class="w"> </span><span class="nx">k</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">carrier</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">attrs</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">types</span><span class="p">.</span><span class="nx">MessageAttributeValue</span><span class="p">{</span><span class="nx">DataType</span><span class="p">:</span><span class="w"> </span><span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">"String"</span><span class="p">),</span><span class="w"> </span><span class="nx">StringValue</span><span class="p">:</span><span class="w"> </span><span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="nx">v</span><span class="p">)}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>With raw message delivery, SNS passes these attributes to SQS as message attributes (up to 10).</p>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: extract on the other side</p>
+<ul>
+<li><strong>Lambda:</strong> read <code>rec.MessageAttributes["traceparent"].StringValue</code>, put it in a <code>propagation.MapCarrier</code>, call <code>Extract</code>, and start the handler's span from the returned context. Pass that context on, and inject it again into the <code>chat-notices</code> message's attributes.</li>
+<li><strong>Broadway:</strong> set <code>attribute_names: :all</code> and <code>message_attribute_names: :all</code> on <code>BroadwaySQS.Producer</code>, read <code>traceparent</code> from the message metadata, and use <code>:otel_propagator_text_map.extract/1</code> before starting a span in <code>handle_message/3</code>.</li>
+<li><strong>Chat → game:</strong> add OpenTelemetry to the Elixir gRPC client (via an interceptor or by injecting into the call's metadata) so <code>SubmitInput</code> spans link to the bot's message.</li>
+</ul>
+</div>
+<h2 id="s14-4-trace-chat-and-bots">14.4 Trace chat and bots</h2>
+<ul>
+<li><strong>Chat:</strong> add <code>opentelemetry</code>, <code>opentelemetry_api</code>, <code>opentelemetry_exporter</code>, <code>opentelemetry_phoenix</code> and <code>opentelemetry_ecto</code> per the <a href="https://opentelemetry.io/docs/languages/erlang/getting-started/" target="_blank" rel="noopener">Erlang/Elixir getting started guide</a>, and call each instrumentation's <code>setup/0</code> in <code>Application.start/2</code>.</li>
+<li><strong>Bots:</strong> add <code>opentelemetry-sdk</code> and <code>opentelemetry-exporter-otlp</code>, start a span around each <code>speak</code> and <code>take_turn</code> with attributes <code>bot.nick</code>, <code>llm.model</code>, <code>llm.cost_usd</code>, and send the <code>traceparent</code> in the message payload so chat can link to it.</li>
+</ul>
+<p>Log the trace ID on every log line in all three languages. Then a log line leads you straight to its trace.</p>
+<h2 id="s14-5-ci-one-workflow-per-service-full-code">14.5 CI: one workflow per service (full code)</h2>
+<p>Each workflow runs only when its own folder (or the shared contract) changes.</p>
+<div class="language-yaml hl has-file"><div class="file">.github/workflows/game.yml</div><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">game</span>
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">],</span><span class="nt"> paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"game/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"proto/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">".github/workflows/game.yml"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"game/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"proto/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">".github/workflows/game.yml"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bufbuild/buf-action@v1</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">breaking_against</span><span class="p">:</span><span class="w"> </span><span class="s">"${{</span><span class="nv"> </span><span class="s">github.event.repository.clone_url</span><span class="nv"> </span><span class="s">}}#branch=main"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-go@v5</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> go-version-file</span><span class="p">:</span><span class="w"> </span><span class="nv">game/go.mod</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">go vet ./... &amp;&amp; go test -race ./...</span>
+<span class="w">        </span><span class="nt">working-directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">game</span>
+</code></pre></div>
+<div class="language-yaml hl has-file"><div class="file">.github/workflows/chat.yml</div><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chat</span>
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">],</span><span class="nt"> paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"chat/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"proto/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">".github/workflows/chat.yml"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"chat/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"proto/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">".github/workflows/chat.yml"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">services</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:17</span>
+<span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="nv">postgres</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">        </span><span class="nt">ports</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"5432:5432"</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">          </span><span class="no">--health-cmd pg_isready --health-interval 2s --health-retries 20</span>
+<span class="w">    </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">MIX_ENV</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">erlef/setup-beam@v1</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> version-file</span><span class="p">:</span><span class="w"> </span><span class="nv">.mise.toml</span><span class="p p-Indicator">,</span><span class="nt"> version-type</span><span class="p">:</span><span class="w"> </span><span class="nv">strict</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">   </span><span class="c1"># or pin otp-version/elixir-version</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mix deps.get &amp;&amp; mix format --check-formatted &amp;&amp; mix compile --warnings-as-errors &amp;&amp; mix test</span>
+<span class="w">        </span><span class="nt">working-directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chat</span>
+</code></pre></div>
+<div class="language-yaml hl has-file"><div class="file">.github/workflows/bots.yml</div><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bots</span>
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">],</span><span class="nt"> paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"bots/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">".github/workflows/bots.yml"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"bots/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">".github/workflows/bots.yml"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">defaults</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> working-directory</span><span class="p">:</span><span class="w"> </span><span class="nv">bots</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">astral-sh/setup-uv@v6</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uv sync --frozen</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uv run ruff check . &amp;&amp; uv run pytest</span>
+</code></pre></div>
+<div class="language-yaml hl has-file"><div class="file">.github/workflows/infra.yml</div><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">infra</span>
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"infra/**"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">".github/workflows/infra.yml"</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">validate</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">defaults</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> working-directory</span><span class="p">:</span><span class="w"> </span><span class="nv">infra</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hashicorp/setup-terraform@v3</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform fmt -check -recursive</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform init -backend=false &amp;&amp; terraform validate</span>
+</code></pre></div>
+<p>Check each action's README for its current major version before you copy these; they move about once a year. <code>erlef/setup-beam</code> can read versions from a <code>.tool-versions</code> file; if it doesn't accept <code>.mise.toml</code> in your version, pin <code>otp-version</code> and <code>elixir-version</code> directly.</p>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: make CI earn its keep</p>
+<p>Break something on a branch in each service (a failing test, an unformatted file, a renamed proto field) and open a pull request. Each should turn exactly one workflow red. Then add a branch protection rule on <code>main</code> that requires all four checks.</p>
+</div>
+<div class="admonition qa">
+<p class="admonition-title">QA for this step</p>
+<p><strong>Automated</strong></p>
+<ul>
+<li>CI runs every service's tests on each pull request, and all four checks are required on <code>main</code>.</li>
+</ul>
+<p><strong>Manual</strong></p>
+<ul>
+<li>In Jaeger, one level-up shows a single trace from the bot's guess to the <code>***</code> notice.</li>
+</ul>
+<p><strong>Break it on purpose</strong></p>
+<ul>
+<li>Do every <a href="qa.html#chaos-drills">chaos drill</a> once in production and record what happened in your README. Add the <a href="qa.html#monitoring-checks">DLQ alarms</a> and confirm one fires.</li>
+</ul>
+</div>
+<div class="admonition checkpoint">
+<p class="admonition-title">Checkpoint</p>
+<p>Jaeger shows one trace for a level-up that spans game, SNS/SQS, the Lambda and chat; and a failing test in any service turns its pull request check red.</p>
+</div><div class="admonition mvp"><p class="admonition-title">MVP 5 reached: Production-grade</p><p>Run the demo script and pass the QA gate for <a href="mvp.html#mvp-5-production-grade">MVP 5</a> before moving on, then tag it: <code>git tag mvp-5</code>.</p></div>
+        </article>
+        <nav class="pager" aria-label="Previous and next"><a class="prev" href="step-13.html"><span>Previous</span>Deploy</a><a class="next" href="extras.html"><span>Next</span>Stretch goals and sources</a></nav>
+      </main>
+      <aside class="toc-col"><nav class="onpage" aria-label="On this page"><p>On this page</p><ol><li><a href="#s14-1-run-jaeger-locally-full-code">14.1 Run Jaeger locally (full code)</a></li><li><a href="#s14-2-trace-the-game-full-code">14.2 Trace the game (full code)</a></li><li><a href="#s14-3-carry-the-trace-through-sns-and-sqs">14.3 Carry the trace through SNS and SQS</a></li><li><a href="#s14-4-trace-chat-and-bots">14.4 Trace chat and bots</a></li><li><a href="#s14-5-ci-one-workflow-per-service-full-code">14.5 CI: one workflow per service (full code)</a></li></ol></nav></aside>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

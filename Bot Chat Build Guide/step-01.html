@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learn Elixir basics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-step">
+<div class="shell">
+  <aside class="rail" aria-label="Guide pages">
+    <a class="brand" href="index.html">botchat<small>a microservices build guide</small></a>
+    <div class="progress" aria-live="polite">
+      <div class="progress-row"><span>progress</span><span class="prog-text">0 / 16 steps</span></div>
+      <div class="bar"><span class="prog-bar"></span></div>
+    </div>
+    <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html" aria-current="page" class="active"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+    </ol></nav>
+    <p class="rail-foot">Progress is saved in this browser only.</p>
+  </aside>
+
+  <div class="col">
+    <details class="mobile-nav">
+      <summary>All pages · <span class="prog-text">0 / 16 steps</span></summary>
+      <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html" aria-current="page" class="active"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+      </ol></nav>
+    </details>
+    <div class="content-grid">
+      <main>
+        <article>
+          <header class="page-head"><p class="kicker"><span class="step-no">Step 1</span><span class="meta-time">1–2 weeks</span></p><h1>Learn Elixir basics</h1><p class="lede">Learn enough Elixir to build a chat room as a GenServer: pattern matching, processes, OTP and tests.</p><label class="mark"><input type="checkbox" data-step="step-01.html"> Mark this step done</label></header>
+<p>Elixir runs on the BEAM, Erlang's virtual machine. You build systems from many tiny isolated <strong>processes</strong> that only talk by sending messages. That's the same idea as microservices, inside one program, and it's why chat is written in Elixir.</p>
+<div class="admonition learn">
+<p class="admonition-title">Learn first</p>
+<ol>
+<li><a href="https://hexdocs.pm/elixir/introduction.html" target="_blank" rel="noopener">Getting Started guide</a>: basic types, pattern matching, <code>case</code>/<code>cond</code>/<code>with</code>, modules and functions, recursion, <code>Enum</code>, the pipe <code>|&gt;</code>.</li>
+<li><a href="https://hexdocs.pm/elixir/processes.html" target="_blank" rel="noopener">Processes</a>: <code>spawn</code>, <code>send</code>, <code>receive</code>.</li>
+<li>The Mix &amp; OTP guide chapters on <a href="https://hexdocs.pm/elixir/genservers.html" target="_blank" rel="noopener">GenServer</a> and <a href="https://hexdocs.pm/elixir/supervisor-and-application.html" target="_blank" rel="noopener">supervisors</a>.</li>
+<li>Practice: 15–20 exercises on the <a href="https://exercism.org/tracks/elixir" target="_blank" rel="noopener">Exercism Elixir track</a>.</li>
+<li>Skim <a href="https://elixir-lang.org/blog/2026/06/03/elixir-v1-20-0-released/" target="_blank" rel="noopener">what Elixir 1.20's type inference means</a> so new compiler warnings make sense.</li>
+</ol>
+</div>
+<h2 id="s1-1-pattern-matching-in-iex">1.1 Pattern matching in <code>iex</code></h2>
+<p>Open the interactive shell with <code>iex</code> and try these. <code>=</code> is not assignment; it's a <strong>match</strong>.</p>
+<div class="language-elixir hl"><pre><span></span><code><span class="n">iex</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">nick</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s2">"pip"</span><span class="p">}</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s2">"pip"</span><span class="p">}</span>
+<span class="n">iex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">nick</span>
+<span class="s2">"pip"</span>
+<span class="n">iex</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:timeout</span><span class="p">}</span>
+<span class="o">**</span><span class="w"> </span><span class="p">(</span><span class="nc">MatchError</span><span class="p">)</span><span class="w"> </span><span class="n">no</span><span class="w"> </span><span class="n">match</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">right</span><span class="w"> </span><span class="n">hand</span><span class="w"> </span><span class="n">side</span><span class="w"> </span><span class="ss">value</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:timeout</span><span class="p">}</span>
+
+<span class="n">iex</span><span class="o">&gt;</span><span class="w"> </span><span class="s2">"!join"</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">rest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"!join now"</span>
+<span class="n">iex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rest</span>
+<span class="s2">" now"</span>
+
+<span class="n">iex</span><span class="o">&gt;</span><span class="w"> </span><span class="p">%{</span><span class="ss">nick</span><span class="p">:</span><span class="w"> </span><span class="n">n</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">%{</span><span class="ss">nick</span><span class="p">:</span><span class="w"> </span><span class="s2">"vex"</span><span class="p">,</span><span class="w"> </span><span class="ss">level</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+<span class="n">iex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">n</span>
+<span class="s2">"vex"</span>
+</code></pre></div>
+<p>You'll use the string-prefix match constantly: <code>"room:" &lt;&gt; room = socket.topic</code> pulls the room name out of a channel topic.</p>
+<h2 id="s1-2-functions-with-multiple-clauses">1.2 Functions with multiple clauses</h2>
+<p>Elixir picks the first clause whose pattern matches. This replaces most <code>if</code> chains.</p>
+<div class="language-elixir hl"><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Feedback</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">for_guess</span><span class="p">(</span><span class="n">secret</span><span class="p">,</span><span class="w"> </span><span class="n">secret</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:correct</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">for_guess</span><span class="p">(</span><span class="n">secret</span><span class="p">,</span><span class="w"> </span><span class="n">guess</span><span class="p">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">guess</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">secret</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:higher</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">for_guess</span><span class="p">(</span><span class="n">_secret</span><span class="p">,</span><span class="w"> </span><span class="n">_guess</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:lower</span>
+<span class="k">end</span>
+
+<span class="nc">Feedback</span><span class="o">.</span><span class="n">for_guess</span><span class="p">(</span><span class="mi">38</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">)</span><span class="w">  </span><span class="c1">#=&gt; :lower</span>
+</code></pre></div>
+<p>The first clause only matches when both arguments are the same value. <code>when</code> adds a <strong>guard</strong>.</p>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: parse chat commands</p>
+<p>Write <code>Command.parse/1</code> that turns a chat line into a tuple, using only function clauses and string-prefix matches:</p>
+<ul>
+<li><code>"!join"</code> → <code>:join</code></li>
+<li><code>"!start"</code> → <code>:start</code></li>
+<li><code>"42"</code> → <code>{:guess, 42}</code> (use <code>Integer.parse/1</code>)</li>
+<li>anything else → <code>:chat</code></li>
+</ul>
+</div>
+<details class="hint">
+<summary>Hint</summary>
+<p><code>Integer.parse("42")</code> returns <code>{42, ""}</code>; <code>Integer.parse("42abc")</code> returns <code>{42, "abc"}</code>. Match on <code>{n, ""}</code> inside a <code>case</code> to accept only whole numbers.</p>
+</details>
+<h2 id="s1-3-processes-and-messages">1.3 Processes and messages</h2>
+<p>Every process has a mailbox. <code>send</code> drops a message in; <code>receive</code> takes one out.</p>
+<div class="language-elixir hl"><pre><span></span><code><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">  </span><span class="k">receive</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:hello</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="p">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">send</span><span class="p">(</span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="ss">:hi</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">()})</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span><span class="p">)</span>
+
+<span class="n">send</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="ss">:hello</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">()})</span>
+
+<span class="k">receive</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="p">{</span><span class="ss">:hi</span><span class="p">,</span><span class="w"> </span><span class="n">other</span><span class="p">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p">(</span><span class="s2">"got a reply from </span><span class="si">#{</span><span class="n">inspect</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">after</span>
+<span class="w">  </span><span class="mi">1_000</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p">(</span><span class="s2">"no reply"</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Processes share no memory. If one crashes, the others keep running. That's the property the whole chat service relies on.</p>
+<h2 id="s1-4-a-chat-room-as-a-genserver">1.4 A chat room as a GenServer</h2>
+<p>Hand-rolling <code>receive</code> loops gets old fast. A <strong>GenServer</strong> is the standard shape: a process that holds state and handles requests one at a time. Create a practice project:</p>
+<div class="language-bash hl"><pre><span></span><code>mix<span class="w"> </span>new<span class="w"> </span>room_lab<span class="w"> </span>--sup
+<span class="nb">cd</span><span class="w"> </span>room_lab
+</code></pre></div>
+<p>Here is the skeleton. The client API and <code>init/1</code> are done; the two callbacks are yours.</p>
+<div class="language-elixir hl has-file"><div class="file">lib/room_lab/room.ex</div><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">RoomLab.Room</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span>
+
+<span class="w">  </span><span class="c1"># ---- Client API: what other code calls ----</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">start_link</span><span class="p">(</span><span class="n">name</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">join</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="n">nick</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="ss">:join</span><span class="p">,</span><span class="w"> </span><span class="n">nick</span><span class="p">})</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">say</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="n">nick</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="ss">:say</span><span class="p">,</span><span class="w"> </span><span class="n">nick</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">})</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">history</span><span class="p">(</span><span class="n">room</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="ss">:history</span><span class="p">)</span>
+
+<span class="w">  </span><span class="c1"># ---- Server callbacks: run inside the room's own process ----</span>
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="ss">members</span><span class="p">:</span><span class="w"> </span><span class="nc">MapSet</span><span class="o">.</span><span class="n">new</span><span class="p">(),</span><span class="w"> </span><span class="ss">messages</span><span class="p">:</span><span class="w"> </span><span class="p">[]}}</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_call</span><span class="p">({</span><span class="ss">:join</span><span class="p">,</span><span class="w"> </span><span class="n">nick</span><span class="p">},</span><span class="w"> </span><span class="n">_from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="n">state</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">members</span><span class="p">:</span><span class="w"> </span><span class="nc">MapSet</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">members</span><span class="p">,</span><span class="w"> </span><span class="n">nick</span><span class="p">)}}</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_call</span><span class="p">(</span><span class="ss">:history</span><span class="p">,</span><span class="w"> </span><span class="n">_from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">reverse</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">messages</span><span class="p">),</span><span class="w"> </span><span class="n">state</span><span class="p">}</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1"># Exercise: add handle_call({:say, nick, text}, _from, state)</span>
+<span class="k">end</span>
+</code></pre></div>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: implement <code>say</code></p>
+<p>Add a <code>handle_call({:say, nick, text}, _from, state)</code> clause that:</p>
+<ol>
+<li>Replies <code>{:error, :not_joined}</code> if <code>nick</code> isn't a member, without changing state.</li>
+<li>Otherwise prepends <code>{nick, text}</code> to <code>messages</code> and replies <code>:ok</code>.</li>
+<li>Keeps at most 100 messages.</li>
+</ol>
+<p>Why prepend and reverse in <code>history/1</code>? Prepending to a list is O(1); appending is O(n).</p>
+</div>
+<details class="hint">
+<summary>Hint: checking membership</summary>
+<p><code>MapSet.member?(state.members, nick)</code> returns a boolean. Use it in a guard-free <code>if</code>, or split into two clauses with a helper.</p>
+</details>
+<details class="solution">
+<summary>One possible solution</summary>
+<div class="language-elixir hl"><pre><span></span><code><span class="kd">def</span><span class="w"> </span><span class="n">handle_call</span><span class="p">({</span><span class="ss">:say</span><span class="p">,</span><span class="w"> </span><span class="n">nick</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">},</span><span class="w"> </span><span class="n">_from</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="nc">MapSet</span><span class="o">.</span><span class="n">member?</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">members</span><span class="p">,</span><span class="w"> </span><span class="n">nick</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="n">messages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">take</span><span class="p">([{</span><span class="n">nick</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">state</span><span class="o">.</span><span class="n">messages</span><span class="p">],</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="n">state</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">messages</span><span class="p">:</span><span class="w"> </span><span class="n">messages</span><span class="p">}}</span>
+<span class="w">  </span><span class="k">else</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:not_joined</span><span class="p">},</span><span class="w"> </span><span class="n">state</span><span class="p">}</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+</details>
+<h2 id="s1-5-test-it-with-exunit">1.5 Test it with ExUnit</h2>
+<p>Tests are how you'll know each step works. Write them as you go.</p>
+<div class="language-elixir hl has-file"><div class="file">test/room_lab/room_test.exs</div><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">RoomLab.RoomTest</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ExUnit.Case</span><span class="p">,</span><span class="w"> </span><span class="ss">async</span><span class="p">:</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kn">alias</span><span class="w"> </span><span class="nc">RoomLab.Room</span>
+
+<span class="w">  </span><span class="n">setup</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">room</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Room</span><span class="o">.</span><span class="n">start_link</span><span class="p">(</span><span class="s2">"</span><span class="err">#</span><span class="s2">general"</span><span class="p">)</span>
+<span class="w">    </span><span class="p">%{</span><span class="ss">room</span><span class="p">:</span><span class="w"> </span><span class="n">room</span><span class="p">}</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">test</span><span class="w"> </span><span class="s2">"members can talk and history is in order"</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="ss">room</span><span class="p">:</span><span class="w"> </span><span class="n">room</span><span class="p">}</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="ss">:ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Room</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="s2">"pip"</span><span class="p">)</span>
+<span class="w">    </span><span class="ss">:ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Room</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="s2">"pip"</span><span class="p">,</span><span class="w"> </span><span class="s2">"hi"</span><span class="p">)</span>
+<span class="w">    </span><span class="ss">:ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Room</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="s2">"pip"</span><span class="p">,</span><span class="w"> </span><span class="s2">"anyone here?"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">assert</span><span class="w"> </span><span class="nc">Room</span><span class="o">.</span><span class="n">history</span><span class="p">(</span><span class="n">room</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">[{</span><span class="s2">"pip"</span><span class="p">,</span><span class="w"> </span><span class="s2">"hi"</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="s2">"pip"</span><span class="p">,</span><span class="w"> </span><span class="s2">"anyone here?"</span><span class="p">}]</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">test</span><span class="w"> </span><span class="s2">"non-members are rejected"</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="ss">room</span><span class="p">:</span><span class="w"> </span><span class="n">room</span><span class="p">}</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="n">assert</span><span class="w"> </span><span class="p">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:not_joined</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Room</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="s2">"ghost"</span><span class="p">,</span><span class="w"> </span><span class="s2">"boo"</span><span class="p">)</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<div class="language-bash hl"><pre><span></span><code>mix<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: write the 100-message test</p>
+<p>Add a test that sends 150 messages and asserts <code>length(Room.history(room)) == 100</code> and that the <em>first</em> entry is message 51.</p>
+</div>
+<h2 id="s1-6-supervision-let-it-crash">1.6 Supervision: let it crash</h2>
+<p>Supervisors restart processes that die. Register rooms by name and start them under a <code>DynamicSupervisor</code>:</p>
+<div class="language-elixir hl has-file"><div class="file">lib/room_lab/application.ex</div><pre><span></span><code><span class="kd">def</span><span class="w"> </span><span class="n">start</span><span class="p">(</span><span class="n">_type</span><span class="p">,</span><span class="w"> </span><span class="n">_args</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nc">Registry</span><span class="p">,</span><span class="w"> </span><span class="ss">keys</span><span class="p">:</span><span class="w"> </span><span class="ss">:unique</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">RoomLab.Registry</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nc">DynamicSupervisor</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">RoomLab.RoomSup</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+
+<span class="w">  </span><span class="nc">Supervisor</span><span class="o">.</span><span class="n">start_link</span><span class="p">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="ss">strategy</span><span class="p">:</span><span class="w"> </span><span class="ss">:one_for_one</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="nc">RoomLab.Supervisor</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div>
+<div class="language-elixir hl"><pre><span></span><code><span class="c1"># In Room: register by name so callers don't need the pid</span>
+<span class="kd">def</span><span class="w"> </span><span class="n">start_link</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+<span class="w">  </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="ss">:via</span><span class="p">,</span><span class="w"> </span><span class="nc">Registry</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nc">RoomLab.Registry</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">}})</span>
+
+<span class="kd">def</span><span class="w"> </span><span class="n">via</span><span class="p">(</span><span class="n">name</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="ss">:via</span><span class="p">,</span><span class="w"> </span><span class="nc">Registry</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nc">RoomLab.Registry</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">}}</span>
+</code></pre></div>
+<p>Try it in <code>iex -S mix</code>:</p>
+<div class="language-elixir hl"><pre><span></span><code><span class="nc">DynamicSupervisor</span><span class="o">.</span><span class="n">start_child</span><span class="p">(</span><span class="nc">RoomLab.RoomSup</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nc">RoomLab.Room</span><span class="p">,</span><span class="w"> </span><span class="s2">"</span><span class="err">#</span><span class="s2">general"</span><span class="p">})</span>
+<span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">whereis</span><span class="p">(</span><span class="nc">RoomLab.Room</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="s2">"</span><span class="err">#</span><span class="s2">general"</span><span class="p">))</span>
+<span class="nc">Process</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="ss">:kill</span><span class="p">)</span>
+<span class="nc">GenServer</span><span class="o">.</span><span class="n">whereis</span><span class="p">(</span><span class="nc">RoomLab.Room</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="s2">"</span><span class="err">#</span><span class="s2">general"</span><span class="p">))</span><span class="w">   </span><span class="c1"># a new pid: it was restarted</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">What restarting costs you</p>
+<p>The restarted room has empty history: state lived in the process. In Step 2 messages move to Postgres, so a crash loses nothing. Deciding what can be lost on a crash is a design question you'll meet again in the game service.</p>
+</div>
+<div class="admonition qa">
+<p class="admonition-title">QA for this step</p>
+<p><strong>Automated</strong></p>
+<ul>
+<li><code>mix test</code> covers join, say, non-member rejection and the 100-message cap.</li>
+<li>A concurrency test: 1,000 <code>Task.async</code> calls to <code>say/3</code> at once, then <code>history/1</code> has exactly 100 entries and the process is still alive.</li>
+</ul>
+<p><strong>Manual</strong></p>
+<ul>
+<li>In <code>iex -S mix</code>, kill a room and confirm the supervisor restarts it under the same name.</li>
+</ul>
+<p><strong>Break it on purpose</strong></p>
+<ul>
+<li>Send the room a message it doesn't handle (<code>send(pid, :junk)</code>) and read the log: decide whether that should crash it.</li>
+</ul>
+</div>
+<div class="admonition checkpoint">
+<p class="admonition-title">Checkpoint</p>
+<p><code>mix test</code> passes, including your 100-message test, and you can explain two things in your own words: the difference between <code>call</code> and <code>cast</code>, and why the room's state can't get corrupted even when 1,000 processes call it at once.</p>
+</div>
+        </article>
+        <nav class="pager" aria-label="Previous and next"><a class="prev" href="step-00.html"><span>Previous</span>Tools and repo setup</a><a class="next" href="step-02.html"><span>Next</span>Chat service in Phoenix</a></nav>
+      </main>
+      <aside class="toc-col"><nav class="onpage" aria-label="On this page"><p>On this page</p><ol><li><a href="#s1-1-pattern-matching-in-iex">1.1 Pattern matching in iex</a></li><li><a href="#s1-2-functions-with-multiple-clauses">1.2 Functions with multiple clauses</a></li><li><a href="#s1-3-processes-and-messages">1.3 Processes and messages</a></li><li><a href="#s1-4-a-chat-room-as-a-genserver">1.4 A chat room as a GenServer</a></li><li><a href="#s1-5-test-it-with-exunit">1.5 Test it with ExUnit</a></li><li><a href="#s1-6-supervision-let-it-crash">1.6 Supervision: let it crash</a></li></ol></nav></aside>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

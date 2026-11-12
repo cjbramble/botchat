@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local dev with Docker Compose</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-step">
+<div class="shell">
+  <aside class="rail" aria-label="Guide pages">
+    <a class="brand" href="index.html">botchat<small>a microservices build guide</small></a>
+    <div class="progress" aria-live="polite">
+      <div class="progress-row"><span>progress</span><span class="prog-text">0 / 16 steps</span></div>
+      <div class="bar"><span class="prog-bar"></span></div>
+    </div>
+    <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html" aria-current="page" class="active"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+    </ol></nav>
+    <p class="rail-foot">Progress is saved in this browser only.</p>
+  </aside>
+
+  <div class="col">
+    <details class="mobile-nav">
+      <summary>All pages · <span class="prog-text">0 / 16 steps</span></summary>
+      <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html" aria-current="page" class="active"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+      </ol></nav>
+    </details>
+    <div class="content-grid">
+      <main>
+        <article>
+          <header class="page-head"><p class="kicker"><span class="step-no">Step 12</span><span class="meta-time">2–3 evenings</span></p><h1>Local dev with Docker Compose</h1><p class="lede">One command starts Postgres, chat, game and bots, so you or anyone reviewing the repo can run the whole system in minutes.</p><label class="mark"><input type="checkbox" data-step="step-12.html"> Mark this step done</label></header>
+<p><code>docker compose up</code> should start Postgres, chat, game and bots. That's what makes the repo easy to review and the system easy to debug.</p>
+<div class="admonition learn">
+<p class="admonition-title">Learn first</p>
+<ul>
+<li><a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose overview</a> and the <a href="https://docs.docker.com/reference/compose-file/" target="_blank" rel="noopener">Compose file reference</a>: <code>depends_on</code> with <code>condition: service_healthy</code>, <code>healthcheck</code>, <code>env_file</code>.</li>
+<li><a href="https://docs.docker.com/build/building/multi-stage/" target="_blank" rel="noopener">Multi-stage builds</a>.</li>
+<li><a href="https://hexdocs.pm/phoenix/releases.html" target="_blank" rel="noopener">Phoenix releases</a> and <code>mix phx.gen.release --docker</code>.</li>
+</ul>
+</div>
+<h2 id="s12-1-dockerfiles-full-code">12.1 Dockerfiles (full code)</h2>
+<div class="language-dockerfile hl has-file"><div class="file">game/Dockerfile</div><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">golang:1.26</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">build</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/src</span>
+<span class="k">COPY</span><span class="w"> </span>go.mod<span class="w"> </span>go.sum<span class="w"> </span>./
+<span class="k">RUN</span><span class="w"> </span>go<span class="w"> </span>mod<span class="w"> </span>download
+<span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+<span class="k">RUN</span><span class="w"> </span><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>/out/game<span class="w"> </span>./cmd/server
+
+<span class="k">FROM</span><span class="w"> </span><span class="s">gcr.io/distroless/static-debian12</span>
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>build<span class="w"> </span>/out/game<span class="w"> </span>/game
+<span class="k">EXPOSE</span><span class="w"> </span><span class="s">50051</span>
+<span class="k">USER</span><span class="w"> </span><span class="s">nonroot</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">"/game"</span><span class="p">]</span>
+</code></pre></div>
+<div class="language-dockerfile hl has-file"><div class="file">bots/Dockerfile</div><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">ghcr.io/astral-sh/uv:python3.12-bookworm-slim</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<span class="k">COPY</span><span class="w"> </span>pyproject.toml<span class="w"> </span>uv.lock<span class="w"> </span>./
+<span class="k">RUN</span><span class="w"> </span>uv<span class="w"> </span>sync<span class="w"> </span>--frozen<span class="w"> </span>--no-dev
+<span class="k">COPY</span><span class="w"> </span>bots<span class="w"> </span>./bots
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">"uv"</span><span class="p">,</span><span class="w"> </span><span class="s2">"run"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--no-dev"</span><span class="p">,</span><span class="w"> </span><span class="s2">"python"</span><span class="p">,</span><span class="w"> </span><span class="s2">"-m"</span><span class="p">,</span><span class="w"> </span><span class="s2">"bots.main"</span><span class="p">]</span>
+</code></pre></div>
+<p>For chat, let Phoenix write it:</p>
+<div class="language-bash hl"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>chat<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mix<span class="w"> </span>phx.gen.release<span class="w"> </span>--docker
+</code></pre></div>
+<p>That creates a <code>Dockerfile</code> plus <code>rel/</code> scripts, including <code>bin/migrate</code>. In <code>rel/overlays/bin/server</code>, nothing needs changing; both endpoints start because <code>server: true</code> is set for each.</p>
+<h2 id="s12-2-the-compose-file-full-code">12.2 The Compose file (full code)</h2>
+<div class="language-yaml hl has-file"><div class="file">docker-compose.yml</div><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:17</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">pgdata</span><span class="p p-Indicator">:</span><span class="nv">/var/lib/postgresql/data</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"CMD"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"pg_isready"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"-U"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"postgres"</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2s</span>
+<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+
+<span class="w">  </span><span class="nt">game</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./game</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">DATABASE_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres://postgres:postgres@db:5432/game?sslmode=disable</span>
+<span class="w">      </span><span class="nt">GAME_INTERNAL_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-token</span>
+<span class="w">      </span><span class="nt">EVENTS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">log</span><span class="w">                       </span><span class="c1"># print events instead of publishing to SNS</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">db</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> condition</span><span class="p">:</span><span class="w"> </span><span class="nv">service_healthy</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="w">  </span><span class="nt">chat</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./chat</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">DATABASE_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ecto://postgres:postgres@db/chat</span>
+<span class="w">      </span><span class="nt">SECRET_KEY_BASE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-only-secret-key-base-at-least-64-bytes-long-xxxxxxxxxxxxxxxxxxxxxxxxx</span>
+<span class="w">      </span><span class="nt">PHX_HOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">      </span><span class="nt">GAME_ADDR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">game:50051</span>
+<span class="w">      </span><span class="nt">GAME_INTERNAL_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-token</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"sh"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"-c"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"bin/migrate</span><span class="nv"> </span><span class="s">&amp;&amp;</span><span class="nv"> </span><span class="s">bin/server"</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"4000:4000"</span><span class="w">                     </span><span class="c1"># public viewer only; 4001 is NOT published</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">db</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> condition</span><span class="p">:</span><span class="w"> </span><span class="nv">service_healthy</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">game</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> condition</span><span class="p">:</span><span class="w"> </span><span class="nv">service_started</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"CMD-SHELL"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"curl</span><span class="nv"> </span><span class="s">-fs</span><span class="nv"> </span><span class="s">http://localhost:4001/healthz</span><span class="nv"> </span><span class="s">||</span><span class="nv"> </span><span class="s">exit</span><span class="nv"> </span><span class="s">1"</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3s</span>
+<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+
+<span class="w">  </span><span class="nt">bots</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./bots</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bots/.env</span><span class="w">                 </span><span class="c1"># OPENROUTER_API_KEY and BOT_TOKEN_* lines</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">CHAT_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ws://chat:4001</span><span class="w">          </span><span class="c1"># private: reachable only inside Compose's network</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">chat</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> condition</span><span class="p">:</span><span class="w"> </span><span class="nv">service_healthy</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pgdata</span><span class="p">:</span>
+</code></pre></div>
+<p>Port 4001 isn't in <code>ports</code>, so from your laptop only the viewer is reachable, just like production. Inside Compose's network, <code>bots</code> reaches <code>chat:4001</code> by service name. (If the chat image lacks <code>curl</code>, add it in the Dockerfile's runner stage.)</p>
+<h2 id="s12-3-seed-bots-and-tokens">12.3 Seed bots and tokens</h2>
+<p>Tokens are only shown once, at creation. Generate all 42 and write the bots' <code>.env</code> in one go.</p>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: <code>Chat.Release.seed_bots/1</code></p>
+<p>Write <code>Chat.Release.seed_bots(path)</code> (in <code>lib/chat/release.ex</code>, next to the generated <code>migrate/0</code>). It reads a personas TOML file (add the <a href="https://hex.pm/packages/toml" target="_blank" rel="noopener"><code>toml</code></a> package), creates any bot that doesn't exist yet, issues a fresh token for each, and prints <code>BOT_TOKEN_&lt;NICK&gt;=&lt;token&gt;</code> lines.</p>
+<p>Mount the personas file into the chat container by adding <code>volumes: ["./bots/bots/personas.toml:/app/personas.toml:ro"]</code> to the <code>chat</code> service, then:</p>
+<div class="language-bash hl"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>chat<span class="w"> </span>bin/chat<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s1">'Chat.Release.seed_bots("/app/personas.toml")'</span><span class="w"> </span>&gt;<span class="w"> </span>bots/.env.tokens
+</code></pre></div>
+<p>Combine it with your OpenRouter key into <code>bots/.env</code>. <code>.env*</code> files are already ignored by Git (Step 0).</p>
+</div>
+<details class="hint">
+<summary>Hint: why not a Mix task?</summary>
+<p>Mix isn't included in releases, so a Mix task can't run inside the production image. A plain module function called with <code>bin/chat eval</code> works in both places. Make sure the repo is started first: copy the <code>load_app/0</code> pattern from the generated <code>Chat.Release</code> module and wrap your work in <code>Ecto.Migrator.with_repo/2</code>.</p>
+</details>
+<h2 id="s12-4-aws-locally-pick-one">12.4 AWS locally: pick one</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>How</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EVENTS=log</code> (start here)</td>
+<td>The game logs events instead of publishing; add a dev-only IEx helper in chat that runs the consumer's handler on a fake event.</td>
+<td>Free and instant; skips the AWS code paths.</td>
+</tr>
+<tr>
+<td>A real dev stack</td>
+<td><code>terraform workspace new dev</code> and point local services at it with real credentials.</td>
+<td>Real behavior for cents; needs internet.</td>
+</tr>
+<tr>
+<td>LocalStack</td>
+<td>Since March 2026 the image needs a free account and <code>LOCALSTACK_AUTH_TOKEN</code> (<a href="https://dev.to/peytongreen_dev/your-localstack-ci-is-broken-here-are-your-three-options-41o8" target="_blank" rel="noopener">details</a>).</td>
+<td>Closest emulation; account required.</td>
+</tr>
+<tr>
+<td>Floci</td>
+<td>A newer MIT-licensed emulator on the same port (<a href="https://floci.io/" target="_blank" rel="noopener">floci.io</a>).</td>
+<td>No signup; young project, expect gaps.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <code>Publisher</code> interface from Step 9 is what makes this a config switch rather than a code change.</p>
+<h2 id="s12-5-everyday-commands">12.5 Everyday commands</h2>
+<div class="language-bash hl"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>--build<span class="w">           </span><span class="c1"># start everything</span>
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>game<span class="w"> </span>bots<span class="w">    </span><span class="c1"># follow two services</span>
+docker<span class="w"> </span>compose<span class="w"> </span>restart<span class="w"> </span>game<span class="w">         </span><span class="c1"># watch the bridge reconnect (Step 6)</span>
+docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w">                 </span><span class="c1"># stop; add -v to wipe the database</span>
+</code></pre></div>
+<div class="admonition qa">
+<p class="admonition-title">QA for this step</p>
+<p><strong>Automated</strong></p>
+<ul>
+<li><code>docker compose config</code> validates the Compose file.</li>
+</ul>
+<p><strong>Manual</strong></p>
+<ul>
+<li>On a second machine (or a fresh clone in a new folder), follow only the README: bots are playing within 5 minutes.</li>
+</ul>
+<p><strong>Break it on purpose</strong></p>
+<ul>
+<li><code>docker compose down -v &amp;&amp; docker compose up</code>: everything comes back from an empty database, with seeds.</li>
+</ul>
+</div>
+<div class="admonition checkpoint">
+<p class="admonition-title">Checkpoint</p>
+<p>A fresh clone runs with: copy <code>bots/.env.example</code>, add your OpenRouter key, seed tokens, <code>docker compose up</code>. Bots are playing within 5 minutes, <code>http://localhost:4000</code> shows the viewer, and <code>ws://localhost:4001</code> is unreachable from your laptop.</p>
+</div>
+        </article>
+        <nav class="pager" aria-label="Previous and next"><a class="prev" href="step-11.html"><span>Previous</span>Infrastructure as code with Terraform</a><a class="next" href="step-13.html"><span>Next</span>Deploy</a></nav>
+      </main>
+      <aside class="toc-col"><nav class="onpage" aria-label="On this page"><p>On this page</p><ol><li><a href="#s12-1-dockerfiles-full-code">12.1 Dockerfiles (full code)</a></li><li><a href="#s12-2-the-compose-file-full-code">12.2 The Compose file (full code)</a></li><li><a href="#s12-3-seed-bots-and-tokens">12.3 Seed bots and tokens</a></li><li><a href="#s12-4-aws-locally-pick-one">12.4 AWS locally: pick one</a></li><li><a href="#s12-5-everyday-commands">12.5 Everyday commands</a></li></ol></nav></aside>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

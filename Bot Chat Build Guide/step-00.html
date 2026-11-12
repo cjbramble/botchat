@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tools and repo setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-step">
+<div class="shell">
+  <aside class="rail" aria-label="Guide pages">
+    <a class="brand" href="index.html">botchat<small>a microservices build guide</small></a>
+    <div class="progress" aria-live="polite">
+      <div class="progress-row"><span>progress</span><span class="prog-text">0 / 16 steps</span></div>
+      <div class="bar"><span class="prog-bar"></span></div>
+    </div>
+    <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html" aria-current="page" class="active"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+    </ol></nav>
+    <p class="rail-foot">Progress is saved in this browser only.</p>
+  </aside>
+
+  <div class="col">
+    <details class="mobile-nav">
+      <summary>All pages · <span class="prog-text">0 / 16 steps</span></summary>
+      <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html" aria-current="page" class="active"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+      </ol></nav>
+    </details>
+    <div class="content-grid">
+      <main>
+        <article>
+          <header class="page-head"><p class="kicker"><span class="step-no">Step 0</span><span class="meta-time">1 evening</span></p><h1>Tools and repo setup</h1><p class="lede">Install the toolchain, pin versions, and create the monorepo every later step builds in.</p><label class="mark"><input type="checkbox" data-step="step-00.html"> Mark this step done</label></header>
+<div class="admonition learn">
+<p class="admonition-title">Learn first</p>
+<ul>
+<li>Git basics if needed: <a href="https://git-scm.com/book/en/v2" target="_blank" rel="noopener">Pro Git, chapters 1–3</a>.</li>
+<li>Docker: images vs containers, <code>docker run</code>, <code>docker ps</code> — <a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">Docker get started</a>.</li>
+<li><a href="https://mise.jdx.dev/getting-started.html" target="_blank" rel="noopener">mise</a>: a version manager that pins Erlang, Elixir, Go and Python per project from one file.</li>
+</ul>
+</div>
+<h2 id="s0-1-install-the-base-tools">0.1 Install the base tools</h2>
+<p>Install these once on your machine:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Why</th>
+<th>Install</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Git</td>
+<td>Version control</td>
+<td><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git-scm.com</a></td>
+</tr>
+<tr>
+<td>Docker Desktop (or OrbStack / Colima on macOS)</td>
+<td>Postgres locally, Compose in Step 12</td>
+<td><a href="https://docs.docker.com/get-started/get-docker/" target="_blank" rel="noopener">docs.docker.com</a></td>
+</tr>
+<tr>
+<td>mise</td>
+<td>Language versions</td>
+<td><a href="https://mise.jdx.dev/getting-started.html" target="_blank" rel="noopener">mise.jdx.dev</a></td>
+</tr>
+<tr>
+<td>VS Code (or your editor)</td>
+<td>Editing</td>
+<td><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">code.visualstudio.com</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Editor extensions: an Elixir language server (ElixirLS or Expert), the official Go extension, Python + Ruff, and Buf for <code>.proto</code> files.</p>
+<h2 id="s0-2-create-the-repo-and-pin-versions">0.2 Create the repo and pin versions</h2>
+<p>One Git repository holds every service (a <strong>monorepo</strong>), so a change to the shared <code>.proto</code> contract updates all of them in one commit.</p>
+<div class="language-bash hl"><pre><span></span><code>mkdir<span class="w"> </span>botchat<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>botchat
+git<span class="w"> </span>init
+</code></pre></div>
+<div class="language-toml hl has-file"><div class="file">.mise.toml</div><pre><span></span><code><span class="c1"># Everyone who clones the repo gets exactly these versions.</span>
+<span class="k">[tools]</span>
+<span class="n">erlang</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"28"</span>
+<span class="n">elixir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"1.20"</span>
+<span class="n">go</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"1.26"</span>
+<span class="n">python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"3.12"</span>
+<span class="n">uv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"latest"</span>
+</code></pre></div>
+<div class="language-bash hl"><pre><span></span><code>mise<span class="w"> </span>install<span class="w">          </span><span class="c1"># compiles/downloads each tool; Erlang takes a few minutes</span>
+mise<span class="w"> </span>ls<span class="w">               </span><span class="c1"># confirm what's active in this folder</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Why pin versions?</p>
+<p>"Works on my machine" usually means "my machine has a different version". Pinning makes your laptop, CI and Docker builds agree.</p>
+</div>
+<h2 id="s0-3-lay-out-the-folders">0.3 Lay out the folders</h2>
+<div class="language-bash hl"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>proto<span class="w"> </span>chat<span class="w"> </span>game<span class="w"> </span>bots<span class="w"> </span>lambdas/announcer<span class="w"> </span>infra
+</code></pre></div>
+<div class="language-text hl"><pre><span></span><code>botchat/
+  proto/              # .proto contracts shared by chat and game
+  chat/               # Elixir/Phoenix app (Step 2)
+  game/               # Go game service (Step 4)
+  bots/               # Python bot runner (Step 7)
+  lambdas/announcer/  # Go Lambda (Step 10)
+  infra/              # Terraform (Step 11)
+  docker-compose.yml  # local dev (Step 12)
+  README.md
+</code></pre></div>
+<div class="language-text hl has-file"><div class="file">.gitignore</div><pre><span></span><code># secrets
+.env
+*.env
+!.env.example
+
+# build output
+_build/
+deps/
+bootstrap
+function.zip
+.terraform/
+*.tfstate*
+__pycache__/
+.venv/
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Secrets never go in Git</p>
+<p>You'll have 42 bot tokens, an OpenRouter key and AWS keys by the end. They live in <code>.env</code> files locally and in your host's secret store in production. The <code>.gitignore</code> above is your first line of defense; add a <a href="https://github.com/gitleaks/gitleaks" target="_blank" rel="noopener">pre-commit secret scanner</a> if you want a second.</p>
+</div>
+<h2 id="s0-4-write-the-readme-skeleton">0.4 Write the README skeleton</h2>
+<div class="language-markdown hl has-file"><div class="file">README.md</div><pre><span></span><code><span class="gh"># botchat</span>
+
+An IRC-style chat where AI bots talk and play Guess the Number.
+
+| Service | Language | Folder |
+| --- | --- | --- |
+| chat | Elixir / Phoenix | <span class="sb">`chat/`</span> |
+| game | Go | <span class="sb">`game/`</span> |
+| bots | Python | <span class="sb">`bots/`</span> |
+| announcer | Go (AWS Lambda) | <span class="sb">`lambdas/announcer/`</span> |
+
+<span class="gu">## Run locally</span>
+(filled in during Step 12)
+</code></pre></div>
+<div class="language-bash hl"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Set up monorepo layout and tool versions"</span>
+</code></pre></div>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise</p>
+<p>Create a GitHub repository and push to it. Then clone it into a second folder, run <code>mise install</code> there, and confirm the versions match. This is exactly what a new contributor (or CI) will do.</p>
+</div>
+<div class="admonition qa">
+<p class="admonition-title">QA for this step</p>
+<p><strong>Automated</strong></p>
+<ul>
+<li><code>git check-ignore .env bots/.env</code> prints both paths (secrets can't be committed).</li>
+</ul>
+<p><strong>Manual</strong></p>
+<ul>
+<li>Clone into a fresh folder and run <code>mise install</code>: identical versions.</li>
+</ul>
+<p><strong>Break it on purpose</strong></p>
+<ul>
+<li>Commit a fake <code>.env</code> on a throwaway branch: it should be ignored. If you add gitleaks, a fake <code>sk-or-...</code> key in a file should fail the pre-commit hook.</li>
+</ul>
+</div>
+<div class="admonition checkpoint">
+<p class="admonition-title">Checkpoint</p>
+<p><code>elixir --version</code>, <code>go version</code>, <code>python --version</code> and <code>docker run hello-world</code> all work inside the repo folder, and your first commit is on GitHub.</p>
+</div>
+        </article>
+        <nav class="pager" aria-label="Previous and next"><a class="prev" href="qa.html"><span>Previous</span>QA plan</a><a class="next" href="step-01.html"><span>Next</span>Learn Elixir basics</a></nav>
+      </main>
+      <aside class="toc-col"><nav class="onpage" aria-label="On this page"><p>On this page</p><ol><li><a href="#s0-1-install-the-base-tools">0.1 Install the base tools</a></li><li><a href="#s0-2-create-the-repo-and-pin-versions">0.2 Create the repo and pin versions</a></li><li><a href="#s0-3-lay-out-the-folders">0.3 Lay out the folders</a></li><li><a href="#s0-4-write-the-readme-skeleton">0.4 Write the README skeleton</a></li></ol></nav></aside>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

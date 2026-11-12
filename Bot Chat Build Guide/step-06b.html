@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The public viewer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-step">
+<div class="shell">
+  <aside class="rail" aria-label="Guide pages">
+    <a class="brand" href="index.html">botchat<small>a microservices build guide</small></a>
+    <div class="progress" aria-live="polite">
+      <div class="progress-row"><span>progress</span><span class="prog-text">0 / 16 steps</span></div>
+      <div class="bar"><span class="prog-bar"></span></div>
+    </div>
+    <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html" aria-current="page" class="active"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+    </ol></nav>
+    <p class="rail-foot">Progress is saved in this browser only.</p>
+  </aside>
+
+  <div class="col">
+    <details class="mobile-nav">
+      <summary>All pages · <span class="prog-text">0 / 16 steps</span></summary>
+      <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html" aria-current="page" class="active"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+      </ol></nav>
+    </details>
+    <div class="content-grid">
+      <main>
+        <article>
+          <header class="page-head"><p class="kicker"><span class="step-no">Step 6b</span><span class="meta-time">1 week</span></p><h1>The public viewer</h1><p class="lede">Build the only public page: a read-only, IRC-style viewer of every channel, with a text status bar for live matches in #games.</p><label class="mark"><input type="checkbox" data-step="step-06b.html"> Mark this step done</label></header>
+<p>The viewer is how people see the project. It shows every public channel as plain, well-set text, and in <code>#games</code> a status bar for the running match. It has <strong>no</strong> event handlers at all, so nothing a visitor sends can do anything.</p>
+<div class="language-text hl"><pre><span></span><code> #games │ Round 2/5 │ Turn: vex (12s) │ Range 31–49 │ pip 1 · vex 1 · grim 0
+────────────────────────────────────────────────────────┬────────────
+ #general   20:14  &lt;GameServ&gt; Round 2 of 5. pip, you're up.│ @GameServ
+ #python    20:14  &lt;[Lv 4] pip&gt; 50                       │  grim
+ #elixir    20:14  &lt;GameServ&gt; Lower than 50. vex, you're up│  pip
+ #golang    20:14  &lt;[Lv 2] vex&gt; 30                       │  vex
+ #startrek  20:15  *** pip has reached level 5!          │
+ #games
+            1 ·········[31▓▓▓▓▓▓▓▓▓49]················ 100
+</code></pre></div>
+<div class="admonition learn">
+<p class="admonition-title">Learn first</p>
+<ul>
+<li><a href="https://hexdocs.pm/phoenix_live_view/welcome.html" target="_blank" rel="noopener">LiveView welcome</a>, <a href="https://hexdocs.pm/phoenix_live_view/live-navigation.html" target="_blank" rel="noopener">live navigation</a> (<code>patch</code> vs <code>navigate</code>) and <a href="https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#stream/4" target="_blank" rel="noopener">streams</a>.</li>
+<li><a href="https://hexdocs.pm/phoenix_live_view/Phoenix.Component.html" target="_blank" rel="noopener">Function components</a> and <a href="https://hexdocs.pm/phoenix_live_view/Phoenix.Component.html#sigil_H/2" target="_blank" rel="noopener">HEEx</a>.</li>
+<li><a href="https://hexdocs.pm/phoenix_live_view/js-interop.html" target="_blank" rel="noopener">JS interop and hooks</a>, including colocated hooks.</li>
+<li><a href="https://hexdocs.pm/phoenix/Phoenix.Presence.html" target="_blank" rel="noopener">Phoenix.Presence</a>.</li>
+</ul>
+</div>
+<h2 id="s6b-1-add-match-state-to-the-contract">6b.1 Add match state to the contract</h2>
+<p>The page shouldn't parse "Round 2 of 5" out of chat text. Add a structured snapshot to the stream instead. Adding a field with a new number is <strong>non-breaking</strong>, so <code>buf breaking</code> stays green.</p>
+<div class="language-proto hl has-file"><div class="file">proto/game/v1/game.proto <span class="file-note">add</span></div><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">MatchState</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">phase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">                  </span><span class="c1">// lobby | turn | reveal | intermission | over</span>
+<span class="w">  </span><span class="kt">int32</span><span class="w"> </span><span class="na">round</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int32</span><span class="w"> </span><span class="na">total_rounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int32</span><span class="w"> </span><span class="na">lo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">                      </span><span class="c1">// range still possible after higher/lower</span>
+<span class="w">  </span><span class="kt">int32</span><span class="w"> </span><span class="na">hi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">current_player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int64</span><span class="w"> </span><span class="na">turn_deadline_unix_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="w">  </span><span class="n">map</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">int32</span><span class="p">&gt;</span><span class="w"> </span><span class="na">round_wins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">GameMessage</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int64</span><span class="w"> </span><span class="na">seq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="n">MatchState</span><span class="w"> </span><span class="na">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">              </span><span class="c1">// new</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="language-bash hl"><pre><span></span><code>buf<span class="w"> </span>breaking<span class="w"> </span>--against<span class="w"> </span><span class="s1">'.git#branch=main'</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>buf<span class="w"> </span>generate
+</code></pre></div>
+<h2 id="s6b-2-fill-it-in-on-the-game-side">6b.2 Fill it in on the game side</h2>
+<p>Add a <code>Snapshot()</code> method to the match. It copies the public parts of the state and <strong>never</strong> includes <code>Secret</code>.</p>
+<div class="language-go hl has-file"><div class="file">internal/match/match.go <span class="file-note">add</span></div><pre><span></span><code><span class="c1">// State is a read-only snapshot for viewers. It never includes the secret.</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">State</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Phase</span><span class="w">         </span><span class="kt">string</span>
+<span class="w">    </span><span class="nx">Round</span><span class="w">         </span><span class="kt">int</span>
+<span class="w">    </span><span class="nx">TotalRounds</span><span class="w">   </span><span class="kt">int</span>
+<span class="w">    </span><span class="nx">Lo</span><span class="p">,</span><span class="w"> </span><span class="nx">Hi</span><span class="w">        </span><span class="kt">int</span>
+<span class="w">    </span><span class="nx">CurrentPlayer</span><span class="w"> </span><span class="nx">PlayerID</span>
+<span class="w">    </span><span class="nx">RoundWins</span><span class="w">     </span><span class="kt">map</span><span class="p">[</span><span class="nx">PlayerID</span><span class="p">]</span><span class="kt">int</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: <code>Snapshot</code> and the hub</p>
+<ol>
+<li>Write <code>func (m *Match) Snapshot() State</code>. Copy <code>RoundWins</code> into a new map, so the receiver can't change the match's map.</li>
+<li>In the hub, pass <code>m</code> to <code>handleEffect</code>. On <code>StartTimer</code>, record <code>deadline = time.Now().Add(After)</code>. On <code>Say</code>, include <code>m.Snapshot()</code> (converted to the proto type) and the deadline in the broadcast.</li>
+</ol>
+<p>Why is reading <code>m</code> from <code>handleEffect</code> safe? Because the runner calls <code>out</code> on its own goroutine, the only one that ever touches <code>m</code>.</p>
+</div>
+<details class="solution">
+<summary>Solution: the hub changes</summary>
+<div class="language-go hl"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">h</span><span class="w"> </span><span class="o">*</span><span class="nx">Hub</span><span class="p">)</span><span class="w"> </span><span class="nx">handleEffect</span><span class="p">(</span><span class="nx">ch</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="w"> </span><span class="o">*</span><span class="nx">match</span><span class="p">.</span><span class="nx">Match</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="nx">match</span><span class="p">.</span><span class="nx">Effect</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">e</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nx">match</span><span class="p">.</span><span class="nx">StartTimer</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">h</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Lock</span><span class="p">()</span>
+<span class="w">        </span><span class="nx">h</span><span class="p">.</span><span class="nx">state</span><span class="p">(</span><span class="nx">ch</span><span class="p">).</span><span class="nx">deadline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">().</span><span class="nx">Add</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">After</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">h</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Unlock</span><span class="p">()</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nx">match</span><span class="p">.</span><span class="nx">Say</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">h</span><span class="p">.</span><span class="nx">broadcast</span><span class="p">(</span><span class="nx">ch</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Text</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="p">.</span><span class="nx">Snapshot</span><span class="p">())</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nx">match</span><span class="p">.</span><span class="nx">RoundWon</span><span class="p">,</span><span class="w"> </span><span class="nx">match</span><span class="p">.</span><span class="nx">MatchWon</span><span class="p">:</span>
+<span class="w">        </span><span class="c1">// Step 9: award XP and publish level-ups here.</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">toProto</span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="nx">match</span><span class="p">.</span><span class="nx">State</span><span class="p">,</span><span class="w"> </span><span class="nx">deadline</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">gamev1</span><span class="p">.</span><span class="nx">MatchState</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">wins</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kt">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int32</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">RoundWins</span><span class="p">))</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">RoundWins</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">wins</span><span class="p">[</span><span class="kt">string</span><span class="p">(</span><span class="nx">p</span><span class="p">)]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int32</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">gamev1</span><span class="p">.</span><span class="nx">MatchState</span><span class="p">{</span>
+<span class="w">        </span><span class="nx">Phase</span><span class="p">:</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">Phase</span><span class="p">,</span><span class="w"> </span><span class="nx">Round</span><span class="p">:</span><span class="w"> </span><span class="kt">int32</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">Round</span><span class="p">),</span><span class="w"> </span><span class="nx">TotalRounds</span><span class="p">:</span><span class="w"> </span><span class="kt">int32</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">TotalRounds</span><span class="p">),</span>
+<span class="w">        </span><span class="nx">Lo</span><span class="p">:</span><span class="w"> </span><span class="kt">int32</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">Lo</span><span class="p">),</span><span class="w"> </span><span class="nx">Hi</span><span class="p">:</span><span class="w"> </span><span class="kt">int32</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">Hi</span><span class="p">),</span><span class="w"> </span><span class="nx">CurrentPlayer</span><span class="p">:</span><span class="w"> </span><span class="kt">string</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">CurrentPlayer</span><span class="p">),</span>
+<span class="w">        </span><span class="nx">TurnDeadlineUnixMs</span><span class="p">:</span><span class="w"> </span><span class="nx">deadline</span><span class="p">.</span><span class="nx">UnixMilli</span><span class="p">(),</span><span class="w"> </span><span class="nx">RoundWins</span><span class="p">:</span><span class="w"> </span><span class="nx">wins</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h2 id="s6b-3-one-shape-for-every-message">6b.3 One shape for every message</h2>
+<p>The LiveView receives messages two ways: loaded from the database on mount, and broadcast live. Make both the same map, so one component renders both.</p>
+<div class="language-elixir hl has-file"><div class="file">lib/chat/rooms.ex <span class="file-note">refactor</span></div><pre><span></span><code><span class="kd">def</span><span class="w"> </span><span class="n">to_payload</span><span class="p">(%</span><span class="nc">Message</span><span class="p">{</span><span class="ss">user</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">msg</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="p">%{</span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="n">msg</span><span class="o">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="ss">nick</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="o">.</span><span class="n">nick</span><span class="p">,</span><span class="w"> </span><span class="ss">kind</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span><span class="w"> </span><span class="ss">level</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="o">.</span><span class="n">level_cache</span><span class="p">,</span>
+<span class="w">    </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">msg</span><span class="o">.</span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="ss">at</span><span class="p">:</span><span class="w"> </span><span class="n">msg</span><span class="o">.</span><span class="n">inserted_at</span><span class="p">}</span>
+<span class="k">end</span>
+
+<span class="c1"># recent/2 now returns payloads; post_message/3 broadcasts to_payload(msg) after preloading :user</span>
+<span class="kd">def</span><span class="w"> </span><span class="n">recent</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="n">limit</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">room</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">recent_query</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Repo</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="n">to_payload</span><span class="o">/</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p>Also have <code>Chat.GameBridge</code> broadcast <code>{:match_state, msg.state}</code> on <code>"room:games"</code> after posting each line, and add a clause to <code>RoomChannel</code> so bots ignore (or receive) it instead of crashing on an unknown message:</p>
+<div class="language-elixir hl"><pre><span></span><code><span class="kd">def</span><span class="w"> </span><span class="n">handle_info</span><span class="p">({</span><span class="ss">:match_state</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">},</span><span class="w"> </span><span class="n">socket</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="n">push</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s2">"match_state"</span><span class="p">,</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">from_struct</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+<span class="w">  </span><span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p">}</span>
+<span class="k">end</span>
+</code></pre></div>
+<h2 id="s6b-4-presence-whos-in-the-room">6b.4 Presence: who's in the room</h2>
+<div class="language-bash hl"><pre><span></span><code>mix<span class="w"> </span>phx.gen.presence<span class="w">      </span><span class="c1"># creates ChatWeb.Presence; add it to your children</span>
+</code></pre></div>
+<p>In <code>RoomChannel</code>'s <code>:after_join</code>, track the bot: <code>ChatWeb.Presence.track(socket, socket.assigns.user.nick, %{level: socket.assigns.user.level_cache})</code>. Presence broadcasts <code>presence_diff</code> on the same topic, which the LiveView already subscribes to.</p>
+<h2 id="s6b-5-the-liveview">6b.5 The LiveView</h2>
+<div class="language-elixir hl has-file"><div class="file">lib/chat_web/router.ex <span class="file-note">public scope</span></div><pre><span></span><code><span class="n">live</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span><span class="w"> </span><span class="nc">ChannelLive</span><span class="p">,</span><span class="w"> </span><span class="ss">:index</span><span class="w">      </span><span class="c1"># redirects to #general</span>
+<span class="n">live</span><span class="w"> </span><span class="s2">"/c/:channel"</span><span class="p">,</span><span class="w"> </span><span class="nc">ChannelLive</span><span class="p">,</span><span class="w"> </span><span class="ss">:show</span>
+</code></pre></div>
+<div class="language-elixir hl has-file"><div class="file">lib/chat_web/live/channel_live.ex</div><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">ChatWeb.ChannelLive</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ChatWeb</span><span class="p">,</span><span class="w"> </span><span class="ss">:live_view</span>
+<span class="w">  </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Chat.Rooms</span>
+
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">mount</span><span class="p">(</span><span class="n">_params</span><span class="p">,</span><span class="w"> </span><span class="n">_session</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">assign</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="ss">channels</span><span class="p">:</span><span class="w"> </span><span class="nc">Rooms</span><span class="o">.</span><span class="n">list_public_channels</span><span class="p">(),</span><span class="w"> </span><span class="ss">room</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="ss">match</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="ss">nicks</span><span class="p">:</span><span class="w"> </span><span class="p">[])}</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_params</span><span class="p">(%{</span><span class="s2">"channel"</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">name</span><span class="p">},</span><span class="w"> </span><span class="n">_uri</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nc">Rooms</span><span class="o">.</span><span class="n">get_channel</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">      </span><span class="p">%{</span><span class="ss">public</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">connected?</span><span class="p">(</span><span class="n">socket</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">switch_subscription</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">assigns</span><span class="o">.</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+
+<span class="w">        </span><span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span>
+<span class="w">         </span><span class="n">socket</span>
+<span class="w">         </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">assign</span><span class="p">(</span><span class="ss">room</span><span class="p">:</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="ss">topic</span><span class="p">:</span><span class="w"> </span><span class="n">channel</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span><span class="w"> </span><span class="ss">page_title</span><span class="p">:</span><span class="w"> </span><span class="s2">"</span><span class="err">#</span><span class="s2">"</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="ss">nicks</span><span class="p">:</span><span class="w"> </span><span class="n">nicks</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+<span class="w">         </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">stream</span><span class="p">(</span><span class="ss">:messages</span><span class="p">,</span><span class="w"> </span><span class="nc">Rooms</span><span class="o">.</span><span class="n">recent</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">),</span><span class="w"> </span><span class="ss">reset</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">)}</span>
+
+<span class="w">      </span><span class="bp">_</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">        </span><span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">push_navigate</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="sx">~p"/c/general"</span><span class="p">)}</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_params</span><span class="p">(</span><span class="n">_params</span><span class="p">,</span><span class="w"> </span><span class="n">_uri</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">push_patch</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="sx">~p"/c/general"</span><span class="p">)}</span>
+
+<span class="w">  </span><span class="c1"># No handle_event/3 anywhere: visitors can't send anything.</span>
+
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_info</span><span class="p">({</span><span class="ss">:new_msg</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p">},</span><span class="w"> </span><span class="n">socket</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">stream_insert</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="ss">:messages</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p">)}</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_info</span><span class="p">({</span><span class="ss">:match_state</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">},</span><span class="w"> </span><span class="n">socket</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">assign</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="ss">match</span><span class="p">:</span><span class="w"> </span><span class="n">state</span><span class="p">)}</span>
+
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_info</span><span class="p">(%</span><span class="nc">Phoenix.Socket.Broadcast</span><span class="p">{</span><span class="ss">event</span><span class="p">:</span><span class="w"> </span><span class="s2">"presence_diff"</span><span class="p">},</span><span class="w"> </span><span class="n">socket</span><span class="p">),</span>
+<span class="w">    </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">assign</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="ss">nicks</span><span class="p">:</span><span class="w"> </span><span class="n">nicks</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">assigns</span><span class="o">.</span><span class="n">room</span><span class="p">))}</span>
+
+<span class="w">  </span><span class="kd">defp</span><span class="w"> </span><span class="n">switch_subscription</span><span class="p">(</span><span class="n">old</span><span class="p">,</span><span class="w"> </span><span class="n">new</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">old</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">Phoenix.PubSub</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="nc">Chat.PubSub</span><span class="p">,</span><span class="w"> </span><span class="s2">"room:"</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">old</span><span class="p">)</span>
+<span class="w">    </span><span class="nc">Phoenix.PubSub</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="nc">Chat.PubSub</span><span class="p">,</span><span class="w"> </span><span class="s2">"room:"</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">new</span><span class="p">)</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="kd">defp</span><span class="w"> </span><span class="n">nicks</span><span class="p">(</span><span class="n">room</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">ChatWeb.Presence</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s2">"room:"</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">room</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="k">end</span>
+</code></pre></div>
+<h2 id="s6b-6-the-template-and-components">6b.6 The template and components</h2>
+<div class="language-elixir hl has-file"><div class="file">lib/chat_web/live/channel_live.ex <span class="file-note">continued</span></div><pre><span></span><code><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="kd">def</span><span class="w"> </span><span class="n">render</span><span class="p">(</span><span class="n">assigns</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="sx">~H</span><span class="sh">"""</span>
+<span class="sh">  &lt;div class="irc"&gt;</span>
+<span class="sh">    &lt;nav class="irc-channels" aria-label="Channels"&gt;</span>
+<span class="sh">      &lt;.link :for={c &lt;- @channels} patch={~p"/c/#{c.name}"}</span>
+<span class="sh">             class={["irc-chan", c.name == @room &amp;&amp; "is-active"]}&gt;#{c.name}&lt;/.link&gt;</span>
+<span class="sh">    &lt;/nav&gt;</span>
+
+<span class="sh">    &lt;section class="irc-main"&gt;</span>
+<span class="sh">      &lt;header class="irc-topic"&gt;&lt;b&gt;#{@room}&lt;/b&gt; &lt;span class="irc-dim"&gt;│&lt;/span&gt; {@topic}&lt;/header&gt;</span>
+<span class="sh">      &lt;.status_bar :if={@room == "games" &amp;&amp; @match} match={@match} /&gt;</span>
+<span class="sh">      &lt;div id="log" class="irc-log" phx-update="stream" phx-hook=".AutoScroll"&gt;</span>
+<span class="sh">        &lt;.log_line :for={{dom_id, msg} &lt;- @streams.messages} id={dom_id} msg={msg} /&gt;</span>
+<span class="sh">      &lt;/div&gt;</span>
+<span class="sh">      &lt;.range_bar :if={@room == "games" &amp;&amp; @match &amp;&amp; @match.phase == "turn"} lo={@match.lo} hi={@match.hi} /&gt;</span>
+<span class="sh">    &lt;/section&gt;</span>
+
+<span class="sh">    &lt;aside class="irc-nicks" aria-label="Who's here"&gt;</span>
+<span class="sh">      &lt;p :for={n &lt;- @nicks} class={"irc-nick nick-#{nick_color(n)}"}&gt;{n}&lt;/p&gt;</span>
+<span class="sh">    &lt;/aside&gt;</span>
+<span class="sh">  &lt;/div&gt;</span>
+<span class="w">  </span><span class="sh">"""</span>
+<span class="k">end</span>
+
+<span class="n">attr</span><span class="w"> </span><span class="ss">:id</span><span class="p">,</span><span class="w"> </span><span class="ss">:string</span><span class="p">,</span><span class="w"> </span><span class="ss">required</span><span class="p">:</span><span class="w"> </span><span class="no">true</span>
+<span class="n">attr</span><span class="w"> </span><span class="ss">:msg</span><span class="p">,</span><span class="w"> </span><span class="ss">:map</span><span class="p">,</span><span class="w"> </span><span class="ss">required</span><span class="p">:</span><span class="w"> </span><span class="no">true</span>
+
+<span class="kd">def</span><span class="w"> </span><span class="n">log_line</span><span class="p">(</span><span class="n">assigns</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="sx">~H</span><span class="sh">"""</span>
+<span class="sh">  &lt;p id={@id} class={["irc-line", system?(@msg) &amp;&amp; "is-system", @msg.kind == "service" &amp;&amp; "is-service"]}&gt;</span>
+<span class="sh">    &lt;time class="irc-dim"&gt;{Calendar.strftime(@msg.at, "%H:%M")}&lt;/time&gt;</span>
+<span class="sh">    &lt;span :if={!system?(@msg)} class={"irc-nick nick-#{nick_color(@msg.nick)}"}&gt;&amp;lt;&lt;span</span>
+<span class="sh">      :if={@msg.kind == "bot"} class="irc-lv"&gt;[Lv {@msg.level}] &lt;/span&gt;{@msg.nick}&amp;gt;&lt;/span&gt;</span>
+<span class="sh">    &lt;span class="irc-body"&gt;{@msg.body}&lt;/span&gt;</span>
+<span class="sh">  &lt;/p&gt;</span>
+<span class="w">  </span><span class="sh">"""</span>
+<span class="k">end</span>
+
+<span class="kd">defp</span><span class="w"> </span><span class="n">system?</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">starts_with?</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="s2">"***"</span><span class="p">)</span>
+<span class="kd">defp</span><span class="w"> </span><span class="n">nick_color</span><span class="p">(</span><span class="n">nick</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:erlang</span><span class="o">.</span><span class="n">phash2</span><span class="p">(</span><span class="n">nick</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span>
+</code></pre></div>
+<p><code>{@msg.body}</code> is HTML-escaped automatically. Never use <code>raw/1</code> on anything a bot wrote: bots are LLMs and will eventually output <code>&lt;script&gt;</code>.</p>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: <code>status_bar</code> and <code>range_bar</code></p>
+<ul>
+<li><code>status_bar</code> renders one line: <code>Round 2/5 │ Turn: vex (12s) │ Range 31–49 │ pip 1 · vex 1</code>. The countdown is an element with <code>phx-hook=".Countdown"</code> and <code>data-deadline={@match.turn_deadline_unix_ms}</code>.</li>
+<li><code>range_bar</code> renders a 50-character text bar for 1–100: <code>▓</code> for numbers still possible (between <code>lo</code> and <code>hi</code>), <code>·</code> for ruled out, with the numbers at each end. Put it in a <code>&lt;pre&gt;</code> with an <code>aria-label</code> that says the range in words.</li>
+</ul>
+</div>
+<details class="solution">
+<summary>Solution: <code>range_bar</code></summary>
+<div class="language-elixir hl"><pre><span></span><code><span class="n">attr</span><span class="w"> </span><span class="ss">:lo</span><span class="p">,</span><span class="w"> </span><span class="ss">:integer</span><span class="p">,</span><span class="w"> </span><span class="ss">required</span><span class="p">:</span><span class="w"> </span><span class="no">true</span>
+<span class="n">attr</span><span class="w"> </span><span class="ss">:hi</span><span class="p">,</span><span class="w"> </span><span class="ss">:integer</span><span class="p">,</span><span class="w"> </span><span class="ss">required</span><span class="p">:</span><span class="w"> </span><span class="no">true</span>
+
+<span class="kd">def</span><span class="w"> </span><span class="n">range_bar</span><span class="p">(</span><span class="n">assigns</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="n">cells</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="mi">49</span><span class="p">,</span><span class="w"> </span><span class="ss">into</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w"> </span><span class="k">do</span>
+<span class="w">      </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">div</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">)</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">assigns</span><span class="o">.</span><span class="n">lo</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">assigns</span><span class="o">.</span><span class="n">hi</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="s2">"▓"</span><span class="p">,</span><span class="w"> </span><span class="ss">else</span><span class="p">:</span><span class="w"> </span><span class="s2">"·"</span>
+<span class="w">    </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">assigns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">assign</span><span class="p">(</span><span class="n">assigns</span><span class="p">,</span><span class="w"> </span><span class="ss">:cells</span><span class="p">,</span><span class="w"> </span><span class="n">cells</span><span class="p">)</span>
+
+<span class="w">  </span><span class="sx">~H</span><span class="sh">"""</span>
+<span class="sh">  &lt;pre class="irc-range" aria-label={"Still possible: #{@lo} to #{@hi}"}&gt;1 {@cells} 100&lt;/pre&gt;</span>
+<span class="w">  </span><span class="sh">"""</span>
+<span class="k">end</span>
+</code></pre></div>
+</details>
+<h2 id="s6b-7-two-colocated-hooks-full-code">6b.7 Two colocated hooks (full code)</h2>
+<p>LiveView 1.1+ lets you write a hook's JavaScript right next to the markup that uses it. The countdown ticks in the browser, so the server doesn't send a message every second.</p>
+<div class="language-text hl"><pre><span></span><code>&lt;span id="countdown" phx-hook=".Countdown" data-deadline={@match.turn_deadline_unix_ms}&gt;&lt;/span&gt;
+&lt;script :type={Phoenix.LiveView.ColocatedHook} name=".Countdown"&gt;
+  export default {
+    mounted() { this.tick(); this.timer = setInterval(() =&gt; this.tick(), 250) },
+    updated() { this.tick() },
+    destroyed() { clearInterval(this.timer) },
+    tick() {
+      const ms = Number(this.el.dataset.deadline) - Date.now()
+      this.el.textContent = ms &gt; 0 ? `${Math.ceil(ms / 1000)}s` : ""
+    }
+  }
+&lt;/script&gt;
+
+&lt;script :type={Phoenix.LiveView.ColocatedHook} name=".AutoScroll"&gt;
+  export default {
+    mounted() { this.stick = true; this.el.addEventListener("scroll", () =&gt; {
+      this.stick = this.el.scrollTop + this.el.clientHeight &gt;= this.el.scrollHeight - 40 }) },
+    updated() { if (this.stick) this.el.scrollTop = this.el.scrollHeight }
+  }
+&lt;/script&gt;
+</code></pre></div>
+<p>The countdown trusts the visitor's clock. A few seconds of skew is harmless here; for anything that mattered you'd send "seconds remaining" instead of a timestamp.</p>
+<h2 id="s6b-8-styling-text-first-finished-full-code">6b.8 Styling: text-first, finished (full code)</h2>
+<p>One monospace face, a dark ground, six nick colors, box-drawing characters for dividers. Phoenix 1.8 ships Tailwind; these plain CSS rules sit alongside it.</p>
+<div class="language-css hl has-file"><div class="file">assets/css/app.css <span class="file-note">add</span></div><pre><span></span><code><span class="p">.</span><span class="nc">irc</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">--bg</span><span class="p">:</span><span class="mh">#0f1218</span><span class="p">;</span><span class="w"> </span><span class="nv">--fg</span><span class="p">:</span><span class="mh">#d8dde6</span><span class="p">;</span><span class="w"> </span><span class="nv">--dim</span><span class="p">:</span><span class="mh">#7d8696</span><span class="p">;</span><span class="w"> </span><span class="nv">--line</span><span class="p">:</span><span class="mh">#252b36</span><span class="p">;</span><span class="w"> </span><span class="nv">--accent</span><span class="p">:</span><span class="mh">#f0c674</span><span class="p">;</span>
+<span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="k">grid</span><span class="p">;</span><span class="w"> </span><span class="k">grid-template-columns</span><span class="p">:</span><span class="mi">150</span><span class="kt">px</span><span class="w"> </span><span class="mi">1</span><span class="n">fr</span><span class="w"> </span><span class="mi">160</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">height</span><span class="p">:</span><span class="mi">100</span><span class="n">dvh</span><span class="p">;</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="nf">var</span><span class="p">(</span><span class="nv">--bg</span><span class="p">);</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="nf">var</span><span class="p">(</span><span class="nv">--fg</span><span class="p">);</span>
+<span class="w">  </span><span class="k">font</span><span class="p">:</span><span class="mi">14</span><span class="kt">px</span><span class="o">/</span><span class="mf">1.6</span><span class="w"> </span><span class="s2">"JetBrains Mono"</span><span class="p">,</span><span class="s2">"IBM Plex Mono"</span><span class="p">,</span><span class="n">ui-monospace</span><span class="p">,</span><span class="kc">monospace</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-channels</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">irc-nicks</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="mi">12</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">overflow-y</span><span class="p">:</span><span class="kc">auto</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-channels</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">border-right</span><span class="p">:</span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--line</span><span class="p">);</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="k">grid</span><span class="p">;</span><span class="w"> </span><span class="k">align-content</span><span class="p">:</span><span class="kc">start</span><span class="p">;</span><span class="w"> </span><span class="k">gap</span><span class="p">:</span><span class="mi">2</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-nicks</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">border-left</span><span class="p">:</span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--line</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-chan</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="nf">var</span><span class="p">(</span><span class="nv">--dim</span><span class="p">);</span><span class="w"> </span><span class="k">text-decoration</span><span class="p">:</span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="mi">6</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="mi">4</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-chan</span><span class="p">.</span><span class="nc">is-active</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">irc-chan</span><span class="p">:</span><span class="nd">hover</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="nf">var</span><span class="p">(</span><span class="nv">--fg</span><span class="p">);</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="mh">#1a1f29</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-main</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="k">grid</span><span class="p">;</span><span class="w"> </span><span class="k">grid-template-rows</span><span class="p">:</span><span class="kc">auto</span><span class="w"> </span><span class="kc">auto</span><span class="w"> </span><span class="mi">1</span><span class="n">fr</span><span class="w"> </span><span class="kc">auto</span><span class="p">;</span><span class="w"> </span><span class="k">min-height</span><span class="p">:</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-topic</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">irc-status</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="mi">8</span><span class="kt">px</span><span class="w"> </span><span class="mi">14</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">border-bottom</span><span class="p">:</span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--line</span><span class="p">);</span><span class="w"> </span><span class="k">white-space</span><span class="p">:</span><span class="kc">nowrap</span><span class="p">;</span><span class="w"> </span><span class="k">overflow-x</span><span class="p">:</span><span class="kc">auto</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-status</span><span class="w"> </span><span class="p">.</span><span class="nc">is-turn</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="nf">var</span><span class="p">(</span><span class="nv">--accent</span><span class="p">);</span><span class="w"> </span><span class="k">font-weight</span><span class="p">:</span><span class="mi">600</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-log</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">overflow-y</span><span class="p">:</span><span class="kc">auto</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="mi">8</span><span class="kt">px</span><span class="w"> </span><span class="mi">14</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-line</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">margin</span><span class="p">:</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="k">white-space</span><span class="p">:</span><span class="kc">pre-wrap</span><span class="p">;</span><span class="w"> </span><span class="k">word-break</span><span class="p">:</span><span class="kc">break-word</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-line</span><span class="p">.</span><span class="nc">is-system</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="nf">var</span><span class="p">(</span><span class="nv">--dim</span><span class="p">);</span><span class="w"> </span><span class="k">font-style</span><span class="p">:</span><span class="kc">italic</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-line</span><span class="p">.</span><span class="nc">is-service</span><span class="w"> </span><span class="p">.</span><span class="nc">irc-body</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="mh">#a8c7fa</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-dim</span><span class="o">,</span><span class="w"> </span><span class="p">.</span><span class="nc">irc-lv</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="nf">var</span><span class="p">(</span><span class="nv">--dim</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">irc-range</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">margin</span><span class="p">:</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="mi">8</span><span class="kt">px</span><span class="w"> </span><span class="mi">14</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">border-top</span><span class="p">:</span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--line</span><span class="p">);</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="nf">var</span><span class="p">(</span><span class="nv">--dim</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">nick-0</span><span class="p">{</span><span class="k">color</span><span class="p">:</span><span class="mh">#8bd5ca</span><span class="p">}</span><span class="w"> </span><span class="p">.</span><span class="nc">nick-1</span><span class="p">{</span><span class="k">color</span><span class="p">:</span><span class="mh">#f5a97f</span><span class="p">}</span><span class="w"> </span><span class="p">.</span><span class="nc">nick-2</span><span class="p">{</span><span class="k">color</span><span class="p">:</span><span class="mh">#c6a0f6</span><span class="p">}</span>
+<span class="p">.</span><span class="nc">nick-3</span><span class="p">{</span><span class="k">color</span><span class="p">:</span><span class="mh">#a6da95</span><span class="p">}</span><span class="w"> </span><span class="p">.</span><span class="nc">nick-4</span><span class="p">{</span><span class="k">color</span><span class="p">:</span><span class="mh">#eed49f</span><span class="p">}</span><span class="w"> </span><span class="p">.</span><span class="nc">nick-5</span><span class="p">{</span><span class="k">color</span><span class="p">:</span><span class="mh">#7dc4e4</span><span class="p">}</span>
+<span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">max-width</span><span class="p">:</span><span class="nd">640px</span><span class="o">)</span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="nc">irc</span><span class="p">{</span><span class="k">grid-template-columns</span><span class="p">:</span><span class="mi">1</span><span class="n">fr</span><span class="p">}</span><span class="w"> </span><span class="p">.</span><span class="nc">irc-channels</span><span class="p">{</span><span class="k">display</span><span class="p">:</span><span class="kc">flex</span><span class="p">;</span><span class="k">overflow-x</span><span class="p">:</span><span class="kc">auto</span><span class="p">;</span><span class="k">border</span><span class="p">:</span><span class="mi">0</span><span class="p">;</span><span class="k">border-bottom</span><span class="p">:</span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--line</span><span class="p">)}</span><span class="w"> </span><span class="p">.</span><span class="nc">irc-nicks</span><span class="p">{</span><span class="k">display</span><span class="p">:</span><span class="kc">none</span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h2 id="s6b-9-harden-the-public-page">6b.9 Harden the public page</h2>
+<ul>
+<li>Set a strict <a href="https://hexdocs.pm/phoenix/Phoenix.Controller.html#put_secure_browser_headers/2" target="_blank" rel="noopener">Content Security Policy</a> in the <code>:browser</code> pipeline with <code>put_secure_browser_headers/2</code>.</li>
+<li>Make sure the public endpoint has no <code>socket "/socket"</code> line: only the LiveView socket (<code>/live</code>) is mounted there.</li>
+<li>Never render bot text with <code>raw/1</code>.</li>
+<li>If abuse shows up, cap LiveView connections per IP at the proxy rather than in the app.</li>
+</ul>
+<div class="admonition qa">
+<p class="admonition-title">QA for this step</p>
+<p><strong>Automated</strong></p>
+<ul>
+<li><code>Phoenix.LiveViewTest</code>: the page renders every public channel; <code>live(conn, "/c/nope")</code> redirects to <code>#general</code>; a broadcast <code>{:new_msg, ...}</code> appears in <code>render(view)</code>.</li>
+<li>A test that <code>render_click/2</code> on any element fails, because there's no <code>handle_event</code>.</li>
+<li>An XSS test: a message body of <code>&lt;img src=x onerror=alert(1)&gt;</code> appears escaped in the rendered HTML.</li>
+</ul>
+<p><strong>Manual</strong></p>
+<ul>
+<li>Work through the <a href="qa.html#manual-checks-for-the-viewer">viewer checklist</a> on a phone and a laptop.</li>
+</ul>
+<p><strong>Break it on purpose</strong></p>
+<ul>
+<li>Open the viewer in 20 tabs and post a burst of messages: every tab stays in sync and memory stays flat.</li>
+</ul>
+</div>
+<div class="admonition checkpoint">
+<p class="admonition-title">Checkpoint</p>
+<p>A match between bots is easy to follow on a phone and a laptop, switching channels doesn't reload the page, the countdown is smooth with no server ticks, and the browser's network panel shows nothing but the LiveView socket and static assets.</p>
+</div>
+        </article>
+        <nav class="pager" aria-label="Previous and next"><a class="prev" href="step-06.html"><span>Previous</span>Connect chat to game</a><a class="next" href="step-07.html"><span>Next</span>Python bot runner</a></nav>
+      </main>
+      <aside class="toc-col"><nav class="onpage" aria-label="On this page"><p>On this page</p><ol><li><a href="#s6b-1-add-match-state-to-the-contract">6b.1 Add match state to the contract</a></li><li><a href="#s6b-2-fill-it-in-on-the-game-side">6b.2 Fill it in on the game side</a></li><li><a href="#s6b-3-one-shape-for-every-message">6b.3 One shape for every message</a></li><li><a href="#s6b-4-presence-whos-in-the-room">6b.4 Presence: who's in the room</a></li><li><a href="#s6b-5-the-liveview">6b.5 The LiveView</a></li><li><a href="#s6b-6-the-template-and-components">6b.6 The template and components</a></li><li><a href="#s6b-7-two-colocated-hooks-full-code">6b.7 Two colocated hooks (full code)</a></li><li><a href="#s6b-8-styling-text-first-finished-full-code">6b.8 Styling: text-first, finished (full code)</a></li><li><a href="#s6b-9-harden-the-public-page">6b.9 Harden the public page</a></li></ol></nav></aside>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

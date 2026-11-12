@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS foundations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-step">
+<div class="shell">
+  <aside class="rail" aria-label="Guide pages">
+    <a class="brand" href="index.html">botchat<small>a microservices build guide</small></a>
+    <div class="progress" aria-live="polite">
+      <div class="progress-row"><span>progress</span><span class="prog-text">0 / 16 steps</span></div>
+      <div class="bar"><span class="prog-bar"></span></div>
+    </div>
+    <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html" aria-current="page" class="active"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+    </ol></nav>
+    <p class="rail-foot">Progress is saved in this browser only.</p>
+  </aside>
+
+  <div class="col">
+    <details class="mobile-nav">
+      <summary>All pages · <span class="prog-text">0 / 16 steps</span></summary>
+      <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html" aria-current="page" class="active"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+      </ol></nav>
+    </details>
+    <div class="content-grid">
+      <main>
+        <article>
+          <header class="page-head"><p class="kicker"><span class="step-no">Step 8</span><span class="meta-time">1–2 evenings</span></p><h1>AWS foundations</h1><p class="lede">Set up an AWS account safely: locked-down root, single sign-on for daily use, a CLI with no long-lived keys, and a budget alarm.</p><label class="mark"><input type="checkbox" data-step="step-08.html"> Mark this step done</label></header>
+<p>Set the account up safely before you create anything. Then a mistake costs you an email, not a bill.</p>
+<div class="admonition learn">
+<p class="admonition-title">Learn first</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-creating.html" target="_blank" rel="noopener">Create an AWS account</a> and the current <a href="https://aws.amazon.com/free/" target="_blank" rel="noopener">Free Tier terms</a> (they changed in 2025; read them).</li>
+<li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-best-practices.html" target="_blank" rel="noopener">Root user best practices</a>.</li>
+<li><a href="https://docs.aws.amazon.com/singlesignon/latest/userguide/getting-started.html" target="_blank" rel="noopener">IAM Identity Center getting started</a>.</li>
+<li><a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html" target="_blank" rel="noopener">AWS CLI v2 install</a> and <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html" target="_blank" rel="noopener">SSO with the CLI</a>.</li>
+<li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html" target="_blank" rel="noopener">IAM security best practices</a>, especially least privilege.</li>
+</ul>
+</div>
+<h2 id="s8-1-lock-down-the-root-user">8.1 Lock down the root user</h2>
+<ol>
+<li>Create the account with an email you'll keep forever.</li>
+<li>In <strong>Security credentials</strong>, turn on MFA for the root user (a passkey or authenticator app).</li>
+<li>Don't create access keys for root. From now on you only sign in as root to change billing or close the account.</li>
+</ol>
+<h2 id="s8-2-a-daily-login-with-iam-identity-center">8.2 A daily login with IAM Identity Center</h2>
+<ol>
+<li>Open <strong>IAM Identity Center</strong> and enable it in the region you'll use for everything (this guide uses <code>us-east-1</code>).</li>
+<li>Create a user for yourself.</li>
+<li>Create a permission set from the <code>AdministratorAccess</code> managed policy. That's fine for a personal sandbox; services will get tiny, specific permissions in Step 11.</li>
+<li>Assign your user to your AWS account with that permission set.</li>
+<li>Sign in through the <strong>AWS access portal</strong> URL Identity Center shows you. Bookmark it.</li>
+</ol>
+<h2 id="s8-3-the-cli-without-long-lived-keys">8.3 The CLI without long-lived keys</h2>
+<div class="language-bash hl"><pre><span></span><code>aws<span class="w"> </span>configure<span class="w"> </span>sso
+<span class="c1">#   SSO session name: botchat</span>
+<span class="c1">#   SSO start URL:    &lt;your access portal URL&gt;</span>
+<span class="c1">#   SSO region:       us-east-1</span>
+<span class="c1">#   (a browser opens; approve, then pick the account and AdministratorAccess)</span>
+<span class="c1">#   CLI profile name: botchat</span>
+
+aws<span class="w"> </span>sso<span class="w"> </span>login<span class="w"> </span>--profile<span class="w"> </span>botchat
+aws<span class="w"> </span>sts<span class="w"> </span>get-caller-identity<span class="w"> </span>--profile<span class="w"> </span>botchat
+<span class="nb">export</span><span class="w"> </span><span class="nv">AWS_PROFILE</span><span class="o">=</span>botchat<span class="w">      </span><span class="c1"># add to your shell profile</span>
+</code></pre></div>
+<p><code>get-caller-identity</code> should print your account ID and an assumed-role ARN. The credentials it uses expire after a few hours; <code>aws sso login</code> renews them. Nothing secret sits in <code>~/.aws/credentials</code>.</p>
+<h2 id="s8-4-a-budget-alarm">8.4 A budget alarm</h2>
+<div class="language-bash hl"><pre><span></span><code><span class="nv">ACCOUNT_ID</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>sts<span class="w"> </span>get-caller-identity<span class="w"> </span>--query<span class="w"> </span>Account<span class="w"> </span>--output<span class="w"> </span>text<span class="k">)</span>
+
+aws<span class="w"> </span>budgets<span class="w"> </span>create-budget<span class="w"> </span>--account-id<span class="w"> </span><span class="s2">"</span><span class="nv">$ACCOUNT_ID</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--budget<span class="w"> </span><span class="s1">'{"BudgetName":"botchat-monthly","BudgetLimit":{"Amount":"10","Unit":"USD"},</span>
+<span class="s1">             "TimeUnit":"MONTHLY","BudgetType":"COST"}'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--notifications-with-subscribers<span class="w"> </span><span class="s1">'[</span>
+<span class="s1">    {"Notification":{"NotificationType":"ACTUAL","ComparisonOperator":"GREATER_THAN","Threshold":50},</span>
+<span class="s1">     "Subscribers":[{"SubscriptionType":"EMAIL","Address":"you@example.com"}]},</span>
+<span class="s1">    {"Notification":{"NotificationType":"FORECASTED","ComparisonOperator":"GREATER_THAN","Threshold":100},</span>
+<span class="s1">     "Subscribers":[{"SubscriptionType":"EMAIL","Address":"you@example.com"}]}]'</span>
+</code></pre></div>
+<p>You'll get an email at 50% of $10 actual spend and when the month is forecast to pass $10. SNS, SQS and Lambda at this project's volume cost cents a month, so an alert means something is wrong.</p>
+<h2 id="s8-5-tour-sns-and-sqs-by-hand">8.5 Tour SNS and SQS by hand</h2>
+<p>Do this once in the CLI so the Terraform in Step 11 makes sense. Then delete everything.</p>
+<div class="language-bash hl"><pre><span></span><code><span class="nv">TOPIC</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>sns<span class="w"> </span>create-topic<span class="w"> </span>--name<span class="w"> </span>tour-events<span class="w"> </span>--query<span class="w"> </span>TopicArn<span class="w"> </span>--output<span class="w"> </span>text<span class="k">)</span>
+<span class="nv">QUEUE_URL</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>sqs<span class="w"> </span>create-queue<span class="w"> </span>--queue-name<span class="w"> </span>tour-queue<span class="w"> </span>--query<span class="w"> </span>QueueUrl<span class="w"> </span>--output<span class="w"> </span>text<span class="k">)</span>
+<span class="nv">QUEUE_ARN</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>sqs<span class="w"> </span>get-queue-attributes<span class="w"> </span>--queue-url<span class="w"> </span><span class="s2">"</span><span class="nv">$QUEUE_URL</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--attribute-names<span class="w"> </span>QueueArn<span class="w"> </span>--query<span class="w"> </span>Attributes.QueueArn<span class="w"> </span>--output<span class="w"> </span>text<span class="k">)</span>
+
+<span class="c1"># Allow this topic (and only it) to send to the queue. Needs jq (brew/apt install jq).</span>
+<span class="nv">POLICY</span><span class="o">=</span><span class="k">$(</span>jq<span class="w"> </span>-cn<span class="w"> </span>--arg<span class="w"> </span>q<span class="w"> </span><span class="s2">"</span><span class="nv">$QUEUE_ARN</span><span class="s2">"</span><span class="w"> </span>--arg<span class="w"> </span>t<span class="w"> </span><span class="s2">"</span><span class="nv">$TOPIC</span><span class="s2">"</span><span class="w"> </span><span class="s1">'{</span>
+<span class="s1">  Version: "2012-10-17",</span>
+<span class="s1">  Statement: [{Effect: "Allow", Principal: {Service: "sns.amazonaws.com"},</span>
+<span class="s1">    Action: "sqs:SendMessage", Resource: $q,</span>
+<span class="s1">    Condition: {ArnEquals: {"aws:SourceArn": $t}}}]}'</span><span class="k">)</span>
+jq<span class="w"> </span>-n<span class="w"> </span>--arg<span class="w"> </span>p<span class="w"> </span><span class="s2">"</span><span class="nv">$POLICY</span><span class="s2">"</span><span class="w"> </span><span class="s1">'{Policy: $p}'</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/attrs.json
+aws<span class="w"> </span>sqs<span class="w"> </span>set-queue-attributes<span class="w"> </span>--queue-url<span class="w"> </span><span class="s2">"</span><span class="nv">$QUEUE_URL</span><span class="s2">"</span><span class="w"> </span>--attributes<span class="w"> </span>file:///tmp/attrs.json
+
+aws<span class="w"> </span>sns<span class="w"> </span>subscribe<span class="w"> </span>--topic-arn<span class="w"> </span><span class="s2">"</span><span class="nv">$TOPIC</span><span class="s2">"</span><span class="w"> </span>--protocol<span class="w"> </span>sqs<span class="w"> </span>--notification-endpoint<span class="w"> </span><span class="s2">"</span><span class="nv">$QUEUE_ARN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--attributes<span class="w"> </span><span class="nv">RawMessageDelivery</span><span class="o">=</span><span class="nb">true</span>
+
+aws<span class="w"> </span>sns<span class="w"> </span>publish<span class="w"> </span>--topic-arn<span class="w"> </span><span class="s2">"</span><span class="nv">$TOPIC</span><span class="s2">"</span><span class="w"> </span>--message<span class="w"> </span><span class="s1">'{"hello":"queue"}'</span>
+aws<span class="w"> </span>sqs<span class="w"> </span>receive-message<span class="w"> </span>--queue-url<span class="w"> </span><span class="s2">"</span><span class="nv">$QUEUE_URL</span><span class="s2">"</span><span class="w"> </span>--wait-time-seconds<span class="w"> </span><span class="m">5</span>
+</code></pre></div>
+<p>You should see your JSON in <code>Body</code>. Run <code>receive-message</code> again within 30 s: nothing. Wait 30 s and run it again: the same message is back, because you never deleted it. That's the <strong>visibility timeout</strong>, and it's why consumers must delete messages after processing and must be idempotent.</p>
+<div class="language-bash hl"><pre><span></span><code>aws<span class="w"> </span>sns<span class="w"> </span>delete-topic<span class="w"> </span>--topic-arn<span class="w"> </span><span class="s2">"</span><span class="nv">$TOPIC</span><span class="s2">"</span>
+aws<span class="w"> </span>sqs<span class="w"> </span>delete-queue<span class="w"> </span>--queue-url<span class="w"> </span><span class="s2">"</span><span class="nv">$QUEUE_URL</span><span class="s2">"</span>
+</code></pre></div>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: break it on purpose</p>
+<p>Repeat the tour without <code>RawMessageDelivery=true</code> and compare the message body: you'll see SNS's JSON envelope wrapping your message. Then remove the queue policy and publish again: the message silently never arrives. Remember both when something "just doesn't work" later.</p>
+</div>
+<div class="admonition qa">
+<p class="admonition-title">QA for this step</p>
+<p><strong>Automated</strong></p>
+<ul>
+<li><code>aws iam get-account-summary --query 'SummaryMap.AccountAccessKeysPresent'</code> returns 0 (no root access keys).</li>
+</ul>
+<p><strong>Manual</strong></p>
+<ul>
+<li>Trigger the budget alert by temporarily lowering the budget below current spend; confirm the email arrives, then restore it.</li>
+</ul>
+<p><strong>Break it on purpose</strong></p>
+<ul>
+<li>Run the SNS/SQS tour without the queue policy and confirm the message silently doesn't arrive: now you'll recognize the symptom.</li>
+</ul>
+</div>
+<div class="admonition checkpoint">
+<p class="admonition-title">Checkpoint</p>
+<p><code>aws sts get-caller-identity</code> works with no access keys on your machine, root has MFA, the budget exists, and you've seen a message go from SNS to SQS and reappear after its visibility timeout.</p>
+</div>
+        </article>
+        <nav class="pager" aria-label="Previous and next"><a class="prev" href="step-07.html"><span>Previous</span>Python bot runner</a><a class="next" href="step-09.html"><span>Next</span>&quot;Events: SNS, SQS and Broadway&quot;</a></nav>
+      </main>
+      <aside class="toc-col"><nav class="onpage" aria-label="On this page"><p>On this page</p><ol><li><a href="#s8-1-lock-down-the-root-user">8.1 Lock down the root user</a></li><li><a href="#s8-2-a-daily-login-with-iam-identity-center">8.2 A daily login with IAM Identity Center</a></li><li><a href="#s8-3-the-cli-without-long-lived-keys">8.3 The CLI without long-lived keys</a></li><li><a href="#s8-4-a-budget-alarm">8.4 A budget alarm</a></li><li><a href="#s8-5-tour-sns-and-sqs-by-hand">8.5 Tour SNS and SQS by hand</a></li></ol></nav></aside>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

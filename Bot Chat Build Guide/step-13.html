@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deploy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-step">
+<div class="shell">
+  <aside class="rail" aria-label="Guide pages">
+    <a class="brand" href="index.html">botchat<small>a microservices build guide</small></a>
+    <div class="progress" aria-live="polite">
+      <div class="progress-row"><span>progress</span><span class="prog-text">0 / 16 steps</span></div>
+      <div class="bar"><span class="prog-bar"></span></div>
+    </div>
+    <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html" aria-current="page" class="active"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+    </ol></nav>
+    <p class="rail-foot">Progress is saved in this browser only.</p>
+  </aside>
+
+  <div class="col">
+    <details class="mobile-nav">
+      <summary>All pages · <span class="prog-text">0 / 16 steps</span></summary>
+      <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html" aria-current="page" class="active"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+      </ol></nav>
+    </details>
+    <div class="content-grid">
+      <main>
+        <article>
+          <header class="page-head"><p class="kicker"><span class="step-no">Step 13</span><span class="meta-time">1 week</span></p><h1>Deploy</h1><p class="lede">Run chat, game and bots as three Fly.io apps on a private network, keep the queues and Lambda in AWS, and expose only the read-only viewer.</p><label class="mark"><input type="checkbox" data-step="step-13.html"> Mark this step done</label></header>
+<p>Chat, game and bots become three Fly.io apps that talk over Fly's private network. The queues and Lambda stay in AWS. Only the chat app's viewer (port 4000) gets a public address.</p>
+<div class="admonition learn">
+<p class="admonition-title">Learn first</p>
+<ul>
+<li><a href="https://fly.io/docs/elixir/getting-started/" target="_blank" rel="noopener">Fly.io Elixir getting started</a>: <code>fly launch</code> detects Phoenix, generates a release and Dockerfile, and can attach Postgres.</li>
+<li><a href="https://fly.io/docs/networking/private-networking/" target="_blank" rel="noopener">Private networking</a>: <code>&lt;app&gt;.internal</code> addresses, encrypted between your apps and never public.</li>
+<li><a href="https://fly.io/docs/reference/configuration/" target="_blank" rel="noopener">fly.toml reference</a>: only ports listed under <code>[http_service]</code> or <code>[[services]]</code> are public.</li>
+<li><a href="https://fly.io/docs/apps/secrets/" target="_blank" rel="noopener">Secrets</a> and <a href="https://fly.io/docs/flyctl/ssh-console/" target="_blank" rel="noopener"><code>fly ssh console</code></a>.</li>
+<li><a href="https://fly.io/docs/about/pricing/" target="_blank" rel="noopener">Fly pricing</a>: check it before you launch.</li>
+</ul>
+</div>
+<h2 id="s13-1-chat">13.1 Chat</h2>
+<div class="language-bash hl"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>chat
+fly<span class="w"> </span>launch<span class="w"> </span>--name<span class="w"> </span>botchat<span class="w"> </span>--no-deploy<span class="w">     </span><span class="c1"># accept Postgres when asked</span>
+</code></pre></div>
+<div class="language-toml hl has-file"><div class="file">chat/fly.toml <span class="file-note">the parts that matter</span></div><pre><span></span><code><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"botchat"</span>
+<span class="n">primary_region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"iad"</span>
+
+<span class="k">[deploy]</span>
+<span class="w">  </span><span class="n">release_command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/app/bin/migrate"</span>
+
+<span class="k">[env]</span>
+<span class="w">  </span><span class="n">PHX_HOST</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"botchat.fly.dev"</span>
+<span class="w">  </span><span class="n">INTERNAL_PORT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"4001"</span>
+
+<span class="k">[http_service]</span><span class="w">              </span><span class="c1"># the ONLY public port</span>
+<span class="w">  </span><span class="n">internal_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4000</span>
+<span class="w">  </span><span class="n">force_https</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="n">auto_stop_machines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"off"</span><span class="w">   </span><span class="c1"># bots need it running</span>
+<span class="w">  </span><span class="n">min_machines_running</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+</code></pre></div>
+<p>Port 4001 appears nowhere in this file, so it's reachable only as <code>botchat.internal:4001</code> from your other apps.</p>
+<div class="language-bash hl"><pre><span></span><code>fly<span class="w"> </span>secrets<span class="w"> </span><span class="nb">set</span><span class="w"> </span>-a<span class="w"> </span>botchat<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">GAME_ADDR</span><span class="o">=</span>botchat-game.internal:50051<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">GAME_INTERNAL_TOKEN</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>openssl<span class="w"> </span>rand<span class="w"> </span>-hex<span class="w"> </span><span class="m">32</span><span class="k">)</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">LEVEL_QUEUE_URL</span><span class="o">=</span>&lt;from<span class="w"> </span>terraform<span class="w"> </span>output&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">NOTICES_QUEUE_URL</span><span class="o">=</span>&lt;from<span class="w"> </span>terraform<span class="w"> </span>output&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">AWS_ACCESS_KEY_ID</span><span class="o">=</span>&lt;chat-consumer<span class="w"> </span>key&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">AWS_SECRET_ACCESS_KEY</span><span class="o">=</span>&lt;chat-consumer<span class="w"> </span>secret&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">AWS_REGION</span><span class="o">=</span>us-east-1
+fly<span class="w"> </span>deploy
+</code></pre></div>
+<p>Keep the <code>GAME_INTERNAL_TOKEN</code> value: the game needs the same one.</p>
+<h2 id="s13-2-game">13.2 Game</h2>
+<div class="language-bash hl"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>game
+fly<span class="w"> </span>launch<span class="w"> </span>--name<span class="w"> </span>botchat-game<span class="w"> </span>--no-deploy
+</code></pre></div>
+<div class="language-toml hl has-file"><div class="file">game/fly.toml</div><pre><span></span><code><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"botchat-game"</span>
+<span class="n">primary_region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"iad"</span>
+
+<span class="k">[env]</span>
+<span class="w">  </span><span class="n">EVENTS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"sns"</span>
+
+<span class="c1"># No [http_service] and no [[services]]: no public address at all.</span>
+
+<span class="k">[[vm]]</span>
+<span class="w">  </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"shared-cpu-1x"</span>
+<span class="w">  </span><span class="n">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"256mb"</span>
+</code></pre></div>
+<p>The server listens on <code>[::]:50051</code> (Step 5), which covers Fly's IPv6 private network. Give it its own database: a second database on the same Postgres cluster is fine for a demo, as long as only the game's credentials can reach it.</p>
+<div class="language-bash hl"><pre><span></span><code>fly<span class="w"> </span>secrets<span class="w"> </span><span class="nb">set</span><span class="w"> </span>-a<span class="w"> </span>botchat-game<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">DATABASE_URL</span><span class="o">=</span>&lt;game<span class="w"> </span>database<span class="w"> </span>url&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">GAME_INTERNAL_TOKEN</span><span class="o">=</span>&lt;same<span class="w"> </span>value<span class="w"> </span>as<span class="w"> </span>chat&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">GAME_EVENTS_TOPIC_ARN</span><span class="o">=</span>&lt;from<span class="w"> </span>terraform<span class="w"> </span>output&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">AWS_ACCESS_KEY_ID</span><span class="o">=</span>&lt;game-publisher<span class="w"> </span>key&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">AWS_SECRET_ACCESS_KEY</span><span class="o">=</span>&lt;game-publisher<span class="w"> </span>secret&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">AWS_REGION</span><span class="o">=</span>us-east-1
+fly<span class="w"> </span>deploy
+</code></pre></div>
+<p>Run the <code>players</code> migration once with <code>fly ssh console -a botchat-game</code> and <code>psql</code>, or add a <code>migrate</code> subcommand to the binary and use it as a <code>release_command</code>.</p>
+<h2 id="s13-3-bots">13.3 Bots</h2>
+<div class="language-toml hl has-file"><div class="file">bots/fly.toml</div><pre><span></span><code><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"botchat-bots"</span>
+<span class="n">primary_region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"iad"</span>
+
+<span class="k">[env]</span>
+<span class="w">  </span><span class="n">CHAT_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"ws://botchat.internal:4001"</span>
+
+<span class="c1"># No services: the bot runner only makes outbound connections.</span>
+</code></pre></div>
+<h2 id="s13-4-create-bots-and-tokens-in-production">13.4 Create bots and tokens in production</h2>
+<p>Upload the personas file to the running machine, then run the seeding function from Step 12 in a remote shell:</p>
+<div class="language-bash hl"><pre><span></span><code>fly<span class="w"> </span>ssh<span class="w"> </span>sftp<span class="w"> </span>shell<span class="w"> </span>-a<span class="w"> </span>botchat
+<span class="c1">#   put bots/bots/personas.toml /tmp/personas.toml</span>
+fly<span class="w"> </span>ssh<span class="w"> </span>console<span class="w"> </span>-a<span class="w"> </span>botchat<span class="w"> </span>-C<span class="w"> </span><span class="s1">'/app/bin/chat eval "Chat.Release.seed_bots(~s(/tmp/personas.toml))"'</span>
+</code></pre></div>
+<p>Or create bots one at a time from <code>fly ssh console -a botchat</code> then <code>/app/bin/chat remote</code>, exactly as in Step 2.</p>
+<p>Copy the token lines into the bots app's secrets, one command, no files left behind:</p>
+<div class="language-bash hl"><pre><span></span><code>fly<span class="w"> </span>secrets<span class="w"> </span><span class="nb">set</span><span class="w"> </span>-a<span class="w"> </span>botchat-bots<span class="w"> </span><span class="nv">OPENROUTER_API_KEY</span><span class="o">=</span>&lt;key&gt;<span class="w"> </span><span class="nv">BOT_TOKEN_PIP</span><span class="o">=</span>...<span class="w"> </span><span class="nv">BOT_TOKEN_VEX</span><span class="o">=</span>...
+fly<span class="w"> </span>deploy<span class="w"> </span>-c<span class="w"> </span>bots/fly.toml
+</code></pre></div>
+<p>Set a <strong>credit limit on the OpenRouter key</strong> in the OpenRouter dashboard before this deploy. It's the backstop if everything else fails.</p>
+<h2 id="s13-5-aws">13.5 AWS</h2>
+<div class="language-bash hl"><pre><span></span><code><span class="o">(</span><span class="nb">cd</span><span class="w"> </span>lambdas/announcer<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>arm64<span class="w"> </span><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-tags<span class="w"> </span>lambda.norpc<span class="w"> </span>-o<span class="w"> </span>bootstrap<span class="w"> </span>.<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>zip<span class="w"> </span>-q<span class="w"> </span><span class="k">function</span>.zip<span class="w"> </span>bootstrap<span class="o">)</span>
+<span class="o">(</span><span class="nb">cd</span><span class="w"> </span>infra<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>terraform<span class="w"> </span>apply<span class="o">)</span>
+</code></pre></div>
+<p>Nothing in AWS needs chat's URL or a secret from chat, because chat pulls.</p>
+<h2 id="s13-6-check-security-from-the-outside">13.6 Check security from the outside</h2>
+<p>Run these from your laptop, which is <em>not</em> on the private network. Every "should fail" must fail.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Command</th>
+<th>Expected</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Viewer loads</td>
+<td>open <code>https://botchat.fly.dev</code></td>
+<td>Works</td>
+</tr>
+<tr>
+<td>Bot socket is private</td>
+<td><code>websocat wss://botchat.fly.dev/socket/websocket</code></td>
+<td>Fails (404)</td>
+</tr>
+<tr>
+<td>Game has no public IP</td>
+<td><code>fly ips list -a botchat-game</code></td>
+<td>Empty</td>
+</tr>
+<tr>
+<td>gRPC isn't reachable</td>
+<td><code>grpcurl botchat-game.fly.dev:443 list</code></td>
+<td>Fails</td>
+</tr>
+<tr>
+<td>Bots have no public IP</td>
+<td><code>fly ips list -a botchat-bots</code></td>
+<td>Empty</td>
+</tr>
+<tr>
+<td>Bad tokens are refused</td>
+<td>from <code>fly ssh console -a botchat-bots</code>, connect with a wrong token</td>
+<td>Refused</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: write it down</p>
+<p>Add a "Security" section to your README with the table from Step 2 and the results of these checks. Interviewers love seeing that you checked, not just that you meant to.</p>
+</div>
+<h2 id="s13-7-smoke-test">13.7 Smoke test</h2>
+<ol>
+<li><code>fly logs -a botchat-bots</code>: 42 bots connected, channels joined.</li>
+<li>The viewer shows conversation in topic channels within a few minutes.</li>
+<li>A match completes in <code>#games</code>.</li>
+<li>A level badge changes and a <code>***</code> notice appears.</li>
+<li><code>fly logs -a botchat-game</code>: no errors; <code>aws sqs get-queue-attributes --attribute-names ApproximateNumberOfMessages</code> on each DLQ: 0.</li>
+</ol>
+<div class="admonition qa">
+<p class="admonition-title">QA for this step</p>
+<p><strong>Automated</strong></p>
+<ul>
+<li>The smoke test passes against production with the production smoke-bot tokens.</li>
+</ul>
+<p><strong>Manual</strong></p>
+<ul>
+<li>Every row of the outside-in security table behaves as expected.</li>
+<li>Work through the <a href="qa.html#release-checklist">release checklist</a>.</li>
+</ul>
+<p><strong>Break it on purpose</strong></p>
+<ul>
+<li>Do the rollback drill from the <a href="qa.html#chaos-drills">chaos drills</a>: deploy a broken image, roll back in under 5 minutes.</li>
+</ul>
+</div>
+<div class="admonition checkpoint">
+<p class="admonition-title">Checkpoint</p>
+<p>The viewer works from your phone, every "should fail" check fails, spend after the first day is under your <code>daily_usd</code>, and the README has a screenshot plus a link to this tutorial's architecture diagram.</p>
+</div><div class="admonition mvp"><p class="admonition-title">MVP 4 reached: Public demo</p><p>Run the demo script and pass the QA gate for <a href="mvp.html#mvp-4-public-demo">MVP 4</a> before moving on, then tag it: <code>git tag mvp-4</code>.</p></div>
+        </article>
+        <nav class="pager" aria-label="Previous and next"><a class="prev" href="step-12.html"><span>Previous</span>Local dev with Docker Compose</a><a class="next" href="step-14.html"><span>Next</span>Observability and CI</a></nav>
+      </main>
+      <aside class="toc-col"><nav class="onpage" aria-label="On this page"><p>On this page</p><ol><li><a href="#s13-1-chat">13.1 Chat</a></li><li><a href="#s13-2-game">13.2 Game</a></li><li><a href="#s13-3-bots">13.3 Bots</a></li><li><a href="#s13-4-create-bots-and-tokens-in-production">13.4 Create bots and tokens in production</a></li><li><a href="#s13-5-aws">13.5 AWS</a></li><li><a href="#s13-6-check-security-from-the-outside">13.6 Check security from the outside</a></li><li><a href="#s13-7-smoke-test">13.7 Smoke test</a></li></ol></nav></aside>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

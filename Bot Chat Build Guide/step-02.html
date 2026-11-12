@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat service in Phoenix</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page-step">
+<div class="shell">
+  <aside class="rail" aria-label="Guide pages">
+    <a class="brand" href="index.html">botchat<small>a microservices build guide</small></a>
+    <div class="progress" aria-live="polite">
+      <div class="progress-row"><span>progress</span><span class="prog-text">0 / 16 steps</span></div>
+      <div class="bar"><span class="prog-bar"></span></div>
+    </div>
+    <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html" aria-current="page" class="active"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+    </ol></nav>
+    <p class="rail-foot">Progress is saved in this browser only.</p>
+  </aside>
+
+  <div class="col">
+    <details class="mobile-nav">
+      <summary>All pages · <span class="prog-text">0 / 16 steps</span></summary>
+      <nav><ol>
+<li><a href="index.html"><span class="chan">#</span><span class="nav-name">Start here</span></a></li>
+<li><a href="concepts.html"><span class="chan">#</span><span class="nav-name">Concepts primer</span></a></li>
+<li><a href="mvp.html"><span class="chan">#</span><span class="nav-name">MVP roadmap</span></a></li>
+<li><a href="qa.html"><span class="chan">#</span><span class="nav-name">QA plan</span></a></li>
+<li><a href="step-00.html"><span class="chan">#0</span><span class="nav-name">Tools and repo setup</span><span class="tick" data-tick="step-00.html" aria-hidden="true"></span></a></li>
+<li><a href="step-01.html"><span class="chan">#1</span><span class="nav-name">Learn Elixir basics</span><span class="tick" data-tick="step-01.html" aria-hidden="true"></span></a></li>
+<li><a href="step-02.html" aria-current="page" class="active"><span class="chan">#2</span><span class="nav-name">Chat service in Phoenix</span><span class="tick" data-tick="step-02.html" aria-hidden="true"></span></a></li>
+<li><a href="step-03.html"><span class="chan">#3</span><span class="nav-name">Learn Go basics</span><span class="tick" data-tick="step-03.html" aria-hidden="true"></span></a></li>
+<li><a href="step-04.html"><span class="chan">#4</span><span class="nav-name">Game service core in Go</span><span class="tick" data-tick="step-04.html" aria-hidden="true"></span></a></li>
+<li><a href="step-05.html"><span class="chan">#5</span><span class="nav-name">Protobuf and gRPC</span><span class="tick" data-tick="step-05.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06.html"><span class="chan">#6</span><span class="nav-name">Connect chat to game</span><span class="tick" data-tick="step-06.html" aria-hidden="true"></span></a></li>
+<li><a href="step-06b.html"><span class="chan">#6b</span><span class="nav-name">The public viewer</span><span class="tick" data-tick="step-06b.html" aria-hidden="true"></span></a></li>
+<li><a href="step-07.html"><span class="chan">#7</span><span class="nav-name">Python bot runner</span><span class="tick" data-tick="step-07.html" aria-hidden="true"></span></a></li>
+<li><a href="step-08.html"><span class="chan">#8</span><span class="nav-name">AWS foundations</span><span class="tick" data-tick="step-08.html" aria-hidden="true"></span></a></li>
+<li><a href="step-09.html"><span class="chan">#9</span><span class="nav-name">Events with SNS and SQS</span><span class="tick" data-tick="step-09.html" aria-hidden="true"></span></a></li>
+<li><a href="step-10.html"><span class="chan">#10</span><span class="nav-name">Lambda announcer in Go</span><span class="tick" data-tick="step-10.html" aria-hidden="true"></span></a></li>
+<li><a href="step-11.html"><span class="chan">#11</span><span class="nav-name">Terraform</span><span class="tick" data-tick="step-11.html" aria-hidden="true"></span></a></li>
+<li><a href="step-12.html"><span class="chan">#12</span><span class="nav-name">Local dev with Compose</span><span class="tick" data-tick="step-12.html" aria-hidden="true"></span></a></li>
+<li><a href="step-13.html"><span class="chan">#13</span><span class="nav-name">Deploy</span><span class="tick" data-tick="step-13.html" aria-hidden="true"></span></a></li>
+<li><a href="step-14.html"><span class="chan">#14</span><span class="nav-name">Observability and CI</span><span class="tick" data-tick="step-14.html" aria-hidden="true"></span></a></li>
+<li><a href="extras.html"><span class="chan">#</span><span class="nav-name">Stretch goals and sources</span></a></li>
+      </ol></nav>
+    </details>
+    <div class="content-grid">
+      <main>
+        <article>
+          <header class="page-head"><p class="kicker"><span class="step-no">Step 2</span><span class="meta-time">1–2 weeks</span></p><h1>Chat service in Phoenix</h1><p class="lede">Build the hub: a Phoenix app with two endpoints, a public read-only one and a private one where bots connect with revocable tokens.</p><label class="mark"><input type="checkbox" data-step="step-02.html"> Mark this step done</label></header>
+<p>The chat service runs <strong>two Phoenix endpoints</strong>. The public one (port 4000) will serve only a read-only viewer. The private one (port 4001) is where bots connect, each with its own secret token. Nothing on the public side can write.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Port</th>
+<th>Who can reach it</th>
+<th>What it allows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ChatWeb.Endpoint</code> (public)</td>
+<td>4000</td>
+<td>Anyone</td>
+<td>Read-only LiveView (Step 6b). No login, no forms, no socket for writing.</td>
+</tr>
+<tr>
+<td><code>ChatWeb.InternalEndpoint</code></td>
+<td>4001</td>
+<td>Private network only</td>
+<td>Bot WebSocket; every bot needs a valid token.</td>
+</tr>
+<tr>
+<td>Admin</td>
+<td>—</td>
+<td>You, via a remote IEx shell</td>
+<td>Create bots, issue and revoke tokens.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="admonition learn">
+<p class="admonition-title">Learn first</p>
+<ul>
+<li><a href="https://hexdocs.pm/phoenix/up_and_running.html" target="_blank" rel="noopener">Phoenix Up and Running</a>, <a href="https://hexdocs.pm/phoenix/request_lifecycle.html" target="_blank" rel="noopener">Request life-cycle</a>, <a href="https://hexdocs.pm/phoenix/contexts.html" target="_blank" rel="noopener">Contexts</a>.</li>
+<li><a href="https://hexdocs.pm/ecto/getting-started.html" target="_blank" rel="noopener">Ecto getting started</a>: schemas, changesets, migrations, <code>Repo</code>.</li>
+<li><a href="https://hexdocs.pm/phoenix/Phoenix.Endpoint.html" target="_blank" rel="noopener">Phoenix.Endpoint</a>: an app can run more than one.</li>
+<li><a href="https://hexdocs.pm/phoenix/channels.html" target="_blank" rel="noopener">Channels guide</a> and <a href="https://hexdocs.pm/phoenix/Phoenix.ChannelTest.html" target="_blank" rel="noopener">Phoenix.ChannelTest</a>.</li>
+<li><a href="https://hexdocs.pm/phoenix/security.html" target="_blank" rel="noopener">Phoenix security guide</a> and the <a href="https://cheatsheetseries.owasp.org/cheatsheets/WebSocket_Security_Cheat_Sheet.html" target="_blank" rel="noopener">OWASP WebSocket cheat sheet</a>.</li>
+</ul>
+</div>
+<h2 id="s2-1-generate-the-app">2.1 Generate the app</h2>
+<p>Postgres runs in Docker; Phoenix's generator creates the project in the empty <code>chat/</code> folder.</p>
+<div class="language-bash hl"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>pg<span class="w"> </span>-e<span class="w"> </span><span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>postgres<span class="w"> </span>-p<span class="w"> </span><span class="m">5432</span>:5432<span class="w"> </span>postgres:17
+mix<span class="w"> </span>archive.install<span class="w"> </span>hex<span class="w"> </span>phx_new
+<span class="nb">cd</span><span class="w"> </span>chat
+mix<span class="w"> </span>phx.new<span class="w"> </span>.<span class="w"> </span>--app<span class="w"> </span>chat
+mix<span class="w"> </span>ecto.create
+mix<span class="w"> </span>phx.server<span class="w">          </span><span class="c1"># http://localhost:4000 shows the Phoenix welcome page</span>
+</code></pre></div>
+<p>There are no human accounts in this system, so skip <code>mix phx.gen.auth</code>.</p>
+<h2 id="s2-2-schemas-users-channels-messages-bot-tokens">2.2 Schemas: users, channels, messages, bot tokens</h2>
+<div class="language-bash hl"><pre><span></span><code>mix<span class="w"> </span>phx.gen.context<span class="w"> </span>Accounts<span class="w"> </span>User<span class="w"> </span>users<span class="w"> </span>nick:string:unique<span class="w"> </span>kind:string<span class="w"> </span>level_cache:integer
+mix<span class="w"> </span>phx.gen.context<span class="w"> </span>Rooms<span class="w"> </span>Channel<span class="w"> </span>channels<span class="w"> </span>name:string:unique<span class="w"> </span>topic:string<span class="w"> </span>public:boolean
+mix<span class="w"> </span>phx.gen.context<span class="w"> </span>Rooms<span class="w"> </span>Message<span class="w"> </span>messages<span class="w"> </span>room:string<span class="w"> </span>body:text<span class="w"> </span>user_id:references:users
+mix<span class="w"> </span>phx.gen.schema<span class="w"> </span>Accounts.BotToken<span class="w"> </span>bot_tokens<span class="w"> </span>token_hash:binary:unique<span class="w"> </span>user_id:references:users
+</code></pre></div>
+<p>Edit the generated user migration so new users start at level 1, then migrate:</p>
+<div class="language-elixir hl has-file"><div class="file">priv/repo/migrations/*_create_users.exs <span class="file-note">excerpt</span></div><pre><span></span><code><span class="n">add</span><span class="w"> </span><span class="ss">:level_cache</span><span class="p">,</span><span class="w"> </span><span class="ss">:integer</span><span class="p">,</span><span class="w"> </span><span class="ss">null</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="n">add</span><span class="w"> </span><span class="ss">:kind</span><span class="p">,</span><span class="w"> </span><span class="ss">:string</span><span class="p">,</span><span class="w"> </span><span class="ss">null</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="w">   </span><span class="c1"># "bot" or "service" (GameServ)</span>
+</code></pre></div>
+<div class="language-bash hl"><pre><span></span><code>mix<span class="w"> </span>ecto.migrate
+</code></pre></div>
+<p>Seed the channels so there's something to join:</p>
+<div class="language-elixir hl has-file"><div class="file">priv/repo/seeds.exs</div><pre><span></span><code><span class="kn">alias</span><span class="w"> </span><span class="nc">Chat</span><span class="o">.</span><span class="p">{</span><span class="nc">Repo</span><span class="p">,</span><span class="w"> </span><span class="nc">Rooms.Channel</span><span class="p">,</span><span class="w"> </span><span class="nc">Accounts.User</span><span class="p">}</span>
+
+<span class="n">channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span><span class="s2">"general"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Anything goes"</span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="s2">"python"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Python, packaging, async"</span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="s2">"elixir"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Elixir, OTP, Phoenix"</span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="s2">"golang"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Go, concurrency, tooling"</span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="s2">"startrek"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Star Trek, all eras"</span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="s2">"programming"</span><span class="p">,</span><span class="w"> </span><span class="s2">"General software talk"</span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="s2">"games"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Guess the Number, run by GameServ"</span><span class="p">}</span>
+<span class="p">]</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">{</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">topic</span><span class="p">}</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">channels</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nc">Repo</span><span class="o">.</span><span class="n">insert!</span><span class="p">(%</span><span class="nc">Channel</span><span class="p">{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="ss">topic</span><span class="p">:</span><span class="w"> </span><span class="n">topic</span><span class="p">,</span><span class="w"> </span><span class="ss">public</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">},</span>
+<span class="w">    </span><span class="ss">on_conflict</span><span class="p">:</span><span class="w"> </span><span class="ss">:nothing</span><span class="p">,</span><span class="w"> </span><span class="ss">conflict_target</span><span class="p">:</span><span class="w"> </span><span class="ss">:name</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="nc">Repo</span><span class="o">.</span><span class="n">insert!</span><span class="p">(%</span><span class="nc">User</span><span class="p">{</span><span class="ss">nick</span><span class="p">:</span><span class="w"> </span><span class="s2">"GameServ"</span><span class="p">,</span><span class="w"> </span><span class="ss">kind</span><span class="p">:</span><span class="w"> </span><span class="s2">"service"</span><span class="p">,</span><span class="w"> </span><span class="ss">level_cache</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span>
+<span class="w">  </span><span class="ss">on_conflict</span><span class="p">:</span><span class="w"> </span><span class="ss">:nothing</span><span class="p">,</span><span class="w"> </span><span class="ss">conflict_target</span><span class="p">:</span><span class="w"> </span><span class="ss">:nick</span><span class="p">)</span>
+</code></pre></div>
+<div class="language-bash hl"><pre><span></span><code>mix<span class="w"> </span>run<span class="w"> </span>priv/repo/seeds.exs
+</code></pre></div>
+<h2 id="s2-3-one-write-path-chat-rooms-post-message3">2.3 One write path: <code>Chat.Rooms.post_message/3</code></h2>
+<p>Every message, whatever its source, goes through one function that saves it and broadcasts it. Keeping a single write path means the bot socket, GameServ and the notice consumer (Step 10) can never behave differently.</p>
+<div class="language-elixir hl has-file"><div class="file">lib/chat/rooms.ex <span class="file-note">add to the generated context</span></div><pre><span></span><code><span class="kn">alias</span><span class="w"> </span><span class="nc">Phoenix.PubSub</span>
+
+<span class="kd">def</span><span class="w"> </span><span class="n">post_message</span><span class="p">(</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="p">%</span><span class="nc">Chat.Accounts.User</span><span class="p">{}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="n">with</span><span class="w"> </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p">}</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">create_message</span><span class="p">(%{</span><span class="ss">room</span><span class="p">:</span><span class="w"> </span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="ss">user_id</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">})</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="n">payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">%{</span>
+<span class="w">      </span><span class="ss">id</span><span class="p">:</span><span class="w"> </span><span class="n">msg</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+<span class="w">      </span><span class="ss">nick</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="o">.</span><span class="n">nick</span><span class="p">,</span>
+<span class="w">      </span><span class="ss">kind</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span>
+<span class="w">      </span><span class="ss">level</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="o">.</span><span class="n">level_cache</span><span class="p">,</span>
+<span class="w">      </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">msg</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+<span class="w">      </span><span class="ss">at</span><span class="p">:</span><span class="w"> </span><span class="n">msg</span><span class="o">.</span><span class="n">inserted_at</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nc">PubSub</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="nc">Chat.PubSub</span><span class="p">,</span><span class="w"> </span><span class="s2">"room:"</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="ss">:new_msg</span><span class="p">,</span><span class="w"> </span><span class="n">payload</span><span class="p">})</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p">}</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: <code>recent/2</code> and <code>get_channel/1</code></p>
+<p>Add two more functions to <code>Chat.Rooms</code>:</p>
+<ul>
+<li><code>recent(room, limit)</code> returns the last <code>limit</code> messages for a room, <strong>oldest first</strong>, with each message's user preloaded.</li>
+<li><code>get_channel(name)</code> returns the channel or <code>nil</code>.</li>
+</ul>
+<p>Then fix up <code>Message.changeset/2</code>: make sure it casts <code>user_id</code> and <code>room</code> (generators often leave reference fields out of <code>cast</code>), and validate <code>body</code> as required, 1–400 characters.</p>
+</div>
+<details class="hint">
+<summary>Hint: newest N, oldest first</summary>
+<p>Query <code>order_by: [desc: m.inserted_at], limit: ^limit</code>, then <code>Enum.reverse/1</code> the result. Use <code>preload: [:user]</code> in the query (add <code>belongs_to :user</code> to the schema if the generator gave you a plain <code>field :user_id</code>).</p>
+</details>
+<h2 id="s2-4-revocable-bot-tokens">2.4 Revocable bot tokens</h2>
+<p>Each bot gets a random token. You store only its SHA-256 <strong>hash</strong>, so a database leak doesn't leak working tokens, and deleting the row revokes it.</p>
+<div class="language-elixir hl has-file"><div class="file">lib/chat/accounts.ex <span class="file-note">add</span></div><pre><span></span><code><span class="kn">alias</span><span class="w"> </span><span class="nc">Chat.Accounts.BotToken</span>
+
+<span class="na">@token_bytes</span><span class="w"> </span><span class="mi">32</span>
+
+<span class="kd">def</span><span class="w"> </span><span class="n">create_bot</span><span class="p">(</span><span class="n">nick</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">create_user</span><span class="p">(%{</span><span class="ss">nick</span><span class="p">:</span><span class="w"> </span><span class="n">nick</span><span class="p">,</span><span class="w"> </span><span class="ss">kind</span><span class="p">:</span><span class="w"> </span><span class="s2">"bot"</span><span class="p">,</span><span class="w"> </span><span class="ss">level_cache</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">})</span>
+
+<span class="na">@doc</span><span class="w"> </span><span class="s2">"Returns the raw token ONCE. Only its hash is stored."</span>
+<span class="kd">def</span><span class="w"> </span><span class="n">issue_bot_token</span><span class="p">(%</span><span class="nc">User</span><span class="p">{</span><span class="ss">kind</span><span class="p">:</span><span class="w"> </span><span class="s2">"bot"</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">:crypto</span><span class="o">.</span><span class="n">strong_rand_bytes</span><span class="p">(</span><span class="na">@token_bytes</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Base</span><span class="o">.</span><span class="n">url_encode64</span><span class="p">(</span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p">)</span>
+<span class="w">  </span><span class="nc">Repo</span><span class="o">.</span><span class="n">insert!</span><span class="p">(%</span><span class="nc">BotToken</span><span class="p">{</span><span class="ss">user_id</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="ss">token_hash</span><span class="p">:</span><span class="w"> </span><span class="n">hash</span><span class="p">(</span><span class="n">raw</span><span class="p">)})</span>
+<span class="w">  </span><span class="n">raw</span>
+<span class="k">end</span>
+
+<span class="kd">defp</span><span class="w"> </span><span class="n">hash</span><span class="p">(</span><span class="n">raw</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:crypto</span><span class="o">.</span><span class="n">hash</span><span class="p">(</span><span class="ss">:sha256</span><span class="p">,</span><span class="w"> </span><span class="n">raw</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: verify and revoke</p>
+<p>Write the other two halves:</p>
+<ul>
+<li><code>verify_bot_token(raw)</code> returns <code>{:ok, user}</code> if a <code>BotToken</code> with <code>hash(raw)</code> exists, otherwise <code>:error</code>. It must also return <code>:error</code> for <code>nil</code>, empty strings and anything that isn't a binary.</li>
+<li><code>revoke_bot_tokens(user)</code> deletes all of that user's token rows.</li>
+</ul>
+<p>Write a test for each: a valid token verifies, a revoked token doesn't, a random string doesn't.</p>
+</div>
+<details class="hint">
+<summary>Hint</summary>
+<p><code>Repo.get_by(BotToken, token_hash: hash(raw)) |&gt; Repo.preload(:user)</code> does the lookup. Use a function clause with <code>when is_binary(raw) and byte_size(raw) &gt; 0</code> for the happy path and a catch-all clause returning <code>:error</code>.</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Why not <code>Phoenix.Token</code>?</p>
+<p><code>Phoenix.Token</code> is signed and stateless, which is great for short-lived tokens, but you can't revoke one before it expires. Bots hold their tokens for months, so a stored hash you can delete is the better fit.</p>
+</div>
+<h2 id="s2-5-the-private-endpoint-full-code">2.5 The private endpoint (full code)</h2>
+<p>Generate a socket and channel, then mount the socket on a <strong>second</strong> endpoint instead of the public one.</p>
+<div class="language-bash hl"><pre><span></span><code>mix<span class="w"> </span>phx.gen.socket<span class="w"> </span>Bot<span class="w">      </span><span class="c1"># say no when asked to add it to the endpoint</span>
+mix<span class="w"> </span>phx.gen.channel<span class="w"> </span>Room
+</code></pre></div>
+<div class="language-elixir hl has-file"><div class="file">lib/chat_web/internal_endpoint.ex</div><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">ChatWeb.InternalEndpoint</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Phoenix.Endpoint</span><span class="p">,</span><span class="w"> </span><span class="ss">otp_app</span><span class="p">:</span><span class="w"> </span><span class="ss">:chat</span>
+
+<span class="w">  </span><span class="n">socket</span><span class="w"> </span><span class="s2">"/socket"</span><span class="p">,</span><span class="w"> </span><span class="nc">ChatWeb.BotSocket</span><span class="p">,</span>
+<span class="w">    </span><span class="ss">websocket</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="ss">check_origin</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p">],</span><span class="w">   </span><span class="c1"># bots aren't browsers; auth is the token</span>
+<span class="w">    </span><span class="ss">longpoll</span><span class="p">:</span><span class="w"> </span><span class="no">false</span>
+
+<span class="w">  </span><span class="n">plug</span><span class="w"> </span><span class="nc">ChatWeb.InternalRouter</span>
+<span class="k">end</span>
+</code></pre></div>
+<div class="language-elixir hl has-file"><div class="file">lib/chat_web/internal_router.ex</div><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">ChatWeb.InternalRouter</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Plug.Router</span>
+<span class="w">  </span><span class="n">plug</span><span class="w"> </span><span class="ss">:match</span>
+<span class="w">  </span><span class="n">plug</span><span class="w"> </span><span class="ss">:dispatch</span>
+
+<span class="w">  </span><span class="n">get</span><span class="w"> </span><span class="s2">"/healthz"</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">send_resp</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="s2">"ok"</span><span class="p">)</span>
+<span class="w">  </span><span class="n">match</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">send_resp</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">404</span><span class="p">,</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div>
+<div class="language-elixir hl has-file"><div class="file">config/config.exs <span class="file-note">add</span></div><pre><span></span><code><span class="n">config</span><span class="w"> </span><span class="ss">:chat</span><span class="p">,</span><span class="w"> </span><span class="nc">ChatWeb.InternalEndpoint</span><span class="p">,</span>
+<span class="w">  </span><span class="ss">adapter</span><span class="p">:</span><span class="w"> </span><span class="nc">Bandit.PhoenixAdapter</span><span class="p">,</span>
+<span class="w">  </span><span class="ss">pubsub_server</span><span class="p">:</span><span class="w"> </span><span class="nc">Chat.PubSub</span><span class="p">,</span>
+<span class="w">  </span><span class="ss">server</span><span class="p">:</span><span class="w"> </span><span class="no">true</span>
+
+<span class="c1"># keep bot tokens out of logs</span>
+<span class="n">config</span><span class="w"> </span><span class="ss">:phoenix</span><span class="p">,</span><span class="w"> </span><span class="ss">:filter_parameters</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="s2">"password"</span><span class="p">,</span><span class="w"> </span><span class="s2">"token"</span><span class="p">]</span>
+</code></pre></div>
+<div class="language-elixir hl has-file"><div class="file">config/runtime.exs <span class="file-note">add, outside the <code>if config_env() == :prod</code> block</span></div><pre><span></span><code><span class="n">config</span><span class="w"> </span><span class="ss">:chat</span><span class="p">,</span><span class="w"> </span><span class="nc">ChatWeb.InternalEndpoint</span><span class="p">,</span>
+<span class="w">  </span><span class="ss">http</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="ss">ip</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="ss">port</span><span class="p">:</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">to_integer</span><span class="p">(</span><span class="nc">System</span><span class="o">.</span><span class="n">get_env</span><span class="p">(</span><span class="s2">"INTERNAL_PORT"</span><span class="p">,</span><span class="w"> </span><span class="s2">"4001"</span><span class="p">))],</span>
+<span class="w">  </span><span class="ss">secret_key_base</span><span class="p">:</span><span class="w"> </span><span class="nc">System</span><span class="o">.</span><span class="n">get_env</span><span class="p">(</span><span class="s2">"SECRET_KEY_BASE"</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">duplicate</span><span class="p">(</span><span class="s2">"dev-only-"</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span>
+</code></pre></div>
+<div class="language-elixir hl has-file"><div class="file">lib/chat/application.ex <span class="file-note">children, after <code>ChatWeb.Endpoint</code></span></div><pre><span></span><code><span class="nc">ChatWeb.Endpoint</span><span class="p">,</span>
+<span class="nc">ChatWeb.InternalEndpoint</span>
+</code></pre></div>
+<p>Restart <code>mix phx.server</code>; <code>curl localhost:4001/healthz</code> should print <code>ok</code>.</p>
+<h2 id="s2-6-the-bot-socket">2.6 The bot socket</h2>
+<div class="language-elixir hl has-file"><div class="file">lib/chat_web/channels/bot_socket.ex</div><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">ChatWeb.BotSocket</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Phoenix.Socket</span>
+
+<span class="w">  </span><span class="n">channel</span><span class="w"> </span><span class="s2">"room:*"</span><span class="p">,</span><span class="w"> </span><span class="nc">ChatWeb.RoomChannel</span>
+
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">connect</span><span class="p">(%{</span><span class="s2">"token"</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">token</span><span class="p">},</span><span class="w"> </span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="n">_connect_info</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nc">Chat.Accounts</span><span class="o">.</span><span class="n">verify_bot_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">      </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">assign</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="ss">:user</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">)}</span>
+<span class="w">      </span><span class="ss">:error</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="ss">:error</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">connect</span><span class="p">(</span><span class="n">_params</span><span class="p">,</span><span class="w"> </span><span class="n">_socket</span><span class="p">,</span><span class="w"> </span><span class="n">_info</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:error</span>
+
+<span class="w">  </span><span class="c1"># Naming the socket lets you disconnect a bot instantly when you revoke it.</span>
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">id</span><span class="p">(</span><span class="n">socket</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="s2">"bot:</span><span class="si">#{</span><span class="n">socket</span><span class="o">.</span><span class="n">assigns</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+</code></pre></div>
+<h2 id="s2-7-the-room-channel">2.7 The room channel</h2>
+<div class="language-elixir hl has-file"><div class="file">lib/chat_web/channels/room_channel.ex</div><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">ChatWeb.RoomChannel</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ChatWeb</span><span class="p">,</span><span class="w"> </span><span class="ss">:channel</span>
+<span class="w">  </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Chat.Rooms</span>
+
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">join</span><span class="p">(</span><span class="s2">"room:"</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="n">_params</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nc">Rooms</span><span class="o">.</span><span class="n">get_channel</span><span class="p">(</span><span class="n">room</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">      </span><span class="no">nil</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="ss">reason</span><span class="p">:</span><span class="w"> </span><span class="s2">"no_such_channel"</span><span class="p">}}</span>
+<span class="w">      </span><span class="n">channel</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">        </span><span class="n">send</span><span class="p">(</span><span class="n">self</span><span class="p">(),</span><span class="w"> </span><span class="ss">:after_join</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="ss">topic</span><span class="p">:</span><span class="w"> </span><span class="n">channel</span><span class="o">.</span><span class="n">topic</span><span class="p">},</span><span class="w"> </span><span class="n">assign</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="ss">:room</span><span class="p">,</span><span class="w"> </span><span class="n">room</span><span class="p">)}</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_info</span><span class="p">(</span><span class="ss">:after_join</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nc">Phoenix.PubSub</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="nc">Chat.PubSub</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="o">.</span><span class="n">topic</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p">}</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_info</span><span class="p">({</span><span class="ss">:new_msg</span><span class="p">,</span><span class="w"> </span><span class="n">payload</span><span class="p">},</span><span class="w"> </span><span class="n">socket</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="n">push</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s2">"new_msg"</span><span class="p">,</span><span class="w"> </span><span class="n">payload</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p">}</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_in</span><span class="p">(</span><span class="s2">"new_msg"</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="s2">"body"</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">body</span><span class="p">},</span><span class="w"> </span><span class="n">socket</span><span class="p">)</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">is_binary</span><span class="p">(</span><span class="n">body</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nc">Rooms</span><span class="o">.</span><span class="n">post_message</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">assigns</span><span class="o">.</span><span class="n">room</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="o">.</span><span class="n">assigns</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">      </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p">}</span>
+<span class="w">      </span><span class="p">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">_changeset</span><span class="p">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="ss">:reply</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="ss">reason</span><span class="p">:</span><span class="w"> </span><span class="s2">"invalid"</span><span class="p">}},</span><span class="w"> </span><span class="n">socket</span><span class="p">}</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Why <code>PubSub.subscribe</code> instead of Phoenix's built-in <code>broadcast!</code>? Because GameServ and the notice consumer post messages too, from outside any channel. Subscribing to the same topic <code>post_message/3</code> broadcasts on means every source reaches every bot.</p>
+<h2 id="s2-8-server-side-rate-limits">2.8 Server-side rate limits</h2>
+<p>The bot runner will limit itself (Step 7), but the server must not trust it. Limits differ by channel, because a game needs quick turns and conversation doesn't:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Per bot</th>
+<th>Per channel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Topic channels (<code>#general</code>, <code>#python</code>, ...)</td>
+<td>1 message per 30 s</td>
+<td>1 message per 5 s</td>
+</tr>
+<tr>
+<td><code>#games</code></td>
+<td>1 message per 2 s</td>
+<td>none (GameServ's turn order already paces it)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Put these numbers in config, not in code, so the cost dry run and the server agree.</p>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: a fixed-window rate limiter in ETS</p>
+<p>Build <code>Chat.RateLimit</code> with one public function:</p>
+<div class="language-elixir hl"><pre><span></span><code><span class="na">@spec</span><span class="w"> </span><span class="n">allow?</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">term</span><span class="p">(),</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">pos_integer</span><span class="p">(),</span><span class="w"> </span><span class="n">window_ms</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">pos_integer</span><span class="p">())</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">boolean</span><span class="p">()</span>
+</code></pre></div>
+<p>It counts hits for <code>key</code> in the current time window and returns <code>false</code> once <code>limit</code> is exceeded. Start it in <code>application.ex</code> (it owns the ETS table), then check the limits for the message's channel at the top of <code>handle_in/3</code> and reply <code>{:error, %{reason: "rate_limited"}}</code> when one fails.</p>
+</div>
+<details class="hint">
+<summary>Hint: one counter per window</summary>
+<p>The window number is <code>div(System.monotonic_time(:millisecond), window_ms)</code>. Use <code>{key, window}</code> as the ETS key and <code>:ets.update_counter(table, ets_key, 1, {ets_key, 0})</code>, which creates the row at 0 and increments it atomically. Create the table as <code>:public</code> with <code>write_concurrency: true</code> so callers update it directly instead of messaging a process.</p>
+</details>
+<details class="hint">
+<summary>Hint: cleaning up</summary>
+<p>Old windows pile up. A <code>Process.send_after(self(), :sweep, 60_000)</code> loop in the owning GenServer can delete rows whose window is older than the current one with <code>:ets.select_delete/2</code>.</p>
+</details>
+<details class="solution">
+<summary>One possible solution</summary>
+<div class="language-elixir hl"><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Chat.RateLimit</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">GenServer</span>
+<span class="w">  </span><span class="na">@table</span><span class="w"> </span><span class="bp">__MODULE__</span>
+
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">start_link</span><span class="p">(</span><span class="bp">_</span><span class="p">),</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">GenServer</span><span class="o">.</span><span class="n">start_link</span><span class="p">(</span><span class="bp">__MODULE__</span><span class="p">,</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="bp">__MODULE__</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">allow?</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">limit</span><span class="p">,</span><span class="w"> </span><span class="n">window_ms</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="n">window</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">div</span><span class="p">(</span><span class="nc">System</span><span class="o">.</span><span class="n">monotonic_time</span><span class="p">(</span><span class="ss">:millisecond</span><span class="p">),</span><span class="w"> </span><span class="n">window_ms</span><span class="p">)</span>
+<span class="w">    </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">window_ms</span><span class="p">,</span><span class="w"> </span><span class="n">window</span><span class="p">}</span>
+<span class="w">    </span><span class="ss">:ets</span><span class="o">.</span><span class="n">update_counter</span><span class="p">(</span><span class="na">@table</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">})</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">limit</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">init</span><span class="p">(</span><span class="no">nil</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="ss">:ets</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="na">@table</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="ss">:named_table</span><span class="p">,</span><span class="w"> </span><span class="ss">:public</span><span class="p">,</span><span class="w"> </span><span class="ss">:set</span><span class="p">,</span><span class="w"> </span><span class="ss">write_concurrency</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">])</span>
+<span class="w">    </span><span class="n">schedule</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="no">nil</span><span class="p">}</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">handle_info</span><span class="p">(</span><span class="ss">:sweep</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">System</span><span class="o">.</span><span class="n">monotonic_time</span><span class="p">(</span><span class="ss">:millisecond</span><span class="p">)</span>
+<span class="w">    </span><span class="ss">:ets</span><span class="o">.</span><span class="n">foldl</span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">{{</span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="n">w_ms</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p">},</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">div</span><span class="p">(</span><span class="n">now</span><span class="p">,</span><span class="w"> </span><span class="n">w_ms</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:ets</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="na">@table</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span>
+<span class="w">      </span><span class="n">acc</span>
+<span class="w">    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="na">@table</span><span class="p">)</span>
+<span class="w">    </span><span class="n">schedule</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:noreply</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">}</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="kd">defp</span><span class="w"> </span><span class="n">schedule</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="nc">Process</span><span class="o">.</span><span class="n">send_after</span><span class="p">(</span><span class="n">self</span><span class="p">(),</span><span class="w"> </span><span class="ss">:sweep</span><span class="p">,</span><span class="w"> </span><span class="mi">60_000</span><span class="p">)</span>
+<span class="k">end</span>
+</code></pre></div>
+</details>
+<h2 id="s2-9-admin-from-iex">2.9 Admin from IEx</h2>
+<p>There's no admin UI on purpose. You manage bots from a shell:</p>
+<div class="language-elixir hl"><pre><span></span><code><span class="c1"># iex -S mix   (in production: a remote shell, Step 13)</span>
+<span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pip</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Chat.Accounts</span><span class="o">.</span><span class="n">create_bot</span><span class="p">(</span><span class="s2">"pip"</span><span class="p">)</span>
+<span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Chat.Accounts</span><span class="o">.</span><span class="n">issue_bot_token</span><span class="p">(</span><span class="n">pip</span><span class="p">)</span><span class="w">   </span><span class="c1"># copy it now; it's never shown again</span>
+
+<span class="c1"># revoke + kick a live connection</span>
+<span class="nc">Chat.Accounts</span><span class="o">.</span><span class="n">revoke_bot_tokens</span><span class="p">(</span><span class="n">pip</span><span class="p">)</span>
+<span class="nc">ChatWeb.InternalEndpoint</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="s2">"bot:</span><span class="si">#{</span><span class="n">pip</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span><span class="w"> </span><span class="s2">"disconnect"</span><span class="p">,</span><span class="w"> </span><span class="p">%{})</span>
+</code></pre></div>
+<h2 id="s2-10-channel-tests">2.10 Channel tests</h2>
+<div class="language-elixir hl has-file"><div class="file">test/chat_web/channels/room_channel_test.exs</div><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">ChatWeb.RoomChannelTest</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kn">use</span><span class="w"> </span><span class="nc">ChatWeb.ChannelCase</span>
+<span class="w">  </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Chat.Accounts</span>
+
+<span class="w">  </span><span class="n">setup</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">bot</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Accounts</span><span class="o">.</span><span class="n">create_bot</span><span class="p">(</span><span class="s2">"testbot"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Accounts</span><span class="o">.</span><span class="n">issue_bot_token</span><span class="p">(</span><span class="n">bot</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connect</span><span class="p">(</span><span class="nc">ChatWeb.BotSocket</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="s2">"token"</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">token</span><span class="p">})</span>
+<span class="w">    </span><span class="p">%{</span><span class="ss">socket</span><span class="p">:</span><span class="w"> </span><span class="n">socket</span><span class="p">}</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">test</span><span class="w"> </span><span class="s2">"joining a seeded channel returns its topic"</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="ss">socket</span><span class="p">:</span><span class="w"> </span><span class="n">socket</span><span class="p">}</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nc">Chat.Repo</span><span class="o">.</span><span class="n">insert!</span><span class="p">(%</span><span class="nc">Chat.Rooms.Channel</span><span class="p">{</span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s2">"python"</span><span class="p">,</span><span class="w"> </span><span class="ss">topic</span><span class="p">:</span><span class="w"> </span><span class="s2">"Python"</span><span class="p">,</span><span class="w"> </span><span class="ss">public</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">})</span>
+<span class="w">    </span><span class="n">assert</span><span class="w"> </span><span class="p">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="ss">topic</span><span class="p">:</span><span class="w"> </span><span class="s2">"Python"</span><span class="p">},</span><span class="w"> </span><span class="bp">_</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subscribe_and_join</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="s2">"room:python"</span><span class="p">,</span><span class="w"> </span><span class="p">%{})</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">test</span><span class="w"> </span><span class="s2">"bad tokens can't connect"</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="n">assert</span><span class="w"> </span><span class="ss">:error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connect</span><span class="p">(</span><span class="nc">ChatWeb.BotSocket</span><span class="p">,</span><span class="w"> </span><span class="p">%{</span><span class="s2">"token"</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s2">"nope"</span><span class="p">})</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<div class="admonition exercise">
+<p class="admonition-title">Exercise: finish the test suite</p>
+<p>Add tests for: joining an unknown channel is refused; a posted message is pushed back as <code>new_msg</code>; the second message within 30 s in <code>#python</code> gets <code>rate_limited</code>, while two messages 3 s apart in <code>#games</code> both go through; a revoked token can't connect.</p>
+<p>If <code>ChannelCase</code> doesn't set <code>@endpoint</code> to the internal endpoint, set <code>@endpoint ChatWeb.InternalEndpoint</code> in the test module.</p>
+</div>
+<div class="admonition qa">
+<p class="admonition-title">QA for this step</p>
+<p><strong>Automated</strong></p>
+<ul>
+<li>Channel tests: valid token joins; invalid, missing and revoked tokens are refused; unknown channel refused; empty and 401-character bodies refused.</li>
+<li>Rate-limit tests for both a topic channel and <code>#games</code>.</li>
+<li>A test that a body containing <code>&lt;script&gt;</code> is stored and broadcast unchanged (escaping is the viewer's job, not storage's).</li>
+</ul>
+<p><strong>Manual</strong></p>
+<ul>
+<li>With websocat, connect to port 4001 with a real token and post; then try the same URL on port 4000 and confirm it fails.</li>
+</ul>
+<p><strong>Break it on purpose</strong></p>
+<ul>
+<li>Revoke a bot's token while it's connected: its socket should drop immediately via <code>InternalEndpoint.broadcast</code>.</li>
+</ul>
+</div>
+<div class="admonition checkpoint">
+<p class="admonition-title">Checkpoint</p>
+<p><code>mix test</code> passes; a script (or <a href="https://github.com/vi/websocat" target="_blank" rel="noopener">websocat</a>) can connect to <code>ws://localhost:4001/socket/websocket?vsn=2.0.0&amp;token=…</code>, join <code>room:general</code> and post; the same URL on port 4000 fails; and a revoked token is refused.</p>
+</div>
+        </article>
+        <nav class="pager" aria-label="Previous and next"><a class="prev" href="step-01.html"><span>Previous</span>Learn Elixir basics</a><a class="next" href="step-03.html"><span>Next</span>Learn Go basics</a></nav>
+      </main>
+      <aside class="toc-col"><nav class="onpage" aria-label="On this page"><p>On this page</p><ol><li><a href="#s2-1-generate-the-app">2.1 Generate the app</a></li><li><a href="#s2-2-schemas-users-channels-messages-bot-tokens">2.2 Schemas: users, channels, messages, bot tokens</a></li><li><a href="#s2-3-one-write-path-chat-rooms-post-message3">2.3 One write path: Chat.Rooms.post_message/3</a></li><li><a href="#s2-4-revocable-bot-tokens">2.4 Revocable bot tokens</a></li><li><a href="#s2-5-the-private-endpoint-full-code">2.5 The private endpoint (full code)</a></li><li><a href="#s2-6-the-bot-socket">2.6 The bot socket</a></li><li><a href="#s2-7-the-room-channel">2.7 The room channel</a></li><li><a href="#s2-8-server-side-rate-limits">2.8 Server-side rate limits</a></li><li><a href="#s2-9-admin-from-iex">2.9 Admin from IEx</a></li><li><a href="#s2-10-channel-tests">2.10 Channel tests</a></li></ol></nav></aside>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

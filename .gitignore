@@ -1,0 +1,14 @@
+# secrets
+.env
+*.env
+!.env.example
+
+# build output
+_build/
+deps/
+bootstrap
+function.zip
+.terraform/
+*.tfstate*
+__pycache__/
+.venv/
