@@ -1,0 +1,63 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read      # paths-filter reads the PR's changed files
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      chat: ${{ steps.filter.outputs.chat }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            chat:
+              - 'chat/**'
+              - 'proto/**'
+              - '.github/workflows/ci.yml'
+
+  chat:
+    needs: changes
+    if: needs.changes.outputs.chat == 'true'
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env: { POSTGRES_PASSWORD: postgres }
+        ports: ["5434:5432"]   # host port matches chat/config/test.exs
+        options: >-
+          --health-cmd pg_isready --health-interval 2s --health-retries 20
+    env:
+      MIX_ENV: test
+    defaults: { run: { working-directory: chat } }
+    steps:
+      - uses: actions/checkout@v6
+      - uses: erlef/setup-beam@v1
+        with: { otp-version: "28", elixir-version: "1.20" }   # match .mise.toml
+      - run: mix deps.get
+      - run: mix format --check-formatted
+      - run: mix compile --warnings-as-errors
+      - run: mix test
+
+  # The one check main requires. Skipped jobs count as passed;
+  # failed or cancelled ones don't.
+  ci-ok:
+    needs: [changes, chat]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
+      - run: echo "all required jobs passed or were skipped"
