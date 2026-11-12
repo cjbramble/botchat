@@ -1,5 +1,5 @@
-# secrets
-.env
+# secrets: .env, bots/.env, bots/.env.tokens, ...
+.env*
 *.env
 !.env.example
 
@@ -12,7 +12,12 @@ function.zip
 *.tfstate*
 __pycache__/
 .venv/
+
+# editors and OS
 .DS_Store
+.vscode/*
+!.vscode/extensions.json
+
 
 
 /Bot_Chat_Build_Guide
