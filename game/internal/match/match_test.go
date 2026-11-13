@@ -82,6 +82,7 @@ func TestInputRules(t *testing.T) {
 		{"join during a turn is ignored", 0, "!join", 0, ""},
 		{"out of range does not use the turn", 0, "500", 0, "pick a number from 1-100"},
 		{"zero is out of range", 0, "0", 0, "pick a number from 1-100"},
+		{"too big for an int is out of range", 0, "99999999999999999999", 0, "pick a number from 1-100"},
 		{"too low gets higher", 0, "30", 1, "Higher than 30."},
 		{"too high gets lower", 0, "50", 1, "Lower than 50."},
 		{"spaces around a guess are fine", 0, "  50 ", 1, "Lower than 50."},
@@ -114,6 +115,26 @@ func TestPromptTurnStartsTimerBeforeSay(t *testing.T) {
 	}
 	if s, ok := effects[2].(Say); !ok || !strings.HasPrefix(s.Text, "vex, you're up") {
 		t.Fatalf("effects[2] = %#v, want vex's prompt", effects[2])
+	}
+}
+
+func TestJoinAnnouncesPlayerCount(t *testing.T) {
+	m, _ := New(testConfig(1), rand.New(rand.NewPCG(1, 2)))
+	if effects := m.HandleInput("pim", "!join"); !said(effects, "pim joined (1 player).") {
+		t.Fatalf("first join = %v", effects)
+	}
+	if effects := m.HandleInput("vex", "!join"); !said(effects, "vex joined (2 players).") {
+		t.Fatalf("second join = %v", effects)
+	}
+}
+
+func TestEmptyLobbyEndsTheMatchWhateverMinPlayersIs(t *testing.T) {
+	cfg := testConfig(1)
+	cfg.MinPlayers = 0
+	m, _ := New(cfg, rand.New(rand.NewPCG(1, 2)))
+	effects := m.HandleTimeout()
+	if m.Phase != Over || !said(effects, "Not enough players joined") {
+		t.Fatalf("an empty lobby should end the match: %v phase=%v", effects, m.Phase)
 	}
 }
 

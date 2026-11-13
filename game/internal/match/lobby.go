@@ -11,7 +11,11 @@ func (m *Match) join(p PlayerID) []Effect {
 		return nil // a second !join does nothing
 	}
 	m.Players = append(m.Players, p)
-	return []Effect{Say{fmt.Sprintf("%s joined (%d players).", p, len(m.Players))}}
+	noun := "players"
+	if len(m.Players) == 1 {
+		noun = "player"
+	}
+	return []Effect{Say{fmt.Sprintf("%s joined (%d %s).", p, len(m.Players), noun)}}
 }
 
 func (m *Match) startRound() []Effect {

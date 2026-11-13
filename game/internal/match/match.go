@@ -67,7 +67,7 @@ func (m *Match) HandleInput(p PlayerID, text string) []Effect {
 func (m *Match) HandleTimeout() []Effect {
 	switch m.Phase {
 	case Lobby:
-		if len(m.Players) < m.cfg.MinPlayers {
+		if len(m.Players) < max(m.cfg.MinPlayers, 1) { // a round needs someone to take a turn
 			m.Phase = Over
 			return []Effect{Say{"Not enough players joined. Type !start to try again."}}
 		}

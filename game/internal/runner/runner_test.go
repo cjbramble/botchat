@@ -11,7 +11,8 @@ import (
 
 func testConfig() match.Config {
 	return match.Config{Rounds: 1, Lo: 1, Hi: 100, MinPlayers: 2,
-		JoinWindow: 20 * time.Millisecond, Turn: 20 * time.Millisecond,
+		// The join window is long enough that the queued joins are read before it closes.
+		JoinWindow: 200 * time.Millisecond, Turn: 20 * time.Millisecond,
 		RevealPause: 10 * time.Millisecond, Intermission: 10 * time.Millisecond}
 }
 
