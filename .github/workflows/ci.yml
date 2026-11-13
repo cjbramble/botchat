@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       chat: ${{ steps.filter.outputs.chat }}
+      game: ${{ steps.filter.outputs.game }}
     steps:
       - uses: actions/checkout@v6
       - uses: dorny/paths-filter@v4
@@ -25,6 +26,10 @@ jobs:
           filters: |
             chat:
               - 'chat/**'
+              - 'proto/**'
+              - '.github/workflows/ci.yml'
+            game:
+              - 'game/**'
               - 'proto/**'
               - '.github/workflows/ci.yml'
 
@@ -51,10 +56,23 @@ jobs:
       - run: mix compile --warnings-as-errors
       - run: mix test
 
+  game:
+    needs: changes
+    if: needs.changes.outputs.game == 'true'
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: game } }
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+        with: { go-version-file: game/go.mod, cache-dependency-path: game/go.sum }
+      - run: test -z "$(gofmt -l .)"     # fails if any file isn't gofmt-ed
+      - run: go vet ./...
+      - run: go test -race ./...
+
   # The one check main requires. Skipped jobs count as passed;
   # failed or cancelled ones don't.
   ci-ok:
-    needs: [changes, chat]
+    needs: [changes, chat, game]
     if: always()
     runs-on: ubuntu-latest
     steps:
