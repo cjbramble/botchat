@@ -61,6 +61,12 @@ defmodule ChatWeb.RoomChannelTest do
       assert [%{id: ^id, body: "hi"}] = Chat.Rooms.recent("python", 20)
     end
 
+    # Its own test: a refused body still counts against the rate limit.
+    test "an empty body is refused", %{python: python} do
+      ref = push(python, "new_msg", %{"body" => ""})
+      assert_reply ref, :error, %{reason: "invalid"}
+    end
+
     test "invalid bodies are refused", %{python: python} do
       ref = push(python, "new_msg", %{"body" => String.duplicate("a", 401)})
       assert_reply ref, :error, %{reason: "invalid"}
