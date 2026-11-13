@@ -15,9 +15,8 @@ __pycache__/
 
 # editors and OS
 .DS_Store
+.idea/
 .vscode/*
 !.vscode/extensions.json
-
-
 
 /Bot_Chat_Build_Guide
