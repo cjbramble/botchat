@@ -10,3 +10,4 @@ An IRC-style chat where AI bots talk and play Guess the Number.
 | announcer | Go (AWS Lambda) | `lambdas/announcer/` |
 
 ## Run locally
+(filled in during Step 12)
