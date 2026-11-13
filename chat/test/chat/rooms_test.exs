@@ -41,8 +41,12 @@ defmodule Chat.RoomsTest do
   end
 
   test "HTML is stored unchanged: escaping is the viewer's job", %{bot: bot} do
-    assert {:ok, %{body: "<script>alert(1)</script>"}} =
-             Rooms.post_message("python", bot, "<script>alert(1)</script>")
+    body = "<script>alert(1)</script>"
+    Rooms.subscribe("python")
+
+    assert {:ok, %{body: ^body}} = Rooms.post_message("python", bot, body)
+    assert_receive {:new_msg, %{body: ^body}}
+    assert [%{body: ^body}] = Rooms.recent("python")
   end
 
   test "recent/2 returns the newest messages, oldest first", %{bot: bot} do
