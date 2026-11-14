@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package game.v1;
+
+option go_package = "github.com/cjbramble/botchat/game/gen/game/v1;gamev1";
+
+// GameService runs Guess the Number matches, one per chat channel.
+service GameService {
+  // SubmitInput feeds one chat line from a player into the channel's match.
+  // "!start" begins a match when none is running; other input is ignored
+  // until a match exists.
+  rpc SubmitInput(SubmitInputRequest) returns (SubmitInputResponse);
+
+  // Subscribe streams everything the game says in a channel until the client
+  // disconnects. A gap in seq means the subscriber was too slow and messages
+  // were dropped.
+  // buf:lint:ignore RPC_RESPONSE_STANDARD_NAME GameMessage is the streamed domain event, not a per-call response.
+  rpc Subscribe(SubscribeRequest) returns (stream GameMessage);
+
+  // GetPlayer returns a player's progression (level and experience).
+  rpc GetPlayer(GetPlayerRequest) returns (GetPlayerResponse);
+}
+
+message SubmitInputRequest {
+  string channel = 1;
+  string player_id = 2;
+  string text = 3;
+  // Chat message id the input came from.
+  string msg_id = 4;
+}
+
+message SubmitInputResponse {}
+
+message SubscribeRequest {
+  string channel = 1;
+}
+
+message GameMessage {
+  string channel = 1;
+  string text = 2;
+  // Per-channel counter starting at 1; increases by one per broadcast.
+  int64 seq = 3;
+}
+
+message GetPlayerRequest {
+  string player_id = 1;
+}
+
+message GetPlayerResponse {
+  string player_id = 1;
+  int32 level = 2;
+  int64 xp = 3;
+}
