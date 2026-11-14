@@ -18,6 +18,7 @@ jobs:
     outputs:
       chat: ${{ steps.filter.outputs.chat }}
       game: ${{ steps.filter.outputs.game }}
+      proto: ${{ steps.filter.outputs.proto }}
     steps:
       - uses: actions/checkout@v6
       - uses: dorny/paths-filter@v4
@@ -32,6 +33,10 @@ jobs:
               - 'game/**'
               - 'proto/**'
               - '.github/workflows/ci.yml'
+            proto:
+              - 'proto/**'
+              - 'buf.yaml'
+              - 'buf.gen.yaml'
 
   chat:
     needs: changes
@@ -69,10 +74,21 @@ jobs:
       - run: go vet ./...
       - run: go test -race ./...
 
+  proto:
+    needs: changes
+    if: needs.changes.outputs.proto == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: bufbuild/buf-action@v1
+        with:
+          push: false
+          breaking_against: "${{ github.event.repository.clone_url }}#branch=main"
+
   # The one check main requires. Skipped jobs count as passed;
   # failed or cancelled ones don't.
   ci-ok:
-    needs: [changes, chat, game]
+    needs: [changes, chat, game, proto]
     if: always()
     runs-on: ubuntu-latest
     steps:
