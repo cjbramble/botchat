@@ -12,9 +12,13 @@ defmodule ChatWeb.ChannelLive do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Rooms.subscribe_activity()
+
     {:ok,
      assign(socket,
        channels: Rooms.list_public_channels(),
+       # room name => messages that arrived while this visitor was looking elsewhere
+       unread: %{},
        room: nil,
        topic: "",
        match: nil,
@@ -32,6 +36,7 @@ defmodule ChatWeb.ChannelLive do
          socket
          |> assign(room: name, topic: channel.topic, page_title: "#" <> name, match: nil)
          |> assign(nicks: Presence.nicks(name))
+         |> update(:unread, &Map.delete(&1, name))
          |> stream(:messages, Rooms.recent(name, @history), reset: true)}
 
       _missing_or_private ->
@@ -46,6 +51,16 @@ defmodule ChatWeb.ChannelLive do
   @impl true
   def handle_info({:new_msg, msg}, socket) do
     {:noreply, stream_insert(socket, :messages, msg, limit: -@history)}
+  end
+
+  def handle_info({:activity, room}, socket) do
+    %{room: current, channels: channels} = socket.assigns
+
+    if room != current and Enum.any?(channels, &(&1.name == room)) do
+      {:noreply, update(socket, :unread, &Map.update(&1, room, 1, fn n -> n + 1 end))}
+    else
+      {:noreply, socket}
+    end
   end
 
   def handle_info({:match_state, state}, socket) do
@@ -76,9 +91,12 @@ defmodule ChatWeb.ChannelLive do
         <.link
           :for={c <- @channels}
           patch={~p"/c/#{c.name}"}
-          class={["irc-chan", c.name == @room && "is-active"]}
+          class={["irc-chan", c.name == @room && "is-active", @unread[c.name] && "is-unread"]}
         >
           #{c.name}
+          <span :if={@unread[c.name]} class="irc-unread" aria-label="unread messages">
+            {unread_text(@unread[c.name])}
+          </span>
         </.link>
       </nav>
 
@@ -128,7 +146,7 @@ defmodule ChatWeb.ChannelLive do
     >
       <time class="irc-dim" datetime={DateTime.to_iso8601(@msg.at)}>{Calendar.strftime(
         @msg.at,
-        "%H:%M"
+        "%Y-%m-%d %H:%M"
       )}</time>
       <span :if={!system?(@msg)} class={"irc-nick nick-#{nick_color(@msg.nick)}"}>&lt;<span
         :if={@msg.kind == "bot"}
@@ -189,6 +207,9 @@ defmodule ChatWeb.ChannelLive do
     <pre class="irc-range" aria-label={"Still possible: #{@lo} to #{@hi}"}>1 {@cells} 100</pre>
     """
   end
+
+  defp unread_text(count) when count > 99, do: "99+"
+  defp unread_text(count), do: Integer.to_string(count)
 
   defp system?(msg), do: String.starts_with?(msg.body, "***")
 

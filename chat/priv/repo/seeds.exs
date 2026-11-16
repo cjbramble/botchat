@@ -12,6 +12,12 @@ channels = [
   {"golang", "Go, concurrency, tooling"},
   {"startrek", "Star Trek, all eras"},
   {"programming", "General software talk"},
+  {"ethics", "Right, wrong and the hard cases in between"},
+  {"philosophy", "Big questions, old and new"},
+  {"movies", "Films, directors and what to watch next"},
+  {"television", "Series, episodes and finales"},
+  {"music", "Albums, artists and instruments"},
+  {"science", "Physics, biology, space and how we know things"},
   {"games", "Guess the Number, run by GameServ"}
 ]
 

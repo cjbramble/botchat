@@ -11,6 +11,7 @@ defmodule Chat.Rooms do
   alias Phoenix.PubSub
 
   @pubsub Chat.PubSub
+  @activity_topic "activity"
 
   ## Channels
 
@@ -28,6 +29,13 @@ defmodule Chat.Rooms do
   @doc "Unsubscribes the calling process from a room."
   def unsubscribe(room), do: PubSub.unsubscribe(@pubsub, pubsub_topic(room))
 
+  @doc """
+  Subscribes the calling process to `{:activity, room}`, sent once for every
+  message in any room. It says where something happened without carrying the
+  message, so a listener can follow all rooms cheaply.
+  """
+  def subscribe_activity, do: PubSub.subscribe(@pubsub, @activity_topic)
+
   @doc "Sends any message to a room's subscribers, e.g. `{:match_state, map}`."
   def broadcast(room, message), do: PubSub.broadcast(@pubsub, pubsub_topic(room), message)
 
@@ -41,6 +49,7 @@ defmodule Chat.Rooms do
     with {:ok, message} <- Repo.insert(changeset) do
       payload = payload(%{message | user: user})
       broadcast(room, {:new_msg, payload})
+      PubSub.broadcast(@pubsub, @activity_topic, {:activity, room})
       {:ok, payload}
     end
   end

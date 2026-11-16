@@ -34,6 +34,16 @@ defmodule Chat.RoomsTest do
     assert_receive {:new_msg, ^payload}
   end
 
+  test "post_message/3 announces activity in the room, but not for rejected messages", %{bot: bot} do
+    Rooms.subscribe_activity()
+
+    assert {:ok, _payload} = Rooms.post_message("python", bot, "hello")
+    assert_receive {:activity, "python"}
+
+    assert {:error, _} = Rooms.post_message("python", bot, "")
+    refute_receive {:activity, _room}, 50
+  end
+
   test "bodies must be 1 to 400 characters", %{bot: bot} do
     assert {:error, _} = Rooms.post_message("python", bot, "")
     assert {:error, _} = Rooms.post_message("python", bot, "   ")
