@@ -19,6 +19,7 @@ jobs:
       chat: ${{ steps.filter.outputs.chat }}
       game: ${{ steps.filter.outputs.game }}
       proto: ${{ steps.filter.outputs.proto }}
+      bots: ${{ steps.filter.outputs.bots }}
     steps:
       - uses: actions/checkout@v6
       - uses: dorny/paths-filter@v4
@@ -37,6 +38,9 @@ jobs:
               - 'proto/**'
               - 'buf.yaml'
               - 'buf.gen.yaml'
+            bots:
+              - 'bots/**'
+              - '.github/workflows/ci.yml'
 
   chat:
     needs: changes
@@ -118,10 +122,22 @@ jobs:
           pr_comment: false
           breaking_against: "${{ github.event.repository.clone_url }}#branch=main"
 
+  bots:
+    needs: changes
+    if: needs.changes.outputs.bots == 'true'
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: bots } }
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v8.1.0   # v8 has no moving major tag: pin a full version
+      - run: uv sync --frozen
+      - run: uv run ruff check . && uv run ruff format --check .
+      - run: uv run pytest
+
   # The one check main requires. Skipped jobs count as passed;
   # failed or cancelled ones don't.
   ci-ok:
-    needs: [changes, chat, game, proto]
+    needs: [changes, chat, game, proto, bots]
     if: always()
     runs-on: ubuntu-latest
     steps:
