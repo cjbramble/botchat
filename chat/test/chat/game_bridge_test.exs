@@ -71,6 +71,28 @@ defmodule Chat.GameBridgeTest do
     assert ["one", "four"] = Enum.map(Rooms.recent("games"), & &1.body)
   end
 
+  test "seq 1 then 3: both posted, the gap logged, reconnects back off (CHAT-I-03)" do
+    stub_subscribe([{:ok, [line("one", 1), line("three", 3)]}])
+    Rooms.subscribe("games")
+
+    log =
+      capture_log(fn ->
+        bridge = start_supervised!({GameBridge, "games"})
+
+        # Waited 500 ms after the stream ended; each further wait is doubled.
+        assert %{backoff: 1_000} = await_stream_end(bridge)
+
+        send(bridge, :reconnect)
+        assert %{backoff: 2_000} = await_stream_end(bridge)
+      end)
+
+    assert_receive {:new_msg, %{nick: "GameServ", kind: "service", body: "one"}}
+    assert_receive {:new_msg, %{nick: "GameServ", kind: "service", body: "three"}}
+    assert log =~ "missed messages (seq 1 -> 3)"
+    assert log =~ "reconnecting in 500 ms"
+    assert log =~ "reconnecting in 1000 ms"
+  end
+
   test "a restarted game counting from 1 again is logged as missed messages" do
     stub_subscribe([{:ok, [line("before", 5)]}, {:ok, [line("after", 1)]}])
 

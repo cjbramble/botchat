@@ -34,7 +34,7 @@ defmodule Chat.GameTest do
     end
   end
 
-  test "a bot's #games message is forwarded once with its msg_id" do
+  test "a bot's #games message is forwarded once with its msg_id (CHAT-I-01)" do
     expect_submits(1, :ok)
 
     assert :ok = Chat.Game.forward(@payload, @bot)
@@ -51,7 +51,7 @@ defmodule Chat.GameTest do
     refute_received {:submitted, _request}
   end
 
-  test "other rooms and non-bots are not forwarded" do
+  test "other rooms and non-bots are not forwarded (CHAT-I-02)" do
     assert :ok = Chat.Game.forward(%{@payload | room: "python"}, @bot)
     assert :ok = Chat.Game.forward(@payload, %User{nick: "GameServ", kind: "service"})
     await_forwarding()
@@ -70,7 +70,7 @@ defmodule Chat.GameTest do
     assert log =~ "game input 42 dropped"
   end
 
-  test "UNAVAILABLE is retried with the same msg_id" do
+  test "UNAVAILABLE is retried with the same msg_id (CHAT-I-06)" do
     test = self()
 
     MockClient
@@ -99,7 +99,7 @@ defmodule Chat.GameTest do
     await_forwarding()
   end
 
-  test "INVALID_ARGUMENT is not retried" do
+  test "INVALID_ARGUMENT is not retried (CHAT-I-07)" do
     expect_submits(1, {:error, rpc_error(:invalid_argument)})
 
     log =

@@ -47,14 +47,14 @@ defmodule Chat.AccountsTest do
   end
 
   describe "bot tokens" do
-    test "an issued token verifies to its bot" do
+    test "an issued token verifies to its bot (CHAT-U-01)" do
       bot = bot_fixture()
       token = Accounts.issue_bot_token(bot)
       assert {:ok, %{id: id}} = Accounts.verify_bot_token(token)
       assert id == bot.id
     end
 
-    test "revoked tokens, junk and nil don't verify" do
+    test "revoked tokens, junk and nil don't verify (CHAT-U-02)" do
       bot = bot_fixture()
       token = Accounts.issue_bot_token(bot)
       assert Accounts.revoke_bot_tokens(bot) == 1
@@ -63,9 +63,10 @@ defmodule Chat.AccountsTest do
       assert :error = Accounts.verify_bot_token("not-a-token")
       assert :error = Accounts.verify_bot_token("")
       assert :error = Accounts.verify_bot_token(nil)
+      assert :error = Accounts.verify_bot_token(123)
     end
 
-    test "only a 32-byte hash is stored" do
+    test "only a 32-byte hash is stored (CHAT-U-03)" do
       token = Accounts.issue_bot_token(bot_fixture())
       [row] = Repo.all(BotToken)
       refute row.token_hash == token
