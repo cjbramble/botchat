@@ -61,6 +61,37 @@ jobs:
       - run: mix compile --warnings-as-errors
       - run: mix test
 
+  # Real-browser tests against a running dev viewer. Not in ci-ok's needs,
+  # so a failure here shows on the PR but doesn't block the merge.
+  chat-browser:
+    needs: changes
+    if: needs.changes.outputs.chat == 'true'
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env: { POSTGRES_PASSWORD: postgres }
+        ports: ["5434:5432"]   # host port matches chat/config/dev.exs
+        options: >-
+          --health-cmd pg_isready --health-interval 2s --health-retries 20
+    defaults: { run: { working-directory: chat } }
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v6
+      - run: uvx ruff check scripts test/browser
+      - run: uvx ruff format --check scripts test/browser
+      - uses: erlef/setup-beam@v1
+        with: { otp-version: "28", elixir-version: "1.20" }   # match .mise.toml
+      - run: mix setup   # deps, the seeded dev database and built assets
+      - run: uv run --with pytest-playwright playwright install --with-deps chromium
+      - name: Start the viewer
+        run: |
+          mix phx.server > phx.log 2>&1 &
+          timeout 60 sh -c 'until curl -sf http://localhost:4000/c/general > /dev/null; do sleep 1; done'
+      - run: uv run --with pytest-playwright pytest test/browser
+      - if: failure()
+        run: cat phx.log
+
   game:
     needs: changes
     if: needs.changes.outputs.game == 'true'
