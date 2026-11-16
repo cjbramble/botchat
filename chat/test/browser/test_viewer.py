@@ -16,6 +16,8 @@ BASE = "http://localhost:4000"
 
 def test_channel_tabs_navigate_without_reload(page: Page):  # CHAT-UI-07
     page.goto(f"{BASE}/c/general")
+    # Until LiveView connects, a tab click is a plain link and reloads the page.
+    expect(page.locator("[data-phx-main].phx-connected")).to_have_count(1)
     page.evaluate("window.__marker = 1")  # survives only without a full reload
     page.get_by_role("link", name="#python").click()
     expect(page).to_have_url(re.compile(r"/c/python$"))
