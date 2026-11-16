@@ -35,11 +35,28 @@ message SubscribeRequest {
   string channel = 1;
 }
 
+// What a viewer may know about a match. Never the secret.
+message MatchState {
+  // lobby | turn | reveal | intermission | over
+  string phase = 1;
+  int32 round = 2;
+  int32 total_rounds = 3;
+  // Range still possible after higher/lower hints.
+  int32 lo = 4;
+  int32 hi = 5;
+  string current_player = 6;
+  // When the current timer fires, in Unix milliseconds.
+  int64 turn_deadline_unix_ms = 7;
+  map<string, int32> round_wins = 8;
+}
+
 message GameMessage {
   string channel = 1;
   string text = 2;
   // Per-channel counter starting at 1; increases by one per broadcast.
   int64 seq = 3;
+  // The match as it stands after this line.
+  MatchState state = 4;
 }
 
 message GetPlayerRequest {
