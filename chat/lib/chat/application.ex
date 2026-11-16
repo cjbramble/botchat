@@ -7,23 +7,41 @@ defmodule Chat.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      ChatWeb.Telemetry,
-      Chat.Repo,
-      {DNSCluster, query: Application.get_env(:chat, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: Chat.PubSub},
-      # Before the endpoints, so limits exist before any bot can post
-      Chat.RateLimit,
-      # Start to serve requests, typically the last entry
-      ChatWeb.Endpoint,
-      # The private endpoint for bots
-      ChatWeb.InternalEndpoint
-    ]
+    children =
+      [
+        ChatWeb.Telemetry,
+        Chat.Repo,
+        {DNSCluster, query: Application.get_env(:chat, :dns_cluster_query) || :ignore},
+        {Phoenix.PubSub, name: Chat.PubSub},
+        # Before the endpoints, so limits exist before any bot can post
+        Chat.RateLimit,
+        # The game client, also before the endpoints: a post in #games uses it.
+        # Its connections live under GRPC.Client.Supervisor, which the :grpc
+        # application starts itself.
+        {Task.Supervisor, name: Chat.TaskSup},
+        {Registry, keys: :unique, name: Chat.Registry},
+        Chat.Game.Conn
+      ] ++
+        game_bridges() ++
+        [
+          # Start to serve requests, typically the last entry
+          ChatWeb.Endpoint,
+          # The private endpoint for bots
+          ChatWeb.InternalEndpoint
+        ]
 
     # See https://elixir.hexdocs.pm/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Chat.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+
+  defp game_bridges do
+    if Application.get_env(:chat, :start_game_bridge, true) do
+      [{Chat.GameBridge, "games"}]
+    else
+      []
+    end
   end
 
   # Tell Phoenix to update the endpoint configuration

@@ -2,10 +2,24 @@ defmodule ChatWeb.RoomChannelTest do
   # Not async: rate limits live in one shared ETS table.
   use ChatWeb.ChannelCase, async: false
 
+  import Mox
+
   alias Chat.Accounts
+  alias Chat.Game.MockClient
   alias ChatWeb.BotSocket
+  alias Game.V1.SubmitInputRequest
+
+  # Global: #games posts reach the game mock from a background task.
+  setup :set_mox_global
 
   setup do
+    test = self()
+
+    stub(MockClient, :submit_input, fn request ->
+      send(test, {:submitted, request})
+      :ok
+    end)
+
     Chat.RateLimit.reset()
     channel_fixture("python", "Python")
     channel_fixture("games", "Guess the Number")
@@ -102,6 +116,29 @@ defmodule ChatWeb.RoomChannelTest do
       # test.exs sets the #games window to 200 ms
       Process.sleep(250)
       assert_reply push(games, "new_msg", %{"body" => "52"}), :ok
+
+      # Let both forwards finish before the mock goes away with the test.
+      assert_receive {:submitted, %SubmitInputRequest{text: "50"}}
+      assert_receive {:submitted, %SubmitInputRequest{text: "52"}}
+    end
+
+    test "a #games post is forwarded to the game, a #python post is not",
+         %{python: python, games: games, bot: bot} do
+      assert_reply push(python, "new_msg", %{"body" => "hi"}), :ok
+      assert_reply push(games, "new_msg", %{"body" => "!start"}), :ok, %{id: id}
+
+      nick = bot.nick
+      msg_id = to_string(id)
+
+      assert_receive {:submitted,
+                      %SubmitInputRequest{
+                        channel: "games",
+                        player_id: ^nick,
+                        text: "!start",
+                        msg_id: ^msg_id
+                      }}
+
+      refute_receive {:submitted, _request}, 50
     end
   end
 end

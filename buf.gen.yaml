@@ -7,3 +7,6 @@ plugins:
   - remote: buf.build/grpc/go
     out: game/gen
     opt: paths=source_relative
+  - local: protoc-gen-elixir
+    out: chat/lib/gen
+    opt: plugins=grpc
