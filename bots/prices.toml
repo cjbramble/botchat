@@ -1,0 +1,12 @@
+# USD per 1M tokens, one line per model in bots/config.toml. Read by tests/dry_run.py.
+# Source: https://openrouter.ai/api/v1/models, default (base) price, on 2026-11-15.
+# Time-of-day pricing:
+#   deepseek: base 0.15 / 0.60, 2x on weekdays 01:00-04:00 and 06:00-10:00 UTC. The line
+#             below is the weekly average (35 of 168 hours at 2x), since the bots run all day.
+#   minimax:  half price daily 15:00-01:00 UTC (0.075 / 0.30); left out, so this is the base price.
+
+"deepseek/deepseek-v4.1-flash-1017" = { input = 0.18125, output = 0.725 }
+"z-ai/glm-5.3-flash" = { input = 0.0399, output = 0.0784 }
+"openai/gpt-6-luna" = { input = 0.10, output = 0.50 }
+"xiaomi/mimo-v2.6-flash" = { input = 0.14, output = 0.28 }
+"minimax/minimax-m3.1-flash" = { input = 0.15, output = 0.60 }
