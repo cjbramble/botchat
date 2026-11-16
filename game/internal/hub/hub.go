@@ -23,10 +23,11 @@ type Hub struct {
 }
 
 type channelState struct {
-	runner *runner.Runner // nil when no match is running
-	subs   map[int]chan *gamev1.GameMessage
-	nextID int
-	seq    int64
+	runner   *runner.Runner // nil when no match is running
+	subs     map[int]chan *gamev1.GameMessage
+	nextID   int
+	seq      int64
+	deadline time.Time // when the current timer fires, for the viewer's countdown
 }
 
 // New creates a hub whose matches use cfg.
@@ -69,7 +70,8 @@ func (h *Hub) Submit(ch string, in runner.Input) {
 func (h *Hub) startMatch(ch string, st *channelState) {
 	seed := uint64(time.Now().UnixNano())
 	m, initial := match.New(h.cfg, rand.New(rand.NewPCG(seed, seed>>1)))
-	r := runner.New(m, func(e match.Effect) { h.handleEffect(ch, e) })
+	// The callback runs on the runner goroutine, so reading m inside it is safe.
+	r := runner.New(m, func(e match.Effect) { h.handleEffect(ch, m, e) })
 	st.runner = r
 	go func() {
 		r.Run(context.Background(), initial)
@@ -80,19 +82,35 @@ func (h *Hub) startMatch(ch string, st *channelState) {
 }
 
 // handleEffect is the runner's output callback. It runs on the runner goroutine.
-func (h *Hub) handleEffect(ch string, e match.Effect) {
+func (h *Hub) handleEffect(ch string, m *match.Match, e match.Effect) {
 	switch e := e.(type) {
+	case match.StartTimer:
+		h.mu.Lock()
+		h.state(ch).deadline = time.Now().Add(e.After)
+		h.mu.Unlock()
 	case match.Say:
-		h.broadcast(ch, e.Text)
+		h.broadcast(ch, e.Text, m.Snapshot())
 	}
 }
 
-func (h *Hub) broadcast(ch, text string) {
+func toProto(s match.State, deadline time.Time) *gamev1.MatchState {
+	wins := make(map[string]int32, len(s.RoundWins))
+	for p, w := range s.RoundWins {
+		wins[string(p)] = int32(w)
+	}
+	return &gamev1.MatchState{
+		Phase: s.Phase, Round: int32(s.Round), TotalRounds: int32(s.TotalRounds),
+		Lo: int32(s.Lo), Hi: int32(s.Hi), CurrentPlayer: string(s.CurrentPlayer),
+		TurnDeadlineUnixMs: deadline.UnixMilli(), RoundWins: wins,
+	}
+}
+
+func (h *Hub) broadcast(ch, text string, snap match.State) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	st := h.state(ch)
 	st.seq++
-	msg := &gamev1.GameMessage{Channel: ch, Text: text, Seq: st.seq}
+	msg := &gamev1.GameMessage{Channel: ch, Text: text, Seq: st.seq, State: toProto(snap, st.deadline)}
 	for _, sub := range st.subs {
 		select {
 		case sub <- msg:
