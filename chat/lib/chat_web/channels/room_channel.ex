@@ -5,7 +5,7 @@ defmodule ChatWeb.RoomChannel do
   """
   use Phoenix.Channel
 
-  alias Chat.{RateLimit, Rooms}
+  alias Chat.{Game, RateLimit, Rooms}
 
   @impl true
   def join("room:" <> room, _params, socket) do
@@ -38,8 +38,12 @@ defmodule ChatWeb.RoomChannel do
 
     if RateLimit.allow_post?(room, user.id) do
       case Rooms.post_message(room, user, body) do
-        {:ok, payload} -> {:reply, {:ok, %{id: payload.id}}, socket}
-        {:error, _changeset} -> {:reply, {:error, %{reason: "invalid"}}, socket}
+        {:ok, payload} ->
+          Game.forward(payload, user)
+          {:reply, {:ok, %{id: payload.id}}, socket}
+
+        {:error, _changeset} ->
+          {:reply, {:error, %{reason: "invalid"}}, socket}
       end
     else
       {:reply, {:error, %{reason: "rate_limited"}}, socket}
