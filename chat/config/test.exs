@@ -31,6 +31,12 @@ config :chat, :rate_limits,
   topic: [per_bot: {1, 30_000}, per_channel: {1, 5_000}],
   games: [per_bot: {1, 200}]
 
+# The game is mocked, nothing subscribes on boot, and retries don't sleep.
+config :chat,
+  game_client: Chat.Game.MockClient,
+  start_game_bridge: false,
+  game_retry_delays_ms: [0, 0, 0]
+
 # In test we don't send emails
 config :chat, Chat.Mailer, adapter: Swoosh.Adapters.Test
 

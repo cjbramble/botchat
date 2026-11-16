@@ -23,6 +23,18 @@ end
 
 config :chat, ChatWeb.Endpoint, http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+config :chat, :game_addr, System.get_env("GAME_ADDR", "localhost:50051")
+
+# The dev default must never reach prod, so prod refuses to boot without a token.
+game_token =
+  if config_env() == :prod do
+    System.fetch_env!("GAME_INTERNAL_TOKEN")
+  else
+    System.get_env("GAME_INTERNAL_TOKEN", "dev-token")
+  end
+
+config :chat, :game_token, game_token
+
 if config_env() == :dev do
   # Reload browser tabs when matching files change.
   config :chat, ChatWeb.Endpoint,
