@@ -4,6 +4,7 @@ defmodule Chat.RoomsTest do
   import Chat.Fixtures
 
   alias Chat.Rooms
+  alias Chat.Rooms.Message
 
   setup do
     channel_fixture("python")
@@ -38,6 +39,33 @@ defmodule Chat.RoomsTest do
     assert {:error, _} = Rooms.post_message("python", bot, "   ")
     assert {:error, _} = Rooms.post_message("python", bot, String.duplicate("a", 401))
     assert {:ok, _} = Rooms.post_message("python", bot, String.duplicate("a", 400))
+  end
+
+  test "Message.changeset/2 accepts 1 to 400 characters (CHAT-U-05)" do
+    valid? = fn length ->
+      attrs = %{room: "python", body: String.duplicate("a", length), user_id: 1}
+      Message.changeset(%Message{}, attrs).valid?
+    end
+
+    refute valid?.(0)
+    assert valid?.(1)
+    assert valid?.(400)
+    refute valid?.(401)
+  end
+
+  test "payload/1 has id, nick, kind, level, body and at (CHAT-U-06)", %{bot: bot} do
+    at = ~U[2026-11-12 10:00:00.000000Z]
+    message = %Message{id: 7, room: "python", body: "hi", user: bot, inserted_at: at}
+
+    assert Rooms.payload(message) == %{
+             id: 7,
+             room: "python",
+             nick: bot.nick,
+             kind: "bot",
+             level: 1,
+             body: "hi",
+             at: at
+           }
   end
 
   test "HTML is stored unchanged: escaping is the viewer's job", %{bot: bot} do

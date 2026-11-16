@@ -29,7 +29,11 @@ defmodule ChatWeb.RoomChannelTest do
   end
 
   describe "connecting" do
-    test "bad, missing and revoked tokens are refused", %{bot: bot} do
+    test "a valid token connects as its bot (CHAT-A-01)", %{socket: socket, bot: bot} do
+      assert socket.assigns.user.id == bot.id
+    end
+
+    test "bad, missing and revoked tokens are refused (CHAT-A-02)", %{bot: bot} do
       assert :error = connect(BotSocket, %{"token" => "nope"})
       assert :error = connect(BotSocket, %{})
 
@@ -45,15 +49,25 @@ defmodule ChatWeb.RoomChannelTest do
       BotSocket.disconnect(bot)
       assert_broadcast "disconnect", %{}
     end
+
+    test "revoking a connected bot closes its socket (CHAT-A-09)", %{socket: socket, bot: bot} do
+      @endpoint.subscribe(BotSocket.id(socket))
+
+      assert Accounts.revoke_bot_tokens(bot) == 1
+      BotSocket.disconnect(bot)
+
+      # Phoenix closes every transport of a socket id that gets this broadcast.
+      assert_broadcast "disconnect", %{}
+    end
   end
 
   describe "joining" do
-    test "a seeded channel replies with its topic", %{socket: socket} do
+    test "a seeded channel replies with its topic (CHAT-A-03)", %{socket: socket} do
       assert {:ok, %{topic: "Python", recent: []}, _socket} =
                subscribe_and_join(socket, "room:python", %{})
     end
 
-    test "an unknown channel is refused", %{socket: socket} do
+    test "an unknown channel is refused (CHAT-A-04)", %{socket: socket} do
       assert {:error, %{reason: "no_such_channel"}} =
                subscribe_and_join(socket, "room:nope", %{})
     end
@@ -75,13 +89,32 @@ defmodule ChatWeb.RoomChannelTest do
       assert [%{id: ^id, body: "hi"}] = Chat.Rooms.recent("python", 20)
     end
 
+    test "a pushed message reaches every subscriber (CHAT-A-05)", %{python: python, bot: bot} do
+      Chat.Rooms.subscribe("python")
+
+      ref = push(python, "new_msg", %{"body" => "TaskGroup > gather"})
+      assert_reply ref, :ok, %{id: id}
+
+      nick = bot.nick
+
+      assert_receive {:new_msg,
+                      %{
+                        id: ^id,
+                        nick: ^nick,
+                        kind: "bot",
+                        level: 1,
+                        body: "TaskGroup > gather",
+                        at: %DateTime{}
+                      }}
+    end
+
     # Its own test: a refused body still counts against the rate limit.
-    test "an empty body is refused", %{python: python} do
+    test "an empty body is refused (CHAT-A-06)", %{python: python} do
       ref = push(python, "new_msg", %{"body" => ""})
       assert_reply ref, :error, %{reason: "invalid"}
     end
 
-    test "invalid bodies are refused", %{python: python} do
+    test "invalid bodies are refused (CHAT-A-06)", %{python: python} do
       ref = push(python, "new_msg", %{"body" => String.duplicate("a", 401)})
       assert_reply ref, :error, %{reason: "invalid"}
 
@@ -92,7 +125,8 @@ defmodule ChatWeb.RoomChannelTest do
       assert_reply ref, :error, %{reason: "bad_request"}
     end
 
-    test "a second message within 30 s in a topic channel is rate limited", %{python: python} do
+    test "a second message within 30 s in a topic channel is rate limited (CHAT-A-07)",
+         %{python: python} do
       assert_reply push(python, "new_msg", %{"body" => "one"}), :ok
       assert_reply push(python, "new_msg", %{"body" => "two"}), :error, %{reason: "rate_limited"}
     end
@@ -109,7 +143,7 @@ defmodule ChatWeb.RoomChannelTest do
       }
     end
 
-    test "#games allows quick turns", %{games: games} do
+    test "#games allows quick turns (CHAT-A-08)", %{games: games} do
       assert_reply push(games, "new_msg", %{"body" => "50"}), :ok
       assert_reply push(games, "new_msg", %{"body" => "51"}), :error, %{reason: "rate_limited"}
 
