@@ -19,6 +19,9 @@ type server struct {
 	// return codes.Unimplemented instead of failing to compile.
 	gamev1.UnimplementedGameServiceServer
 	hub *hub.Hub
+	// done closes when the server shuts down. GracefulStop waits for open
+	// streams, and a Subscribe stream never ends by itself. Nil never closes.
+	done <-chan struct{}
 }
 
 func (s *server) SubmitInput(ctx context.Context, req *gamev1.SubmitInputRequest) (*gamev1.SubmitInputResponse, error) {
@@ -46,6 +49,8 @@ func (s *server) Subscribe(req *gamev1.SubscribeRequest, stream grpc.ServerStrea
 		select {
 		case <-stream.Context().Done():
 			return nil // the client hung up
+		case <-s.done:
+			return status.Error(codes.Unavailable, "server is shutting down")
 		case msg := <-msgs:
 			if err := stream.Send(msg); err != nil {
 				return err

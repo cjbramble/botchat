@@ -24,6 +24,12 @@ const testToken = "test-token"
 // and returns a client connected to it.
 func newClient(t *testing.T) gamev1.GameServiceClient {
 	t.Helper()
+	return newClientWithDone(t, nil)
+}
+
+// newClientWithDone is newClient with the server's shutdown signal exposed.
+func newClientWithDone(t *testing.T, done <-chan struct{}) gamev1.GameServiceClient {
+	t.Helper()
 	lis := bufconn.Listen(1 << 20)
 	s := grpc.NewServer(
 		grpc.UnaryInterceptor(unaryAuth(testToken)),
@@ -31,7 +37,7 @@ func newClient(t *testing.T) gamev1.GameServiceClient {
 	)
 	cfg := match.DefaultConfig()
 	cfg.JoinWindow = 200 * time.Millisecond
-	gamev1.RegisterGameServiceServer(s, &server{hub: hub.New(cfg)})
+	gamev1.RegisterGameServiceServer(s, &server{hub: hub.New(cfg), done: done})
 
 	serveErr := make(chan error, 1)
 	go func() { serveErr <- s.Serve(lis) }()
@@ -111,5 +117,18 @@ func TestStartIsStreamedWithSeq1(t *testing.T) { // GAME-A-03
 	msg, err := stream.Recv()
 	if err != nil || msg.GetSeq() != 1 {
 		t.Fatalf("want seq 1, got %v / %v", msg, err)
+	}
+}
+
+func TestShutdownEndsSubscribeStreams(t *testing.T) {
+	done := make(chan struct{})
+	c := newClientWithDone(t, done)
+	stream, err := c.Subscribe(authed(t), &gamev1.SubscribeRequest{Channel: "games"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	close(done)
+	if _, err := stream.Recv(); status.Code(err) != codes.Unavailable {
+		t.Fatalf("want Unavailable, got %v", err)
 	}
 }

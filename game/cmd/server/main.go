@@ -29,7 +29,9 @@ func main() {
 		grpc.UnaryInterceptor(unaryAuth(token)),
 		grpc.StreamInterceptor(streamAuth(token)),
 	)
-	gamev1.RegisterGameServiceServer(s, &server{hub: hub.New(match.DefaultConfig())})
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+	gamev1.RegisterGameServiceServer(s, &server{hub: hub.New(match.DefaultConfig()), done: ctx.Done()})
 	reflection.Register(s) // lets grpcurl discover methods (calls still need the token)
 
 	lis, err := net.Listen("tcp", addr)
@@ -38,12 +40,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
 	go func() {
 		<-ctx.Done()
 		slog.Info("shutting down")
-		s.GracefulStop() // finish in-flight calls, then stop
+		s.GracefulStop() // finish in-flight calls (Subscribe streams end on ctx), then stop
 	}()
 
 	slog.Info("game listening", "addr", lis.Addr().String())
