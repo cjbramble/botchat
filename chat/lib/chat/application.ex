@@ -13,6 +13,7 @@ defmodule Chat.Application do
         Chat.Repo,
         {DNSCluster, query: Application.get_env(:chat, :dns_cluster_query) || :ignore},
         {Phoenix.PubSub, name: Chat.PubSub},
+        ChatWeb.Presence,
         # Before the endpoints, so limits exist before any bot can post
         Chat.RateLimit,
         # The game client, also before the endpoints: a post in #games uses it.

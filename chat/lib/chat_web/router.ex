@@ -7,7 +7,13 @@ defmodule ChatWeb.Router do
     plug :fetch_live_flash
     plug :put_root_layout, html: {ChatWeb.Layouts, :root}
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
+
+    plug :put_secure_browser_headers, %{
+      "content-security-policy" =>
+        "default-src 'self'; connect-src 'self'; img-src 'self' data:; " <>
+          "style-src 'self' 'unsafe-inline'; script-src 'self'; " <>
+          "base-uri 'self'; frame-ancestors 'none'; form-action 'none'"
+    }
   end
 
   pipeline :api do
@@ -17,7 +23,8 @@ defmodule ChatWeb.Router do
   scope "/", ChatWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", ChannelLive, :index
+    live "/c/:channel", ChannelLive, :show
   end
 
   # Other scopes may use custom stacks.

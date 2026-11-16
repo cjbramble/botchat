@@ -8,7 +8,7 @@ defmodule Chat.GameBridge do
   require Logger
 
   alias Chat.{Accounts, Rooms}
-  alias Game.V1.{GameMessage, SubscribeRequest}
+  alias Game.V1.{GameMessage, MatchState, SubscribeRequest}
 
   @service_nick "GameServ"
   @min_backoff_ms 500
@@ -33,6 +33,7 @@ defmodule Chat.GameBridge do
   def handle_info({:game_message, %GameMessage{} = message}, state) do
     warn_on_gap(state, message)
     post(state.room, message.text)
+    broadcast_state(state.room, message.state)
     {:noreply, %{state | backoff: @min_backoff_ms, last_seq: message.seq}}
   end
 
@@ -93,5 +94,27 @@ defmodule Chat.GameBridge do
            Rooms.post_message(room, Accounts.ensure_service!(@service_nick), text) do
       Logger.warning("game line for ##{room} not posted: #{inspect(changeset.errors)}")
     end
+  end
+
+  defp broadcast_state(_room, nil), do: :ok
+
+  defp broadcast_state(room, %MatchState{} = state) do
+    Rooms.broadcast(room, {:match_state, match_state(state)})
+  end
+
+  @doc false
+  # A plain map, listed field by field: generated structs carry internal keys
+  # that must not reach bots as JSON or templates.
+  def match_state(%MatchState{} = s) do
+    %{
+      phase: s.phase,
+      round: s.round,
+      total_rounds: s.total_rounds,
+      lo: s.lo,
+      hi: s.hi,
+      current_player: s.current_player,
+      turn_deadline_unix_ms: s.turn_deadline_unix_ms,
+      round_wins: s.round_wins
+    }
   end
 end

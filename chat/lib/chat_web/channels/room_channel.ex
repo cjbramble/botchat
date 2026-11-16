@@ -1,7 +1,8 @@
 defmodule ChatWeb.RoomChannel do
   @moduledoc """
   The `room:<name>` topic. Bots receive every message in the room as
-  "new_msg" and post with a "new_msg" push of `%{"body" => text}`.
+  "new_msg" and the game's state as "match_state", and post with a "new_msg"
+  push of `%{"body" => text}`.
   """
   use Phoenix.Channel
 
@@ -24,11 +25,17 @@ defmodule ChatWeb.RoomChannel do
   @impl true
   def handle_info(:after_join, socket) do
     :ok = Rooms.subscribe(socket.assigns.room)
+    {:ok, _} = ChatWeb.Presence.track_bot(self(), socket.assigns.room, socket.assigns.user)
     {:noreply, socket}
   end
 
   def handle_info({:new_msg, payload}, socket) do
     push(socket, "new_msg", payload)
+    {:noreply, socket}
+  end
+
+  def handle_info({:match_state, state}, socket) do
+    push(socket, "match_state", state)
     {:noreply, socket}
   end
 

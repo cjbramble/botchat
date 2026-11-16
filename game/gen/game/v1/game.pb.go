@@ -170,19 +170,125 @@ func (x *SubscribeRequest) GetChannel() string {
 	return ""
 }
 
+// What a viewer may know about a match. Never the secret.
+type MatchState struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// lobby | turn | reveal | intermission | over
+	Phase       string `protobuf:"bytes,1,opt,name=phase,proto3" json:"phase,omitempty"`
+	Round       int32  `protobuf:"varint,2,opt,name=round,proto3" json:"round,omitempty"`
+	TotalRounds int32  `protobuf:"varint,3,opt,name=total_rounds,json=totalRounds,proto3" json:"total_rounds,omitempty"`
+	// Range still possible after higher/lower hints.
+	Lo            int32  `protobuf:"varint,4,opt,name=lo,proto3" json:"lo,omitempty"`
+	Hi            int32  `protobuf:"varint,5,opt,name=hi,proto3" json:"hi,omitempty"`
+	CurrentPlayer string `protobuf:"bytes,6,opt,name=current_player,json=currentPlayer,proto3" json:"current_player,omitempty"`
+	// When the current timer fires, in Unix milliseconds.
+	TurnDeadlineUnixMs int64            `protobuf:"varint,7,opt,name=turn_deadline_unix_ms,json=turnDeadlineUnixMs,proto3" json:"turn_deadline_unix_ms,omitempty"`
+	RoundWins          map[string]int32 `protobuf:"bytes,8,rep,name=round_wins,json=roundWins,proto3" json:"round_wins,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *MatchState) Reset() {
+	*x = MatchState{}
+	mi := &file_game_v1_game_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MatchState) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MatchState) ProtoMessage() {}
+
+func (x *MatchState) ProtoReflect() protoreflect.Message {
+	mi := &file_game_v1_game_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MatchState.ProtoReflect.Descriptor instead.
+func (*MatchState) Descriptor() ([]byte, []int) {
+	return file_game_v1_game_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *MatchState) GetPhase() string {
+	if x != nil {
+		return x.Phase
+	}
+	return ""
+}
+
+func (x *MatchState) GetRound() int32 {
+	if x != nil {
+		return x.Round
+	}
+	return 0
+}
+
+func (x *MatchState) GetTotalRounds() int32 {
+	if x != nil {
+		return x.TotalRounds
+	}
+	return 0
+}
+
+func (x *MatchState) GetLo() int32 {
+	if x != nil {
+		return x.Lo
+	}
+	return 0
+}
+
+func (x *MatchState) GetHi() int32 {
+	if x != nil {
+		return x.Hi
+	}
+	return 0
+}
+
+func (x *MatchState) GetCurrentPlayer() string {
+	if x != nil {
+		return x.CurrentPlayer
+	}
+	return ""
+}
+
+func (x *MatchState) GetTurnDeadlineUnixMs() int64 {
+	if x != nil {
+		return x.TurnDeadlineUnixMs
+	}
+	return 0
+}
+
+func (x *MatchState) GetRoundWins() map[string]int32 {
+	if x != nil {
+		return x.RoundWins
+	}
+	return nil
+}
+
 type GameMessage struct {
 	state   protoimpl.MessageState `protogen:"open.v1"`
 	Channel string                 `protobuf:"bytes,1,opt,name=channel,proto3" json:"channel,omitempty"`
 	Text    string                 `protobuf:"bytes,2,opt,name=text,proto3" json:"text,omitempty"`
 	// Per-channel counter starting at 1; increases by one per broadcast.
-	Seq           int64 `protobuf:"varint,3,opt,name=seq,proto3" json:"seq,omitempty"`
+	Seq int64 `protobuf:"varint,3,opt,name=seq,proto3" json:"seq,omitempty"`
+	// The match as it stands after this line.
+	State         *MatchState `protobuf:"bytes,4,opt,name=state,proto3" json:"state,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GameMessage) Reset() {
 	*x = GameMessage{}
-	mi := &file_game_v1_game_proto_msgTypes[3]
+	mi := &file_game_v1_game_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -194,7 +300,7 @@ func (x *GameMessage) String() string {
 func (*GameMessage) ProtoMessage() {}
 
 func (x *GameMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_game_v1_game_proto_msgTypes[3]
+	mi := &file_game_v1_game_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -207,7 +313,7 @@ func (x *GameMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameMessage.ProtoReflect.Descriptor instead.
 func (*GameMessage) Descriptor() ([]byte, []int) {
-	return file_game_v1_game_proto_rawDescGZIP(), []int{3}
+	return file_game_v1_game_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GameMessage) GetChannel() string {
@@ -231,6 +337,13 @@ func (x *GameMessage) GetSeq() int64 {
 	return 0
 }
 
+func (x *GameMessage) GetState() *MatchState {
+	if x != nil {
+		return x.State
+	}
+	return nil
+}
+
 type GetPlayerRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	PlayerId      string                 `protobuf:"bytes,1,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
@@ -240,7 +353,7 @@ type GetPlayerRequest struct {
 
 func (x *GetPlayerRequest) Reset() {
 	*x = GetPlayerRequest{}
-	mi := &file_game_v1_game_proto_msgTypes[4]
+	mi := &file_game_v1_game_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -252,7 +365,7 @@ func (x *GetPlayerRequest) String() string {
 func (*GetPlayerRequest) ProtoMessage() {}
 
 func (x *GetPlayerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_game_v1_game_proto_msgTypes[4]
+	mi := &file_game_v1_game_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -265,7 +378,7 @@ func (x *GetPlayerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPlayerRequest.ProtoReflect.Descriptor instead.
 func (*GetPlayerRequest) Descriptor() ([]byte, []int) {
-	return file_game_v1_game_proto_rawDescGZIP(), []int{4}
+	return file_game_v1_game_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetPlayerRequest) GetPlayerId() string {
@@ -286,7 +399,7 @@ type GetPlayerResponse struct {
 
 func (x *GetPlayerResponse) Reset() {
 	*x = GetPlayerResponse{}
-	mi := &file_game_v1_game_proto_msgTypes[5]
+	mi := &file_game_v1_game_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -298,7 +411,7 @@ func (x *GetPlayerResponse) String() string {
 func (*GetPlayerResponse) ProtoMessage() {}
 
 func (x *GetPlayerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_game_v1_game_proto_msgTypes[5]
+	mi := &file_game_v1_game_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -311,7 +424,7 @@ func (x *GetPlayerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPlayerResponse.ProtoReflect.Descriptor instead.
 func (*GetPlayerResponse) Descriptor() ([]byte, []int) {
-	return file_game_v1_game_proto_rawDescGZIP(), []int{5}
+	return file_game_v1_game_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetPlayerResponse) GetPlayerId() string {
@@ -347,11 +460,26 @@ const file_game_v1_game_proto_rawDesc = "" +
 	"\x06msg_id\x18\x04 \x01(\tR\x05msgId\"\x15\n" +
 	"\x13SubmitInputResponse\",\n" +
 	"\x10SubscribeRequest\x12\x18\n" +
-	"\achannel\x18\x01 \x01(\tR\achannel\"M\n" +
+	"\achannel\x18\x01 \x01(\tR\achannel\"\xd6\x02\n" +
+	"\n" +
+	"MatchState\x12\x14\n" +
+	"\x05phase\x18\x01 \x01(\tR\x05phase\x12\x14\n" +
+	"\x05round\x18\x02 \x01(\x05R\x05round\x12!\n" +
+	"\ftotal_rounds\x18\x03 \x01(\x05R\vtotalRounds\x12\x0e\n" +
+	"\x02lo\x18\x04 \x01(\x05R\x02lo\x12\x0e\n" +
+	"\x02hi\x18\x05 \x01(\x05R\x02hi\x12%\n" +
+	"\x0ecurrent_player\x18\x06 \x01(\tR\rcurrentPlayer\x121\n" +
+	"\x15turn_deadline_unix_ms\x18\a \x01(\x03R\x12turnDeadlineUnixMs\x12A\n" +
+	"\n" +
+	"round_wins\x18\b \x03(\v2\".game.v1.MatchState.RoundWinsEntryR\troundWins\x1a<\n" +
+	"\x0eRoundWinsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"x\n" +
 	"\vGameMessage\x12\x18\n" +
 	"\achannel\x18\x01 \x01(\tR\achannel\x12\x12\n" +
 	"\x04text\x18\x02 \x01(\tR\x04text\x12\x10\n" +
-	"\x03seq\x18\x03 \x01(\x03R\x03seq\"/\n" +
+	"\x03seq\x18\x03 \x01(\x03R\x03seq\x12)\n" +
+	"\x05state\x18\x04 \x01(\v2\x13.game.v1.MatchStateR\x05state\"/\n" +
 	"\x10GetPlayerRequest\x12\x1b\n" +
 	"\tplayer_id\x18\x01 \x01(\tR\bplayerId\"V\n" +
 	"\x11GetPlayerResponse\x12\x1b\n" +
@@ -375,27 +503,31 @@ func file_game_v1_game_proto_rawDescGZIP() []byte {
 	return file_game_v1_game_proto_rawDescData
 }
 
-var file_game_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_game_v1_game_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_game_v1_game_proto_goTypes = []any{
 	(*SubmitInputRequest)(nil),  // 0: game.v1.SubmitInputRequest
 	(*SubmitInputResponse)(nil), // 1: game.v1.SubmitInputResponse
 	(*SubscribeRequest)(nil),    // 2: game.v1.SubscribeRequest
-	(*GameMessage)(nil),         // 3: game.v1.GameMessage
-	(*GetPlayerRequest)(nil),    // 4: game.v1.GetPlayerRequest
-	(*GetPlayerResponse)(nil),   // 5: game.v1.GetPlayerResponse
+	(*MatchState)(nil),          // 3: game.v1.MatchState
+	(*GameMessage)(nil),         // 4: game.v1.GameMessage
+	(*GetPlayerRequest)(nil),    // 5: game.v1.GetPlayerRequest
+	(*GetPlayerResponse)(nil),   // 6: game.v1.GetPlayerResponse
+	nil,                         // 7: game.v1.MatchState.RoundWinsEntry
 }
 var file_game_v1_game_proto_depIdxs = []int32{
-	0, // 0: game.v1.GameService.SubmitInput:input_type -> game.v1.SubmitInputRequest
-	2, // 1: game.v1.GameService.Subscribe:input_type -> game.v1.SubscribeRequest
-	4, // 2: game.v1.GameService.GetPlayer:input_type -> game.v1.GetPlayerRequest
-	1, // 3: game.v1.GameService.SubmitInput:output_type -> game.v1.SubmitInputResponse
-	3, // 4: game.v1.GameService.Subscribe:output_type -> game.v1.GameMessage
-	5, // 5: game.v1.GameService.GetPlayer:output_type -> game.v1.GetPlayerResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	7, // 0: game.v1.MatchState.round_wins:type_name -> game.v1.MatchState.RoundWinsEntry
+	3, // 1: game.v1.GameMessage.state:type_name -> game.v1.MatchState
+	0, // 2: game.v1.GameService.SubmitInput:input_type -> game.v1.SubmitInputRequest
+	2, // 3: game.v1.GameService.Subscribe:input_type -> game.v1.SubscribeRequest
+	5, // 4: game.v1.GameService.GetPlayer:input_type -> game.v1.GetPlayerRequest
+	1, // 5: game.v1.GameService.SubmitInput:output_type -> game.v1.SubmitInputResponse
+	4, // 6: game.v1.GameService.Subscribe:output_type -> game.v1.GameMessage
+	6, // 7: game.v1.GameService.GetPlayer:output_type -> game.v1.GetPlayerResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_game_v1_game_proto_init() }
@@ -409,7 +541,7 @@ func file_game_v1_game_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_game_v1_game_proto_rawDesc), len(file_game_v1_game_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

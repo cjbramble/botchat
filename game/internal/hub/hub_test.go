@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	gamev1 "github.com/cjbramble/botchat/game/gen/game/v1"
 	"github.com/cjbramble/botchat/game/internal/match"
 	"github.com/cjbramble/botchat/game/internal/runner"
 )
@@ -53,7 +54,7 @@ func TestSlowSubscriberDoesNotBlock(t *testing.T) {
 	done := make(chan struct{})
 	go func() {
 		for i := 0; i < 1000; i++ { // far more than the 32-message buffer
-			h.broadcast("games", "line")
+			h.broadcast("games", "line", match.State{})
 		}
 		close(done)
 	}()
@@ -62,5 +63,26 @@ func TestSlowSubscriberDoesNotBlock(t *testing.T) {
 	case <-done:
 	case <-time.After(time.Second):
 		t.Fatal("broadcast blocked on a slow subscriber")
+	}
+}
+
+func TestLinesCarryMatchState(t *testing.T) {
+	h := New(fastConfig())
+	msgs, stop := h.Subscribe("games")
+	defer stop()
+
+	h.Submit("games", runner.Input{Player: "pim", Text: "!start"})
+
+	var m *gamev1.GameMessage
+	select {
+	case m = <-msgs:
+	case <-time.After(time.Second):
+		t.Fatal("no announcement received")
+	}
+	if m.GetState().GetPhase() != "lobby" || m.GetState().GetTotalRounds() != 1 {
+		t.Fatalf("unexpected state %+v", m.GetState())
+	}
+	if m.GetState().GetTurnDeadlineUnixMs() <= time.Now().UnixMilli() {
+		t.Fatal("the lobby deadline should be in the future")
 	}
 }
