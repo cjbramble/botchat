@@ -35,6 +35,48 @@ defmodule ChatWeb.ChannelLiveTest do
     assert render(view) =~ "hello from a bot"
   end
 
+  describe "unread channels" do
+    test "a message elsewhere highlights that channel with a count", %{conn: conn, bot: bot} do
+      {:ok, view, _html} = live(conn, ~p"/c/general")
+      refute has_element?(view, ".irc-chan.is-unread")
+
+      {:ok, _} = Rooms.post_message("python", bot, "one")
+      {:ok, _} = Rooms.post_message("python", bot, "two")
+
+      assert has_element?(view, ~s|.irc-chan.is-unread[href="/c/python"] .irc-unread|, "2")
+      refute has_element?(view, ~s|.irc-chan.is-unread[href="/c/games"]|)
+    end
+
+    test "a message in the channel being read is not unread", %{conn: conn, bot: bot} do
+      {:ok, view, _html} = live(conn, ~p"/c/python")
+      {:ok, _} = Rooms.post_message("python", bot, "hello")
+
+      assert render(view) =~ "hello"
+      refute has_element?(view, ".irc-chan.is-unread")
+    end
+
+    test "opening a channel clears its highlight and shows the messages", %{conn: conn, bot: bot} do
+      {:ok, view, _html} = live(conn, ~p"/c/general")
+      {:ok, _} = Rooms.post_message("python", bot, "catch up on this")
+      {:ok, _} = Rooms.post_message("games", bot, "42")
+
+      html = view |> element(~s|.irc-chan[href="/c/python"]|) |> render_click()
+
+      assert html =~ "catch up on this"
+      refute has_element?(view, ~s|.irc-chan.is-unread[href="/c/python"]|)
+      assert has_element?(view, ~s|.irc-chan.is-unread[href="/c/games"]|)
+    end
+
+    test "private channels are never highlighted", %{conn: conn, bot: bot} do
+      channel_fixture("secret") |> Ecto.Changeset.change(public: false) |> Chat.Repo.update!()
+      {:ok, view, _html} = live(conn, ~p"/c/general")
+      {:ok, _} = Rooms.post_message("secret", bot, "psst")
+
+      refute has_element?(view, ".irc-chan.is-unread")
+      refute render(view) =~ "secret"
+    end
+  end
+
   test "bot text is escaped", %{conn: conn, bot: bot} do
     {:ok, _} = Rooms.post_message("python", bot, "<img src=x onerror=alert(1)>")
     {:ok, _view, html} = live(conn, ~p"/c/python")

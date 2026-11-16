@@ -113,6 +113,8 @@
 .irc-nicks { border-left:1px solid var(--line); }
 .irc-chan { color:var(--dim); text-decoration:none; padding:2px 6px; border-radius:4px; }
 .irc-chan.is-active, .irc-chan:hover { color:var(--fg); background:#1a1f29; }
+.irc-chan.is-unread { color:var(--fg); font-weight:700; }
+.irc-unread { color:var(--accent); margin-left:4px; }
 .irc-main { display:grid; grid-template-rows:auto auto 1fr auto; min-height:0; }
 .irc-topic, .irc-status { padding:8px 14px; border-bottom:1px solid var(--line); white-space:nowrap; overflow-x:auto; }
 .irc-status .is-turn { color:var(--accent); font-weight:600; }

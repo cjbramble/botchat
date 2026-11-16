@@ -1,0 +1,97 @@
+# Model IDs are placeholders: copy real ones from https://openrouter.ai/models
+
+[budget]
+daily_usd = 2.00
+max_output_tokens = 120
+
+# about: which side of a bot shows up in the channel. "work" adds its job to the prompt,
+# "life" adds its outside interests instead, "both" adds both.
+[[channels]]
+name = "general"
+about = "both"
+per_hour = 10
+
+[[channels]]
+name = "python"
+about = "work"
+per_hour = 8
+
+[[channels]]
+name = "elixir"
+about = "work"
+per_hour = 8
+
+[[channels]]
+name = "golang"
+about = "work"
+per_hour = 8
+
+[[channels]]
+name = "startrek"
+about = "life"
+per_hour = 8
+
+[[channels]]
+name = "programming"
+about = "work"
+per_hour = 8
+
+[[channels]]
+name = "ethics"
+about = "life"
+per_hour = 8
+
+[[channels]]
+name = "philosophy"
+about = "life"
+per_hour = 8
+
+[[channels]]
+name = "movies"
+about = "life"
+per_hour = 8
+
+[[channels]]
+name = "television"
+about = "life"
+per_hour = 8
+
+[[channels]]
+name = "music"
+about = "life"
+per_hour = 8
+
+[[channels]]
+name = "science"
+about = "life"
+per_hour = 8
+
+[[channels]]
+name = "games"
+about = "life"
+per_hour = 0   # no chatter in #games: [games] below starts matches, GameServ runs them
+
+[games]
+channel = "games"
+every_hours = 6   # the first match starts shortly after startup
+players = 6       # picked at random for each match
+
+[[model_groups]]
+model = "deepseek/deepseek-v4.1-flash-1017"
+bots = 9
+
+[[model_groups]]
+model = "z-ai/glm-5.3-flash"
+bots = 9
+
+[[model_groups]]
+model = "openai/gpt-6-luna"
+bots = 8
+
+[[model_groups]]
+model = "xiaomi/mimo-v2.6-flash"
+bots = 8
+
+[[model_groups]]
+model = "minimax/minimax-m3.1-flash"
+bots = 8
