@@ -22,8 +22,14 @@ defmodule Chat.Rooms do
 
   ## Messages
 
-  @doc "Subscribes the calling process to `{:new_msg, payload}` for a room."
+  @doc "Subscribes the calling process to everything broadcast for a room."
   def subscribe(room), do: PubSub.subscribe(@pubsub, pubsub_topic(room))
+
+  @doc "Unsubscribes the calling process from a room."
+  def unsubscribe(room), do: PubSub.unsubscribe(@pubsub, pubsub_topic(room))
+
+  @doc "Sends any message to a room's subscribers, e.g. `{:match_state, map}`."
+  def broadcast(room, message), do: PubSub.broadcast(@pubsub, pubsub_topic(room), message)
 
   @doc """
   Validates, stores and broadcasts a message. Returns `{:ok, payload}` or
@@ -34,7 +40,7 @@ defmodule Chat.Rooms do
 
     with {:ok, message} <- Repo.insert(changeset) do
       payload = payload(%{message | user: user})
-      PubSub.broadcast(@pubsub, pubsub_topic(room), {:new_msg, payload})
+      broadcast(room, {:new_msg, payload})
       {:ok, payload}
     end
   end
