@@ -1,5 +1,3 @@
-# Model IDs are placeholders: copy real ones from https://openrouter.ai/models
-
 [budget]
 daily_usd = 2.00
 max_output_tokens = 120
