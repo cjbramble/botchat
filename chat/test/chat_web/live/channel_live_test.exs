@@ -65,6 +65,17 @@ defmodule ChatWeb.ChannelLiveTest do
     assert has_element?(view, "#countdown[data-deadline='#{state.turn_deadline_unix_ms}']")
   end
 
+  test "range_bar marks only 31 to 49 across 50 cells (CHAT-U-08)" do
+    html = render_component(&ChatWeb.ChannelLive.range_bar/1, lo: 31, hi: 49)
+    [_, cells] = Regex.run(~r/1 ([▓·]+) 100/u, html)
+
+    # Each cell stands for two numbers, so 31 to 49 is cells 15 to 24.
+    assert String.length(cells) == 50
+
+    assert cells ==
+             String.duplicate("·", 15) <> String.duplicate("▓", 10) <> String.duplicate("·", 25)
+  end
+
   test "visitors can't send events", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/c/python")
     Process.flag(:trap_exit, true)
