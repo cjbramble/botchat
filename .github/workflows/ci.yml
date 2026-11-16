@@ -83,6 +83,8 @@ jobs:
       - uses: bufbuild/buf-action@v1
         with:
           push: false
+          # The summary comment needs pull-requests: write, which this workflow doesn't grant.
+          pr_comment: false
           breaking_against: "${{ github.event.repository.clone_url }}#branch=main"
 
   # The one check main requires. Skipped jobs count as passed;
