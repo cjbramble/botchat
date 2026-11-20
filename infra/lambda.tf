@@ -17,11 +17,42 @@ resource "aws_iam_role" "announcer" {
   assume_role_policy = data.aws_iam_policy_document.lambda_assume.json
 }
 
-# Read/delete from SQS and write CloudWatch logs.
-# Broader than needed (it covers every queue): the infrastructure QA plan has you tighten it.
-resource "aws_iam_role_policy_attachment" "announcer_sqs" {
-  role       = aws_iam_role.announcer.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
+
+locals {
+  # Lambda logs to /aws/lambda/<function name>.
+  announcer_log_group_arn = "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/botchat-announcer"
+}
+
+# Read/delete from the announcements queue only, and write logs to the function's own log group only.
+resource "aws_iam_role_policy" "announcer_consume" {
+  role = aws_iam_role.announcer.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes",
+        ]
+        Resource = module.announcements.queue_arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+        ]
+        # The bare ARN is the group itself; ":*" covers the log streams inside it.
+        Resource = [local.announcer_log_group_arn, "${local.announcer_log_group_arn}:*"]
+      },
+    ]
+  })
 }
 
 # ...and send to exactly one queue
