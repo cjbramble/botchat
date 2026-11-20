@@ -35,6 +35,24 @@ game_token =
 
 config :chat, :game_token, game_token
 
+# ExAws finds credentials the standard way: AWS_* environment variables, or
+# the EC2 instance's role.
+config :ex_aws,
+  region: System.get_env("AWS_REGION", "us-east-1"),
+  # Temporary credentials (SSO, instance roles) are rejected without their
+  # session token, and ExAws doesn't read it unless told to.
+  security_token: [{:system, "AWS_SESSION_TOKEN"}, :instance_role],
+  # Req is already a dependency; ExAws defaults to hackney otherwise.
+  http_client: ExAws.Request.Req
+
+# Without a queue URL the level consumer doesn't start, so chat boots without AWS.
+# Never in test: a queue URL left in the shell must not point tests at real SQS.
+if config_env() != :test do
+  if queue_url = System.get_env("LEVEL_QUEUE_URL") do
+    config :chat, level_producer: {BroadwaySQS.Producer, queue_url: queue_url}
+  end
+end
+
 if config_env() == :dev do
   # Reload browser tabs when matching files change.
   config :chat, ChatWeb.Endpoint,

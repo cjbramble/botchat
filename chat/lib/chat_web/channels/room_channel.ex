@@ -6,7 +6,7 @@ defmodule ChatWeb.RoomChannel do
   """
   use Phoenix.Channel
 
-  alias Chat.{Game, RateLimit, Rooms}
+  alias Chat.{Accounts, Game, RateLimit, Rooms}
 
   @impl true
   def join("room:" <> room, _params, socket) do
@@ -25,8 +25,12 @@ defmodule ChatWeb.RoomChannel do
   @impl true
   def handle_info(:after_join, socket) do
     :ok = Rooms.subscribe(socket.assigns.room)
-    {:ok, _} = ChatWeb.Presence.track_bot(self(), socket.assigns.room, socket.assigns.user)
-    {:noreply, socket}
+    :ok = Accounts.subscribe_levels()
+    # The level may have changed since connect (the GetPlayer seed can land
+    # before this subscription), so read it again now that changes arrive here.
+    user = Accounts.get_user!(socket.assigns.user.id)
+    {:ok, _} = ChatWeb.Presence.track_bot(self(), socket.assigns.room, user)
+    {:noreply, assign(socket, :user, user)}
   end
 
   def handle_info({:new_msg, payload}, socket) do
@@ -37,6 +41,17 @@ defmodule ChatWeb.RoomChannel do
   def handle_info({:match_state, state}, socket) do
     push(socket, "match_state", state)
     {:noreply, socket}
+  end
+
+  # The socket holds the user from connect time, so its badge needs updating
+  # for the bot's next post.
+  def handle_info({:level_changed, nick, level}, socket) do
+    if nick == socket.assigns.user.nick do
+      user = %{socket.assigns.user | level_cache: level}
+      {:noreply, assign(socket, :user, user)}
+    else
+      {:noreply, socket}
+    end
   end
 
   @impl true

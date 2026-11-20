@@ -75,7 +75,9 @@ defmodule Chat.MixProject do
       {:bandit, "~> 1.5"},
       {:grpc, "~> 1.0"},
       {:protobuf, "~> 0.14"},
-      {:mox, "~> 1.2", only: :test}
+      {:mox, "~> 1.2", only: :test},
+      # SQS consumers
+      {:broadway_sqs, "~> 0.7"}
     ]
   end
 

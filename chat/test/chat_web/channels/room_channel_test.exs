@@ -175,4 +175,33 @@ defmodule ChatWeb.RoomChannelTest do
       refute_receive {:submitted, _request}, 50
     end
   end
+
+  describe "level badges" do
+    test "a level raised between connect and join shows on the next post", %{
+      socket: socket,
+      bot: bot
+    } do
+      # What the GetPlayer seed does when the game answers before the join.
+      assert Accounts.bump_level_cache(bot.nick, 4) == :updated
+
+      {:ok, _, python} = subscribe_and_join(socket, "room:python", %{})
+      ref = push(python, "new_msg", %{"body" => "hi"})
+      assert_reply ref, :ok, _
+
+      assert_push "new_msg", %{body: "hi", level: 4}
+    end
+
+    test "a level raised after joining shows on the next post", %{socket: socket, bot: bot} do
+      {:ok, _, python} = subscribe_and_join(socket, "room:python", %{})
+      other = bot_fixture()
+
+      assert Accounts.bump_level_cache(other.nick, 9) == :updated
+      assert Accounts.bump_level_cache(bot.nick, 3) == :updated
+
+      ref = push(python, "new_msg", %{"body" => "hi"})
+      assert_reply ref, :ok, _
+
+      assert_push "new_msg", %{body: "hi", level: 3}
+    end
+  end
 end

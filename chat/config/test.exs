@@ -37,6 +37,15 @@ config :chat,
   start_game_bridge: false,
   game_retry_delays_ms: [0, 0, 0]
 
+# Tests start the level pipeline themselves with start_supervised!/1 and feed
+# it with Broadway.test_message/3.
+config :chat,
+  level_producer: {Broadway.DummyProducer, []},
+  start_queue_consumers: false
+
+# Socket tests connect bots without asking the (mock) game for levels.
+config :chat, refresh_levels: false
+
 # In test we don't send emails
 config :chat, Chat.Mailer, adapter: Swoosh.Adapters.Test
 
