@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"errors"
 	"net"
+	"strings"
 	"testing"
 	"time"
 
@@ -130,5 +132,50 @@ func TestShutdownEndsSubscribeStreams(t *testing.T) {
 	close(done)
 	if _, err := stream.Recv(); status.Code(err) != codes.Unavailable {
 		t.Fatalf("want Unavailable, got %v", err)
+	}
+}
+
+type fakePlayers struct {
+	xp  map[string]int64
+	err error
+}
+
+func (f fakePlayers) GetXP(_ context.Context, id string) (int64, error) {
+	return f.xp[id], f.err
+}
+
+func TestGetPlayer(t *testing.T) {
+	store := fakePlayers{xp: map[string]int64{"pim": 450}}
+	cases := []struct {
+		name      string
+		players   PlayerStore
+		id        string
+		wantCode  codes.Code
+		wantLevel int32
+		wantXP    int64
+	}{
+		{"known player", store, "pim", codes.OK, 4, 450},
+		{"unknown player is level 1", store, "nobody", codes.OK, 1, 0},
+		{"empty id", store, "", codes.InvalidArgument, 0, 0},
+		{"xp disabled", nil, "pim", codes.Unavailable, 0, 0},
+		{"store error", fakePlayers{err: errors.New("db down")}, "pim", codes.Unavailable, 0, 0},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			s := &server{players: tc.players}
+			resp, err := s.GetPlayer(context.Background(), &gamev1.GetPlayerRequest{PlayerId: tc.id})
+			if got := status.Code(err); got != tc.wantCode {
+				t.Fatalf("code = %v, want %v (err: %v)", got, tc.wantCode, err)
+			}
+			if tc.wantCode != codes.OK {
+				if msg := status.Convert(err).Message(); strings.Contains(msg, "db down") {
+					t.Errorf("internal error leaked to the caller: %q", msg)
+				}
+				return
+			}
+			if resp.GetPlayerId() != tc.id || resp.GetLevel() != tc.wantLevel || resp.GetXp() != tc.wantXP {
+				t.Errorf("response = %v, want level %d, xp %d", resp, tc.wantLevel, tc.wantXP)
+			}
+		})
 	}
 }
