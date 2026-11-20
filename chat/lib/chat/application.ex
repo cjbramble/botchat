@@ -50,7 +50,7 @@ defmodule Chat.Application do
   # Tests start them with start_supervised!/1 instead.
   defp queue_consumers do
     if Application.get_env(:chat, :start_queue_consumers, true) do
-      [level_producer: Chat.LevelConsumer]
+      [level_producer: Chat.LevelConsumer, notice_producer: Chat.NoticeConsumer]
       |> Enum.filter(fn {key, _consumer} -> Application.get_env(:chat, key) end)
       |> Enum.map(fn {_key, consumer} -> consumer end)
     else

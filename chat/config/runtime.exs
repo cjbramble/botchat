@@ -45,11 +45,15 @@ config :ex_aws,
   # Req is already a dependency; ExAws defaults to hackney otherwise.
   http_client: ExAws.Request.Req
 
-# Without a queue URL the level consumer doesn't start, so chat boots without AWS.
+# Without a queue URL a consumer doesn't start, so chat boots without AWS.
 # Never in test: a queue URL left in the shell must not point tests at real SQS.
 if config_env() != :test do
   if queue_url = System.get_env("LEVEL_QUEUE_URL") do
     config :chat, level_producer: {BroadwaySQS.Producer, queue_url: queue_url}
+  end
+
+  if queue_url = System.get_env("NOTICES_QUEUE_URL") do
+    config :chat, notice_producer: {BroadwaySQS.Producer, queue_url: queue_url}
   end
 end
 
