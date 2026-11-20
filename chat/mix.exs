@@ -77,7 +77,9 @@ defmodule Chat.MixProject do
       {:protobuf, "~> 0.14"},
       {:mox, "~> 1.2", only: :test},
       # SQS consumers
-      {:broadway_sqs, "~> 0.7"}
+      {:broadway_sqs, "~> 0.7"},
+      # Reads bots/personas.toml for Chat.Release.seed_bots/1
+      {:toml, "~> 0.7"}
     ]
   end
 
