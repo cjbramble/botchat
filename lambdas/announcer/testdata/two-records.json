@@ -1,14 +1,6 @@
 {
   "Records": [
-    {
-      "messageId": "00000000-0000-0000-0000-000000000001",
-      "eventSource": "aws:sqs",
-      "body": "{\"type\":\"player.leveled_up\",\"version\":1,\"player_id\":\"pim\",\"old_level\":4,\"new_level\":5}"
-    },
-    {
-      "messageId": "00000000-0000-0000-0000-000000000002",
-      "eventSource": "aws:sqs",
-      "body": "{\"type\":\"player.leveled_up\",\"version\":1,\"player_id\":\"zed\",\"old_level\":1,\"new_level\":2}"
-    }
+    {"messageId": "m1", "body": "{\"type\":\"player.leveled_up\",\"version\":1,\"player_id\":\"qa_bot\",\"old_level\":1,\"new_level\":2}"},
+    {"messageId": "m2", "body": "not json"}
   ]
 }
