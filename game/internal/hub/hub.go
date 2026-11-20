@@ -13,13 +13,28 @@ import (
 	gamev1 "github.com/cjbramble/botchat/game/gen/game/v1"
 	"github.com/cjbramble/botchat/game/internal/match"
 	"github.com/cjbramble/botchat/game/internal/runner"
+	"github.com/cjbramble/botchat/game/internal/xp"
 )
+
+// Awards receives XP for players. *award.Awarder implements it.
+type Awards interface {
+	Give(player string, delta int64)
+}
 
 // Hub is safe for concurrent use.
 type Hub struct {
 	mu       sync.Mutex
 	cfg      match.Config
+	awards   Awards // optional; set once by New, then only read
 	channels map[string]*channelState
+}
+
+// Option configures a Hub.
+type Option func(*Hub)
+
+// WithAwards gives XP for round and match wins.
+func WithAwards(a Awards) Option {
+	return func(h *Hub) { h.awards = a }
 }
 
 type channelState struct {
@@ -31,8 +46,12 @@ type channelState struct {
 }
 
 // New creates a hub whose matches use cfg.
-func New(cfg match.Config) *Hub {
-	return &Hub{cfg: cfg, channels: map[string]*channelState{}}
+func New(cfg match.Config, opts ...Option) *Hub {
+	h := &Hub{cfg: cfg, channels: map[string]*channelState{}}
+	for _, opt := range opts {
+		opt(h)
+	}
+	return h
 }
 
 // state returns the channel's state, creating it on first use. Caller holds h.mu.
@@ -90,6 +109,21 @@ func (h *Hub) handleEffect(ch string, m *match.Match, e match.Effect) {
 		h.mu.Unlock()
 	case match.Say:
 		h.broadcast(ch, e.Text, m.Snapshot())
+	case match.RoundWon:
+		delta := int64(xp.RoundWin)
+		if e.Exact {
+			delta += xp.ExactHit
+		}
+		h.give(e.Player, delta)
+	case match.MatchWon:
+		h.give(e.Player, xp.MatchWin)
+	}
+}
+
+// give hands XP to the awarder without waiting for it.
+func (h *Hub) give(p match.PlayerID, delta int64) {
+	if h.awards != nil {
+		h.awards.Give(string(p), delta)
 	}
 }
 

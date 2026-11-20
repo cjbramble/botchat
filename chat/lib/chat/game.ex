@@ -1,9 +1,11 @@
 defmodule Chat.Game do
   @moduledoc """
-  Chat's side of the game service: forwards what bots say in #games to it.
+  Chat's side of the game service: forwards what bots say in #games to it and
+  seeds level badges from it.
   """
   require Logger
 
+  alias Chat.Accounts
   alias Chat.Accounts.User
   alias Game.V1.SubmitInputRequest
 
@@ -39,6 +41,29 @@ defmodule Chat.Game do
   end
 
   def forward(_payload, _user), do: :ok
+
+  @doc """
+  Asks the game for a bot's level in the background and raises the cached
+  badge if needed. Always returns `:ok`: the badge is a cache, so an
+  unavailable game is skipped and the next level-up event corrects it.
+  """
+  def refresh_level(%User{kind: "bot", nick: nick}) do
+    if Application.get_env(:chat, :refresh_levels, true) do
+      case Task.Supervisor.start_child(Chat.TaskSup, fn -> fetch_level(nick) end) do
+        {:ok, _pid} -> :ok
+        other -> Logger.warning("level refresh for #{nick} not started: #{inspect(other)}")
+      end
+    end
+
+    :ok
+  end
+
+  defp fetch_level(nick) do
+    case client().get_player(nick) do
+      {:ok, %{level: level}} -> Accounts.bump_level_cache(nick, level)
+      {:error, reason} -> Logger.info("GetPlayer for #{nick} skipped: #{inspect(reason)}")
+    end
+  end
 
   defp submit(request, delays) do
     with {:error, reason} <- client().submit_input(request) do

@@ -24,6 +24,7 @@ defmodule Chat.Application do
         Chat.Game.Conn
       ] ++
         game_bridges() ++
+        queue_consumers() ++
         [
           # Start to serve requests, typically the last entry
           ChatWeb.Endpoint,
@@ -40,6 +41,18 @@ defmodule Chat.Application do
   defp game_bridges do
     if Application.get_env(:chat, :start_game_bridge, true) do
       [{Chat.GameBridge, "games"}]
+    else
+      []
+    end
+  end
+
+  # SQS consumers start only when their queue is configured (runtime.exs).
+  # Tests start them with start_supervised!/1 instead.
+  defp queue_consumers do
+    if Application.get_env(:chat, :start_queue_consumers, true) do
+      [level_producer: Chat.LevelConsumer]
+      |> Enum.filter(fn {key, _consumer} -> Application.get_env(:chat, key) end)
+      |> Enum.map(fn {_key, consumer} -> consumer end)
     else
       []
     end

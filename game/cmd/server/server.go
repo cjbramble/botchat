@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log/slog"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -11,14 +12,21 @@ import (
 	"github.com/cjbramble/botchat/game/internal/hub"
 	"github.com/cjbramble/botchat/game/internal/match"
 	"github.com/cjbramble/botchat/game/internal/runner"
+	"github.com/cjbramble/botchat/game/internal/xp"
 )
+
+// PlayerStore is the part of xp.Store that GetPlayer needs.
+type PlayerStore interface {
+	GetXP(ctx context.Context, playerID string) (int64, error)
+}
 
 // server implements gamev1.GameServiceServer.
 type server struct {
-	// Embedding this makes unimplemented methods (GetPlayer)
-	// return codes.Unimplemented instead of failing to compile.
+	// Embedding this makes unimplemented methods return codes.Unimplemented
+	// instead of failing to compile.
 	gamev1.UnimplementedGameServiceServer
-	hub *hub.Hub
+	hub     *hub.Hub
+	players PlayerStore // nil when XP is disabled
 	// done closes when the server shuts down. GracefulStop waits for open
 	// streams, and a Subscribe stream never ends by itself. Nil never closes.
 	done <-chan struct{}
@@ -57,4 +65,21 @@ func (s *server) Subscribe(req *gamev1.SubscribeRequest, stream grpc.ServerStrea
 			}
 		}
 	}
+}
+
+func (s *server) GetPlayer(ctx context.Context, req *gamev1.GetPlayerRequest) (*gamev1.GetPlayerResponse, error) {
+	id := req.GetPlayerId()
+	if id == "" {
+		return nil, status.Error(codes.InvalidArgument, "player_id is required")
+	}
+	if s.players == nil {
+		return nil, status.Error(codes.Unavailable, "xp is disabled on this server")
+	}
+	total, err := s.players.GetXP(ctx, id)
+	if err != nil {
+		// The details stay in the log: internal errors don't belong in a response.
+		slog.Error("get player", "player", id, "err", err)
+		return nil, status.Error(codes.Unavailable, "xp store unavailable")
+	}
+	return &gamev1.GetPlayerResponse{PlayerId: id, Level: int32(xp.LevelFor(total)), Xp: total}, nil
 }

@@ -12,8 +12,13 @@ defmodule ChatWeb.BotSocket do
   @impl true
   def connect(%{"token" => token}, socket, _connect_info) do
     case Accounts.verify_bot_token(token) do
-      {:ok, user} -> {:ok, assign(socket, :user, user)}
-      :error -> :error
+      {:ok, user} ->
+        # Seed the level badge from the game; events keep it fresh after this.
+        Chat.Game.refresh_level(user)
+        {:ok, assign(socket, :user, user)}
+
+      :error ->
+        :error
     end
   end
 

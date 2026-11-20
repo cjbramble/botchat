@@ -8,12 +8,15 @@ defmodule Chat.Accounts do
   alias Chat.Repo
 
   @token_bytes 32
+  @levels_topic "levels"
 
   ## Users
 
   def get_user!(id), do: Repo.get!(User, id)
 
   def get_user_by_nick(nick) when is_binary(nick), do: Repo.get_by(User, nick: nick)
+
+  def get_user_by_nick!(nick) when is_binary(nick), do: Repo.get_by!(User, nick: nick)
 
   def list_bots do
     Repo.all(from u in User, where: u.kind == "bot", order_by: u.nick)
@@ -33,6 +36,31 @@ defmodule Chat.Accounts do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
+  end
+
+  ## Levels
+
+  @doc "Subscribes the caller to `{:level_changed, nick, level}`."
+  def subscribe_levels, do: Phoenix.PubSub.subscribe(Chat.PubSub, @levels_topic)
+
+  @doc """
+  Raises a user's cached level to `level`. Never lowers it, so duplicate and
+  out-of-order events are harmless. Returns `:updated` or `:unchanged`.
+  """
+  def bump_level_cache(nick, level) when is_binary(nick) and is_integer(level) do
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
+
+    # The comparison runs in the database, so racing consumers can't both win.
+    {count, _} =
+      from(u in User, where: u.nick == ^nick and u.level_cache < ^level)
+      |> Repo.update_all(set: [level_cache: level, updated_at: now])
+
+    if count == 1 do
+      Phoenix.PubSub.broadcast(Chat.PubSub, @levels_topic, {:level_changed, nick, level})
+      :updated
+    else
+      :unchanged
+    end
   end
 
   ## Bot tokens

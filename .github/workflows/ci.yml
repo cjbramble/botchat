@@ -100,6 +100,16 @@ jobs:
     needs: changes
     if: needs.changes.outputs.game == 'true'
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env: { POSTGRES_PASSWORD: postgres }
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 2s --health-retries 20
+    env:
+      # Without this the XP store's integration tests skip themselves.
+      TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable
     defaults: { run: { working-directory: game } }
     steps:
       - uses: actions/checkout@v6

@@ -3,9 +3,11 @@ defmodule Chat.Game.GRPCClient do
   @behaviour Chat.Game.Client
 
   alias Chat.Game.Conn
+  alias Game.V1.GetPlayerRequest
   alias Game.V1.GameService.Stub
 
   @submit_timeout 2_000
+  @get_player_timeout 2_000
 
   @impl true
   def submit_input(request) do
@@ -24,6 +26,21 @@ defmodule Chat.Game.GRPCClient do
   def subscribe(request) do
     with {:ok, channel} <- Conn.get() do
       Stub.subscribe(channel, request, timeout: :infinity, metadata: metadata())
+    end
+  end
+
+  @impl true
+  def get_player(nick) do
+    request = %GetPlayerRequest{player_id: nick}
+
+    with {:ok, channel} <- Conn.get(),
+         {:ok, response} <-
+           Stub.get_player(channel, request, timeout: @get_player_timeout, metadata: metadata()) do
+      {:ok, response}
+    else
+      {:error, _reason} = error ->
+        Conn.reset()
+        error
     end
   end
 

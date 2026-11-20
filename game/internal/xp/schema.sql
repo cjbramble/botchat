@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS players (
+  player_id  TEXT PRIMARY KEY,
+  xp         BIGINT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
