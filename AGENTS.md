@@ -31,7 +31,7 @@ Number. It follows a step-by-step build guide; match its file paths and names ex
 - Never commit, push, or change Git history. The human reviews and commits.
 - Keep changes inside the paths the task lists. Don't reformat unrelated code.
 - If something is ambiguous, stop and ask instead of guessing.
-- Some actions are the human's alone: creating accounts or keys, `aws sso login`,
+- Some actions are the human's alone: creating accounts or keys, `aws login --profile botchat`,
   `terraform apply`, `helm install`, deploying, anything in a cloud console or a browser,
   and anything that spends money (real bot runs). Don't run them; say exactly what the
   human should run and why, and wait.
