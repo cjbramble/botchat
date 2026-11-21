@@ -41,7 +41,7 @@ patches:
 images:
   - name: chat
     newName: 867169974753.dkr.ecr.us-east-1.amazonaws.com/botchat/chat
-    newTag: "none"
+    newTag: "db4218af5c56"
   - name: game
     newName: 867169974753.dkr.ecr.us-east-1.amazonaws.com/botchat/game
     newTag: "ca4d71f5f82c"
