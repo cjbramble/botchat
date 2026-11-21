@@ -21,6 +21,7 @@ jobs:
       proto: ${{ steps.filter.outputs.proto }}
       bots: ${{ steps.filter.outputs.bots }}
       lambda: ${{ steps.filter.outputs.lambda }}
+      infra: ${{ steps.filter.outputs.infra }}
     steps:
       - uses: actions/checkout@v6
       - uses: dorny/paths-filter@v4
@@ -44,6 +45,9 @@ jobs:
               - '.github/workflows/ci.yml'
             lambda:
               - 'lambdas/**'
+              - '.github/workflows/ci.yml'
+            infra:
+              - 'infra/**'
               - '.github/workflows/ci.yml'
 
   chat:
@@ -160,10 +164,25 @@ jobs:
       - run: go vet ./... && go test ./...
       - run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags lambda.norpc -o bootstrap .
 
+  # Format and validate only: plan and apply need AWS credentials, which stay off CI.
+  infra:
+    needs: changes
+    if: needs.changes.outputs.infra == 'true'
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: infra } }
+    steps:
+      - uses: actions/checkout@v6
+      - uses: hashicorp/setup-terraform@v4
+      - run: terraform fmt -check -recursive
+      # lambda.tf hashes the announcer's zip, a build output Git ignores; validate
+      # only needs the file to exist.
+      - run: touch ../lambdas/announcer/function.zip
+      - run: terraform init -backend=false && terraform validate
+
   # The one check main requires. Skipped jobs count as passed;
   # failed or cancelled ones don't.
   ci-ok:
-    needs: [changes, chat, game, proto, bots, lambda]
+    needs: [changes, chat, game, proto, bots, lambda, infra]
     if: always()
     runs-on: ubuntu-latest
     steps:

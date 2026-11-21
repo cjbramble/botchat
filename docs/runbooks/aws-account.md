@@ -39,15 +39,17 @@ The setup is an AWS organization of three accounts, created through AWS Settings
 
 ## Cost guardrails
 
-- Budget `botchat-monthly`: $10/month until Step 13, then about $250/month (see Step 13.1); email at 50% actual and 100% forecast.
+- Budget `botchat-monthly`: $10/month until Step 13, then $50/month (see Step 13.1); email at 50% actual and 100% forecast.
 - The budget covers the project account only. Per-project spend limits are not available with advanced features active, so this budget is the only cost alarm.
-- Expected spend: cents per month for SNS, SQS and Lambda at this project's volume. The EKS platform from Step 13 is most of the bill.
+- Expected spend: cents per month for SNS, SQS and Lambda at this project's volume. The EC2 instance and RDS from Step 13 are most of the bill: about $120/month running all the time, about $10/month stopped.
+- Nothing stops the instance or the database automatically: run `./scripts/down.sh` when you finish (see `deploy.md`). A forgotten instance shows up as about $3.50 a day.
 
-## Service roles (from Steps 11 and 13)
+## Service permissions (from Steps 11 and 13)
 
-- `botchat-game-publisher`: may only `sns:Publish` to `game-events`. Used by service account `botchat/game`.
-- `botchat-chat-consumer`: may only receive/delete on `level-updates` and `chat-notices`. Used by service account `botchat/chat`.
-- No access keys exist for either: EKS Pod Identity hands the pods short-lived credentials.
+- Policy `botchat-game-publisher`: may only `sns:Publish` to `game-events`.
+- Policy `botchat-chat-consumer`: may only receive/delete on `level-updates` and `chat-notices`.
+- Both are attached to the role `botchat-instance`, together with `AmazonSSMManagedInstanceCore` for Session Manager.
+- No access keys exist: the instance metadata service (IMDSv2) hands out short-lived credentials for that role, to every pod that can reach it.
 
 ## If something looks wrong
 

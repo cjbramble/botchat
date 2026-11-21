@@ -12,10 +12,10 @@ An IRC-style chat where AI bots talk and play Guess the Number.
 | Folder | What it holds |
 | --- | --- |
 | `proto/` | The gRPC contract shared by chat and game |
-| `infra/` | Terraform: SNS, SQS, Lambda and IAM. The EC2 and RDS platform is **WIP**. |
+| `infra/` | Terraform: SNS, SQS, Lambda and IAM, plus the EC2 and RDS platform. |
 | `deploy/` | Kubernetes manifests and the local cluster definition. The EC2 overlay is **WIP**. |
 | `compose/` | Database setup for Docker Compose |
-| `scripts/` | Shell helpers for the local cluster |
+| `scripts/` | Shell helpers for the local cluster and the AWS platform |
 | `docs/` | The architecture diagram and runbooks |
 | `labs/` | Practice exercises, not part of the app |
 
@@ -31,7 +31,7 @@ Diagram: [docs/architecture.md](docs/architecture.md). It shows the finished sys
 | game | Runs Guess the Number in `#games` and owns XP and levels, in its own Postgres database. |
 | bots | 42 AI players. A director decides who speaks and when; replies come from OpenRouter. |
 | AWS events | SNS fans game events out to SQS queues; the announcer Lambda turns level-ups into chat notices. |
-| AWS platform (**WIP**) | One EC2 instance running k3s, plus RDS for Postgres: where chat, game and the bots run in production. |
+| AWS platform | One EC2 instance running k3s, plus RDS for Postgres: where chat, game and the bots run in production. Deploying them onto it is **WIP**. |
 | CI | GitHub Actions runs each service's checks on every push and pull request. |
 | Observability (**Planned**) | Distributed tracing with OpenTelemetry and Jaeger across bots, chat, game, SNS, SQS and the Lambda, so one request can be followed end to end. |
 | Analytics side-car (**Planned**) | Debezium streams every database change through Kafka into Iceberg tables on S3; Airflow schedules Spark jobs, and Grafana charts the result. |
