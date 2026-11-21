@@ -87,12 +87,29 @@ if config_env() == :prod do
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
+  # DB_CA_FILE points at Amazon's RDS CA bundle (mounted by the ec2 overlay). Unset
+  # in Compose and the local cluster, where the database has no certificate.
+  db_ssl =
+    case System.get_env("DB_CA_FILE") do
+      nil ->
+        false
+
+      ca_file ->
+        [
+          verify: :verify_peer,
+          cacertfile: ca_file,
+          # Without these two, :ssl would check the chain but not the host name.
+          server_name_indication: String.to_charlist(URI.parse(database_url).host),
+          customize_hostname_check: [
+            match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+          ]
+        ]
+    end
+
   config :chat, Chat.Repo,
-    # ssl: true,
     url: database_url,
+    ssl: db_ssl,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-    # For machines with several cores, consider starting multiple pools of `pool_size`
-    # pool_count: 4,
     socket_options: maybe_ipv6
 
   # The secret key base is used to sign/encrypt cookies and other secrets.

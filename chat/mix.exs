@@ -78,6 +78,8 @@ defmodule Chat.MixProject do
       {:mox, "~> 1.2", only: :test},
       # SQS consumers
       {:broadway_sqs, "~> 0.7"},
+      # Instance-role credentials over IMDSv2
+      {:ex_aws, "~> 2.6"},
       # Reads bots/personas.toml for Chat.Release.seed_bots/1
       {:toml, "~> 0.7"}
     ]
