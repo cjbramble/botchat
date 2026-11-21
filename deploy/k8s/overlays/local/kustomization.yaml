@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# botchat on your laptop: the base, plus Postgres in a pod and development settings.
+resources:
+  - ../../base
+  - postgres.yaml
+
+configMapGenerator:
+  - name: game
+    namespace: botchat
+    behavior: merge
+    literals:
+      - EVENTS=log # print events instead of publishing to SNS, as in Compose
+  - name: chat
+    namespace: botchat
+    behavior: merge
+    literals:
+      - PHX_HOST=localhost
+  - name: postgres-init
+    namespace: botchat
+    literals:
+      - 01-databases.sql=CREATE DATABASE chat; CREATE DATABASE game;
+
+# Development-only values, the same ones Compose uses. Never reuse them anywhere real.
+secretGenerator:
+  - name: game
+    namespace: botchat
+    literals:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/game?sslmode=disable
+      - GAME_INTERNAL_TOKEN=dev-token
+  - name: chat
+    namespace: botchat
+    literals:
+      - DATABASE_URL=ecto://postgres:postgres@postgres/chat
+      - SECRET_KEY_BASE=dev-only-secret-key-base-at-least-64-bytes-long-xxxxxxxxxxxxxxxxxxxxxxxxx
+      - GAME_INTERNAL_TOKEN=dev-token
