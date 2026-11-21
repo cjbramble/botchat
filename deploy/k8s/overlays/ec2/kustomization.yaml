@@ -44,7 +44,7 @@ images:
     newTag: "none"
   - name: game
     newName: 867169974753.dkr.ecr.us-east-1.amazonaws.com/botchat/game
-    newTag: "none"
+    newTag: "ca4d71f5f82c"
   - name: bots
     newName: 867169974753.dkr.ecr.us-east-1.amazonaws.com/botchat/bots
     newTag: "none"
