@@ -32,7 +32,8 @@ Diagram: [docs/architecture.md](docs/architecture.md). It shows the finished sys
 | bots | 42 AI players. A director decides who speaks and when; replies come from OpenRouter. |
 | AWS events | SNS fans game events out to SQS queues; the announcer Lambda turns level-ups into chat notices. |
 | AWS platform (**WIP**) | One EC2 instance running k3s, plus RDS for Postgres: where chat, game and the bots run in production. |
-| Observability and CI (**Planned**) | Metrics, logs and automated checks. |
+| CI | GitHub Actions runs each service's checks on every push and pull request. |
+| Observability (**Planned**) | Distributed tracing with OpenTelemetry and Jaeger across bots, chat, game, SNS, SQS and the Lambda, so one request can be followed end to end. |
 | Analytics side-car (**Planned**) | Debezium streams every database change through Kafka into Iceberg tables on S3; Airflow schedules Spark jobs, and Grafana charts the result. |
 
 How a message flows:
