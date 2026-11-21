@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat
+  namespace: botchat
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate # PubSub, presence and rate limits live in one node's memory
+  selector:
+    matchLabels:
+      app: chat
+  template:
+    metadata:
+      labels:
+        app: chat
+    spec:
+      serviceAccountName: chat
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534 # "nobody", as in the generated Dockerfile
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: migrate # runs to completion before chat starts
+          image: chat
+          command: ["/app/bin/migrate"]
+          envFrom:
+            - configMapRef:
+                name: chat
+            - secretRef:
+                name: chat # DATABASE_URL, SECRET_KEY_BASE, GAME_INTERNAL_TOKEN
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: tls
+              mountPath: /etc/chat-tls
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+      containers:
+        - name: chat
+          image: chat
+          ports:
+            - name: http
+              containerPort: 4000
+            - name: internal
+              containerPort: 4001
+          envFrom:
+            - configMapRef:
+                name: chat
+            - secretRef:
+                name: chat # DATABASE_URL, SECRET_KEY_BASE, GAME_INTERNAL_TOKEN
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: tls
+              mountPath: /etc/chat-tls
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: internal
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: internal
+            periodSeconds: 10
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 768Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: tls
+          secret:
+            secretName: chat-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat
+  namespace: botchat
+spec:
+  selector:
+    app: chat
+  ports:
+    - name: http
+      port: 4000
+      targetPort: http
+    - name: internal
+      port: 4001
+      targetPort: internal

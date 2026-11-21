@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# What every environment runs. Overlays (overlays/local, overlays/ec2) add the rest.
+resources:
+  - namespace.yaml
+  - certs.yaml
+  - game.yaml
+  - chat.yaml
+  - bots.yaml
+  - network-policies.yaml
+
+# Settings shared by every environment. Overlays add keys with `behavior: merge`.
+configMapGenerator:
+  - name: game
+    namespace: botchat
+    literals:
+      - GAME_TLS_DIR=/etc/game-tls
+      - GAME_TLS_CLIENT=chat
+  - name: chat
+    namespace: botchat
+    literals:
+      - PORT=4000
+      - INTERNAL_PORT=4001
+      - GAME_ADDR=game:50051
+      - GAME_TLS_DIR=/etc/chat-tls
+      - RELEASE_TMP=/tmp # the release writes its boot config here; the rest of the disk is read-only
+      # The Erlang VM sizes its port table from the open-file limit, which is about a
+      # billion in some container runtimes; uncapped, chat is OOM-killed at boot.
+      - ERL_FLAGS=+Q 65536
+  - name: bots
+    namespace: botchat
+    literals:
+      - CHAT_URL=ws://chat:4001
+      - PYTHONDONTWRITEBYTECODE=1

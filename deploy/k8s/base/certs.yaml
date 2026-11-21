@@ -1,0 +1,83 @@
+# 1. A self-signed issuer, used once, to create the CA below.
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: selfsigned
+  namespace: botchat
+spec:
+  selfSigned: {}
+---
+# 2. botchat's private certificate authority. Its key never leaves the cluster.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: botchat-ca
+  namespace: botchat
+spec:
+  isCA: true
+  commonName: botchat internal CA
+  secretName: botchat-ca
+  duration: 8760h # 1 year
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: selfsigned
+    kind: Issuer
+---
+# 3. An issuer that signs with that CA.
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: botchat-ca
+  namespace: botchat
+spec:
+  ca:
+    secretName: botchat-ca
+---
+# 4. The game's server certificate, valid for the names chat dials.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: game-tls
+  namespace: botchat
+spec:
+  secretName: game-tls
+  duration: 168h # 7 days
+  renewBefore: 48h
+  dnsNames:
+    - game
+    - game.botchat.svc
+    - game.botchat.svc.cluster.local
+  usages:
+    - server auth
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always # a new key at every renewal
+  issuerRef:
+    name: botchat-ca
+    kind: Issuer
+---
+# 5. Chat's client certificate: the identity the game checks.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: chat-tls
+  namespace: botchat
+spec:
+  secretName: chat-tls
+  duration: 168h
+  renewBefore: 48h
+  commonName: chat
+  dnsNames:
+    - chat
+  usages:
+    - client auth
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always
+  issuerRef:
+    name: botchat-ca
+    kind: Issuer

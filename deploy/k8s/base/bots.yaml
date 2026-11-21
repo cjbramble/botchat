@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bots
+  namespace: botchat
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate # two runners would mean every bot twice, and twice the spend
+  selector:
+    matchLabels:
+      app: bots
+  template:
+    metadata:
+      labels:
+        app: bots
+    spec:
+      serviceAccountName: bots
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: bots
+          image: bots
+          # Run the venv's Python directly: `uv run` would try to write to the read-only disk.
+          command: ["/app/.venv/bin/python", "-m", "bots.main"]
+          envFrom:
+            - configMapRef:
+                name: bots
+            - secretRef:
+                name: bots # OPENROUTER_API_KEY and the BOT_TOKEN_* lines
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 384Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

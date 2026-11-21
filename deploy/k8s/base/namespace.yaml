@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: botchat
+---
+# One identity per service. Network policies select pods by label; these name who runs them.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: chat
+  namespace: botchat
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: game
+  namespace: botchat
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bots
+  namespace: botchat
+automountServiceAccountToken: false # the bots never call the Kubernetes or AWS APIs

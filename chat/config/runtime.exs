@@ -35,6 +35,9 @@ game_token =
 
 config :chat, :game_token, game_token
 
+# Outside any `if` block: unset in dev, test and Compose, so those stay plaintext.
+config :chat, game_tls_dir: System.get_env("GAME_TLS_DIR")
+
 # ExAws finds credentials the standard way: AWS_* environment variables, or
 # the EC2 instance's role.
 config :ex_aws,

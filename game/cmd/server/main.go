@@ -65,7 +65,13 @@ func main() {
 	}
 	srv.hub = hub.New(match.DefaultConfig(), opts...)
 
+	creds, err := transportCreds() // mutual TLS when GAME_TLS_DIR is set
+	if err != nil {
+		slog.Error("tls", "err", err)
+		os.Exit(1)
+	}
 	s := grpc.NewServer(
+		creds,
 		grpc.UnaryInterceptor(unaryAuth(token)),
 		grpc.StreamInterceptor(streamAuth(token)),
 	)
