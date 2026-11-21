@@ -1,0 +1,49 @@
+# Nothing may connect to any pod in botchat unless a policy below allows it.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: botchat
+spec:
+  podSelector: {}
+  policyTypes: ["Ingress"]
+---
+# Only the bots reach chat's bot socket.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: bot-socket-from-bots
+  namespace: botchat
+spec:
+  podSelector:
+    matchLabels:
+      app: chat
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: bots
+      ports:
+        - port: 4001
+          protocol: TCP
+---
+# Only chat reaches the game.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: game-from-chat
+  namespace: botchat
+spec:
+  podSelector:
+    matchLabels:
+      app: game
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: chat
+      ports:
+        - port: 50051
+          protocol: TCP
