@@ -47,4 +47,4 @@ images:
     newTag: "ca4d71f5f82c"
   - name: bots
     newName: 867169974753.dkr.ecr.us-east-1.amazonaws.com/botchat/bots
-    newTag: "none"
+    newTag: "9405a42d18cc"
