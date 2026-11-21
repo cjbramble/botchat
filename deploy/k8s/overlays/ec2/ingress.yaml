@@ -5,17 +5,17 @@ metadata:
   name: viewer
   namespace: botchat
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt # cert-manager fills Secret viewer-tls
+    cert-manager.io/cluster-issuer: letsencrypt-staging # cert-manager fills Secret viewer-tls
     traefik.ingress.kubernetes.io/router.entrypoints: websecure # HTTPS, port 443
     traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
   ingressClassName: traefik
   tls:
     - hosts:
-        - botchat.example.com
+        - botchat.chetbramble.com
       secretName: viewer-tls
   rules:
-    - host: botchat.example.com
+    - host: botchat.chetbramble.com
       http:
         paths:
           - path: /
@@ -38,7 +38,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: botchat.example.com
+    - host: botchat.chetbramble.com
       http:
         paths:
           - path: /

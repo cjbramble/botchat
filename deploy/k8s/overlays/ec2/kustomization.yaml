@@ -15,15 +15,15 @@ configMapGenerator:
     literals:
       - EVENTS=sns
       - AWS_REGION=us-east-1
-      - GAME_EVENTS_TOPIC_ARN=<terraform output game_events_topic_arn>
+      - GAME_EVENTS_TOPIC_ARN=arn:aws:sns:us-east-1:867169974753:game-events
   - name: chat
     namespace: botchat
     behavior: merge
     literals:
-      - PHX_HOST=botchat.example.com
+      - PHX_HOST=botchat.chetbramble.com
       - AWS_REGION=us-east-1
-      - LEVEL_QUEUE_URL=<terraform output level_updates_queue_url>
-      - NOTICES_QUEUE_URL=<terraform output chat_notices_queue_url>
+      - LEVEL_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/867169974753/level-updates
+      - NOTICES_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/867169974753/chat-notices
       - DB_CA_FILE=/etc/rds/global-bundle.pem
   # Amazon's public CA bundle for RDS, so both services can verify the database.
   - name: rds-ca
@@ -40,11 +40,11 @@ patches:
 # Which image each Deployment runs. scripts/deploy.sh updates newTag.
 images:
   - name: chat
-    newName: <account-id>.dkr.ecr.us-east-1.amazonaws.com/botchat/chat
+    newName: 867169974753.dkr.ecr.us-east-1.amazonaws.com/botchat/chat
     newTag: "none"
   - name: game
-    newName: <account-id>.dkr.ecr.us-east-1.amazonaws.com/botchat/game
+    newName: 867169974753.dkr.ecr.us-east-1.amazonaws.com/botchat/game
     newTag: "none"
   - name: bots
-    newName: <account-id>.dkr.ecr.us-east-1.amazonaws.com/botchat/bots
+    newName: 867169974753.dkr.ecr.us-east-1.amazonaws.com/botchat/bots
     newTag: "none"
