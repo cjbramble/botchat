@@ -5,7 +5,7 @@ metadata:
   name: viewer
   namespace: botchat
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-staging # cert-manager fills Secret viewer-tls
+    cert-manager.io/cluster-issuer: letsencrypt # cert-manager fills Secret viewer-tls
     traefik.ingress.kubernetes.io/router.entrypoints: websecure # HTTPS, port 443
     traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
