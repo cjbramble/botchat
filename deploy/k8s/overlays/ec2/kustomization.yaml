@@ -1,0 +1,50 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# botchat on the EC2 instance's k3s: the base, plus HTTPS, RDS's CA and the AWS settings.
+resources:
+  - ../../base
+  - letsencrypt.yaml
+  - ingress.yaml
+  - network-policies.yaml
+
+configMapGenerator:
+  - name: game
+    namespace: botchat
+    behavior: merge
+    literals:
+      - EVENTS=sns
+      - AWS_REGION=us-east-1
+      - GAME_EVENTS_TOPIC_ARN=<terraform output game_events_topic_arn>
+  - name: chat
+    namespace: botchat
+    behavior: merge
+    literals:
+      - PHX_HOST=botchat.example.com
+      - AWS_REGION=us-east-1
+      - LEVEL_QUEUE_URL=<terraform output level_updates_queue_url>
+      - NOTICES_QUEUE_URL=<terraform output chat_notices_queue_url>
+      - DB_CA_FILE=/etc/rds/global-bundle.pem
+  # Amazon's public CA bundle for RDS, so both services can verify the database.
+  - name: rds-ca
+    namespace: botchat
+    files:
+      - global-bundle.pem
+
+patches:
+  # Mount that bundle into chat (both containers) and the game.
+  - path: rds-ca-mounts.yaml
+  # Every service account pulls images with the ECR secret that deploy.sh refreshes.
+  - path: pull-secret.yaml
+
+# Which image each Deployment runs. scripts/deploy.sh updates newTag.
+images:
+  - name: chat
+    newName: <account-id>.dkr.ecr.us-east-1.amazonaws.com/botchat/chat
+    newTag: "none"
+  - name: game
+    newName: <account-id>.dkr.ecr.us-east-1.amazonaws.com/botchat/game
+    newTag: "none"
+  - name: bots
+    newName: <account-id>.dkr.ecr.us-east-1.amazonaws.com/botchat/bots
+    newTag: "none"

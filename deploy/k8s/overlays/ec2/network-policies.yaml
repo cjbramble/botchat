@@ -1,0 +1,66 @@
+# Traefik (in kube-system) reaches the viewer, port 4000 only.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: viewer-from-traefik
+  namespace: botchat
+spec:
+  podSelector:
+    matchLabels:
+      app: chat
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - port: 4000
+          protocol: TCP
+---
+# cert-manager's short-lived HTTP-01 solver pods answer Let's Encrypt through Traefik.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: acme-solver-from-traefik
+  namespace: botchat
+spec:
+  podSelector:
+    matchLabels:
+      acme.cert-manager.io/http01-solver: "true"
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - port: 8089
+          protocol: TCP
+---
+# The bots never call AWS, so keep them away from the instance's credentials:
+# anything in the cluster and anywhere on the internet, except the metadata service.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: bots-no-instance-metadata
+  namespace: botchat
+spec:
+  podSelector:
+    matchLabels:
+      app: bots
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector: {} # every pod: chat, CoreDNS
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 169.254.169.254/32

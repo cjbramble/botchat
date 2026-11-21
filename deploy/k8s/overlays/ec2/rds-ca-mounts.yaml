@@ -1,0 +1,44 @@
+# A strategic merge patch: list items with the same `name` are merged, new ones are added.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat
+  namespace: botchat
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: migrate
+          volumeMounts:
+            - name: rds-ca
+              mountPath: /etc/rds
+              readOnly: true
+      containers:
+        - name: chat
+          volumeMounts:
+            - name: rds-ca
+              mountPath: /etc/rds
+              readOnly: true
+      volumes:
+        - name: rds-ca
+          configMap:
+            name: rds-ca
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game
+  namespace: botchat
+spec:
+  template:
+    spec:
+      containers:
+        - name: game
+          volumeMounts:
+            - name: rds-ca
+              mountPath: /etc/rds
+              readOnly: true
+      volumes:
+        - name: rds-ca
+          configMap:
+            name: rds-ca
