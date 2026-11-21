@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game
+  namespace: botchat
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate # matches live in memory: never run two game pods at once
+  selector:
+    matchLabels:
+      app: game
+  template:
+    metadata:
+      labels:
+        app: game
+    spec:
+      serviceAccountName: game
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532 # distroless "nonroot"
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: game
+          image: game # kustomization.yaml swaps in the ECR image and tag
+          ports:
+            - name: grpc
+              containerPort: 50051
+          envFrom:
+            - configMapRef:
+                name: game
+            - secretRef:
+                name: game # DATABASE_URL, GAME_INTERNAL_TOKEN
+          volumeMounts:
+            - name: tls
+              mountPath: /etc/game-tls
+              readOnly: true
+          readinessProbe:
+            tcpSocket:
+              port: grpc
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: grpc
+            periodSeconds: 10
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+      volumes:
+        - name: tls
+          secret:
+            secretName: game-tls # written and renewed by cert-manager
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: game
+  namespace: botchat
+spec:
+  selector:
+    app: game
+  ports:
+    - name: grpc
+      port: 50051
+      targetPort: grpc
