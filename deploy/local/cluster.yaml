@@ -1,0 +1,16 @@
+# The local Kubernetes cluster for Tilt (Step 12b): kind plus a local image registry.
+# Create or update it with: scripts/local-cluster.sh
+apiVersion: ctlptl.dev/v1alpha1
+kind: Registry
+name: ctlptl-registry
+port: 5005
+---
+apiVersion: ctlptl.dev/v1alpha1
+kind: Cluster
+product: kind
+registry: ctlptl-registry
+kindV1Alpha4Cluster:
+  name: botchat
+  networking:
+    disableDefaultCNI: true # Calico replaces it, so network policies are enforced
+    podSubnet: 192.168.0.0/16 # the pod address range Calico's manifest expects
