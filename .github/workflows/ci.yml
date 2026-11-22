@@ -22,6 +22,7 @@ jobs:
       bots: ${{ steps.filter.outputs.bots }}
       lambda: ${{ steps.filter.outputs.lambda }}
       infra: ${{ steps.filter.outputs.infra }}
+      deploy: ${{ steps.filter.outputs.deploy }}
     steps:
       - uses: actions/checkout@v6
       - uses: dorny/paths-filter@v4
@@ -49,6 +50,20 @@ jobs:
             infra:
               - 'infra/**'
               - '.github/workflows/ci.yml'
+            deploy:
+              - 'deploy/**'
+              - 'scripts/**'
+              - 'infra/k3s-init.sh'
+              - '.github/workflows/ci.yml'
+
+  # Runs on every pull request, whatever changed.
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with: { fetch-depth: 0 }   # full history, so every commit in the PR is scanned
+      - uses: gitleaks/gitleaks-action@v3
+        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
 
   chat:
     needs: changes
@@ -179,10 +194,22 @@ jobs:
       - run: touch ../lambdas/announcer/function.zip
       - run: terraform init -backend=false && terraform validate
 
+  # The manifests must render and the scripts must parse.
+  deploy:
+    needs: changes
+    if: needs.changes.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      # kubectl (with kustomize built in) is preinstalled on GitHub's Ubuntu runners.
+      - run: kubectl kustomize deploy/k8s/overlays/local > /dev/null
+      - run: kubectl kustomize deploy/k8s/overlays/ec2 > /dev/null
+      - run: for s in scripts/*.sh infra/k3s-init.sh; do bash -n "$s"; done
+
   # The one check main requires. Skipped jobs count as passed;
   # failed or cancelled ones don't.
   ci-ok:
-    needs: [changes, chat, game, proto, bots, lambda, infra]
+    needs: [changes, secrets, chat, game, proto, bots, lambda, infra, deploy]
     if: always()
     runs-on: ubuntu-latest
     steps:

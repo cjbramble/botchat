@@ -33,7 +33,7 @@ Diagram: [docs/architecture.md](docs/architecture.md). It shows the finished sys
 | AWS events | SNS fans game events out to SQS queues; the announcer Lambda turns level-ups into chat notices. |
 | AWS platform | One EC2 instance running k3s, plus RDS for Postgres: where chat, game and the bots run in production. |
 | CI | GitHub Actions runs each service's checks on every push and pull request. |
-| Observability (**Planned**) | Distributed tracing with OpenTelemetry and Jaeger across bots, chat, game, SNS, SQS and the Lambda, so one request can be followed end to end. |
+| Tracing | OpenTelemetry carries one trace from a bot's guess through chat, game, SNS, SQS and the Lambda to the level-up notice. Jaeger shows it locally; production exports nothing. |
 | Analytics side-car (**Planned**) | Debezium streams every database change through Kafka into Iceberg tables on S3; Airflow schedules Spark jobs, and Grafana charts the result. |
 
 How a message flows:
@@ -64,13 +64,13 @@ Needs Docker with Compose, and an [OpenRouter](https://openrouter.ai) API key. R
    grep '^BOT_TOKEN_' bots/.env.tokens >> bots/.env
    ```
 
-3. Start Postgres, game, chat and the bots:
+3. Start Postgres, Jaeger, game, chat and the bots:
 
    ```bash
    docker compose up --build
    ```
 
-4. Open the viewer at <http://localhost:4000>.
+4. Open the viewer at <http://localhost:4000>, and the traces in Jaeger at <http://localhost:16686>.
 
 Running bots call OpenRouter, which costs money. Stop them with `docker compose down`.
 
@@ -81,9 +81,36 @@ Running bots call OpenRouter, which costs money. Stop them with `docker compose 
 | `docker compose restart game` | Restart one service |
 | `docker compose down` | Stop; add `-v` to wipe the database |
 
-- Only port 4000 (the viewer) is published. The bots' port, 4001, is reachable only inside Compose's network.
+- Only port 4000 (the viewer) is published to your network. The bots' port, 4001, is reachable only inside Compose's network.
+- Jaeger's UI has no login, so port 16686 is published to this machine only.
 - `bots/.env` and `bots/.env.tokens` are ignored by Git. Never commit them.
 - Re-running step 2 revokes every bot's old token, so replace the `BOT_TOKEN_` lines in `bots/.env` afterwards.
+
+### Trace a level-up through AWS
+
+Plain Compose only logs level-up events, so a trace stops at the game. This override sends them through the real SNS topic, SQS queues and Lambda, while Jaeger stays local.
+
+Needs the AWS platform applied (`infra/`), the announcer Lambda deployed from a build that has tracing, and a signed-in session (`aws login --profile botchat`). Stop the production instance first (`./scripts/down.sh`): its chat pulls the same queues and would take some of the messages.
+
+```bash
+eval "$(aws configure export-credentials --profile botchat --format env)"
+export GAME_EVENTS_TOPIC_ARN="$(terraform -chdir=infra output -raw game_events_topic_arn)"
+export LEVEL_QUEUE_URL="$(terraform -chdir=infra output -raw level_updates_queue_url)"
+export NOTICES_QUEUE_URL="$(terraform -chdir=infra output -raw chat_notices_queue_url)"
+docker compose -f docker-compose.yml -f docker-compose.aws.yml up --build
+```
+
+In Jaeger, pick the `bots` service and open a `bot.take_turn` trace that ends in a level-up:
+
+| Span | Service | What it covers |
+| --- | --- | --- |
+| `bot.take_turn` | bots | The model call and the guess |
+| `room.new_msg`, `game.submit_input` | chat | Storing the post and forwarding it to the game |
+| `game.v1.GameService/SubmitInput`, `award xp` | game | The gRPC call, then the XP award and the SNS publish |
+| `level_consumer.handle`, `notice_consumer.handle` | chat | The badge update and the `***` notice |
+
+- The Lambda passes the trace on but exports no span of its own, so it shows as a gap before `notice_consumer.handle`.
+- The exported credentials are temporary. When they expire, run the `eval` line again and restart.
 
 ## Run on local Kubernetes
 

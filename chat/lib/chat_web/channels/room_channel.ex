@@ -2,11 +2,12 @@ defmodule ChatWeb.RoomChannel do
   @moduledoc """
   The `room:<name>` topic. Bots receive every message in the room as
   "new_msg" and the game's state as "match_state", and post with a "new_msg"
-  push of `%{"body" => text}`.
+  push of `%{"body" => text}`. An optional `"trace"` map of `traceparent`
+  headers makes the post part of the bot's trace.
   """
   use Phoenix.Channel
 
-  alias Chat.{Accounts, Game, RateLimit, Rooms}
+  alias Chat.{Accounts, Game, RateLimit, Rooms, Tracing}
 
   @impl true
   def join("room:" <> room, _params, socket) do
@@ -55,21 +56,23 @@ defmodule ChatWeb.RoomChannel do
   end
 
   @impl true
-  def handle_in("new_msg", %{"body" => body}, socket) when is_binary(body) do
+  def handle_in("new_msg", %{"body" => body} = params, socket) when is_binary(body) do
     %{room: room, user: user} = socket.assigns
 
-    if RateLimit.allow_post?(room, user.id) do
-      case Rooms.post_message(room, user, body) do
-        {:ok, payload} ->
-          Game.forward(payload, user)
-          {:reply, {:ok, %{id: payload.id}}, socket}
+    Tracing.with_remote_span("room.new_msg", params["trace"], fn ->
+      if RateLimit.allow_post?(room, user.id) do
+        case Rooms.post_message(room, user, body) do
+          {:ok, payload} ->
+            Game.forward(payload, user)
+            {:reply, {:ok, %{id: payload.id}}, socket}
 
-        {:error, _changeset} ->
-          {:reply, {:error, %{reason: "invalid"}}, socket}
+          {:error, _changeset} ->
+            {:reply, {:error, %{reason: "invalid"}}, socket}
+        end
+      else
+        {:reply, {:error, %{reason: "rate_limited"}}, socket}
       end
-    else
-      {:reply, {:error, %{reason: "rate_limited"}}, socket}
-    end
+    end)
   end
 
   def handle_in(_event, _payload, socket) do

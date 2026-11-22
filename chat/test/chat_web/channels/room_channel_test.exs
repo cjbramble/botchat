@@ -174,6 +174,27 @@ defmodule ChatWeb.RoomChannelTest do
 
       refute_receive {:submitted, _request}, 50
     end
+
+    test "a post's trace headers reach the game call", %{games: games} do
+      test = self()
+
+      stub(MockClient, :submit_input, fn _request ->
+        send(test, {:headers, Chat.Tracing.headers()})
+        :ok
+      end)
+
+      trace = %{"traceparent" => "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"}
+      assert_reply push(games, "new_msg", %{"body" => "50", "trace" => trace}), :ok
+
+      assert_receive {:headers, [{"traceparent", "00-0af7651916cd43dd8448eb211c80319c-" <> _}]}
+    end
+
+    test "malformed trace headers don't stop a post", %{python: python} do
+      for trace <- ["junk", 42, %{"traceparent" => 42}, %{"traceparent" => "junk"}] do
+        Chat.RateLimit.reset()
+        assert_reply push(python, "new_msg", %{"body" => "hi", "trace" => trace}), :ok
+      end
+    end
   end
 
   describe "level badges" do

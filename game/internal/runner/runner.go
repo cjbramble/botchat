@@ -14,17 +14,21 @@ type Input struct {
 	Player match.PlayerID
 	Text   string
 	MsgID  string // chat's message ID: the same ID is only applied once
+	// Ctx carries the caller's trace to the effects this input causes. It must
+	// outlive the request that made it. Nil means the Run context.
+	Ctx context.Context
 }
 
 // Runner is the only goroutine allowed to touch its Match.
 type Runner struct {
 	Inputs chan Input
-	out    func(match.Effect)
+	out    func(context.Context, match.Effect)
 	m      *match.Match
 }
 
-// New wraps a match. out is called from the runner goroutine for every effect.
-func New(m *match.Match, out func(match.Effect)) *Runner {
+// New wraps a match. out is called from the runner goroutine for every effect,
+// with the context of the input that caused it (the Run context for timers).
+func New(m *match.Match, out func(context.Context, match.Effect)) *Runner {
 	return &Runner{Inputs: make(chan Input, 64), out: out, m: m}
 }
 
@@ -36,16 +40,16 @@ func (r *Runner) Run(ctx context.Context, initial []match.Effect) {
 
 	seen := map[string]bool{} // message IDs already applied
 
-	apply := func(effects []match.Effect) {
+	apply := func(ctx context.Context, effects []match.Effect) {
 		for _, e := range effects {
 			if st, ok := e.(match.StartTimer); ok {
 				timer.Reset(st.After) // Go 1.23+: also discards a pending tick
 			}
-			r.out(e)
+			r.out(ctx, e)
 		}
 	}
 
-	apply(initial)
+	apply(ctx, initial)
 	for r.m.Phase != match.Over {
 		select {
 		case <-ctx.Done():
@@ -57,9 +61,13 @@ func (r *Runner) Run(ctx context.Context, initial []match.Effect) {
 				}
 				seen[in.MsgID] = true
 			}
-			apply(r.m.HandleInput(in.Player, in.Text))
+			inCtx := in.Ctx
+			if inCtx == nil {
+				inCtx = ctx
+			}
+			apply(inCtx, r.m.HandleInput(in.Player, in.Text))
 		case <-timer.C:
-			apply(r.m.HandleTimeout())
+			apply(ctx, r.m.HandleTimeout())
 		}
 	}
 }

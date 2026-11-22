@@ -43,6 +43,8 @@ func (s *server) SubmitInput(ctx context.Context, req *gamev1.SubmitInputRequest
 		Player: match.PlayerID(req.GetPlayerId()),
 		Text:   req.GetText(),
 		MsgID:  req.GetMsgId(),
+		// The match outlives this call, so keep its trace but not its cancellation.
+		Ctx: context.WithoutCancel(ctx),
 	})
 	return &gamev1.SubmitInputResponse{}, nil
 }

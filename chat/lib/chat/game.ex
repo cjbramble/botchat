@@ -4,6 +4,7 @@ defmodule Chat.Game do
   seeds level badges from it.
   """
   require Logger
+  require OpenTelemetry.Tracer, as: Tracer
 
   alias Chat.Accounts
   alias Chat.Accounts.User
@@ -29,8 +30,15 @@ defmodule Chat.Game do
     }
 
     delays = Application.get_env(:chat, :game_retry_delays_ms, @default_retry_delays_ms)
+    # The task is another process, so the caller's trace has to be handed to it.
+    ctx = :otel_ctx.get_current()
 
-    case Task.Supervisor.start_child(Chat.TaskSup, fn -> submit(request, delays) end) do
+    forward = fn ->
+      :otel_ctx.attach(ctx)
+      Tracer.with_span("game.submit_input", do: submit(request, delays))
+    end
+
+    case Task.Supervisor.start_child(Chat.TaskSup, forward) do
       {:ok, _pid} ->
         :ok
 

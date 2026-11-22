@@ -21,10 +21,12 @@ defmodule Chat.NoticeConsumer do
 
   @impl true
   def handle_message(_processor, %Message{data: data} = message, _context) do
-    case post_once(data) do
-      :ok -> message
-      {:error, reason} -> Message.failed(message, reason)
-    end
+    Chat.Tracing.with_message_span("notice_consumer.handle", message, fn ->
+      case post_once(data) do
+        :ok -> message
+        {:error, reason} -> Message.failed(message, reason)
+      end
+    end)
   end
 
   @doc "Posts a notice unless one with the same dedupe key was already posted."

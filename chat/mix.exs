@@ -81,7 +81,14 @@ defmodule Chat.MixProject do
       # Instance-role credentials over IMDSv2
       {:ex_aws, "~> 2.6"},
       # Reads bots/personas.toml for Chat.Release.seed_bots/1
-      {:toml, "~> 0.7"}
+      {:toml, "~> 0.7"},
+      # Tracing
+      {:opentelemetry, "~> 1.7"},
+      {:opentelemetry_api, "~> 1.5"},
+      {:opentelemetry_exporter, "~> 1.11"},
+      {:opentelemetry_phoenix, "~> 2.0"},
+      {:opentelemetry_bandit, "~> 0.3.0"},
+      {:opentelemetry_ecto, "~> 1.2"}
     ]
   end
 

@@ -3,6 +3,7 @@ defmodule Chat.Game.GRPCClient do
   @behaviour Chat.Game.Client
 
   alias Chat.Game.Conn
+  alias Chat.Tracing
   alias Game.V1.GetPlayerRequest
   alias Game.V1.GameService.Stub
 
@@ -44,5 +45,10 @@ defmodule Chat.Game.GRPCClient do
     end
   end
 
-  defp metadata, do: %{"x-internal-token" => Application.fetch_env!(:chat, :game_token)}
+  # The trace headers make the game's span for this call a child of the caller's.
+  defp metadata do
+    Map.new([
+      {"x-internal-token", Application.fetch_env!(:chat, :game_token)} | Tracing.headers()
+    ])
+  end
 end

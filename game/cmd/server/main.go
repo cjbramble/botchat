@@ -10,9 +10,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sns"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
@@ -24,6 +26,10 @@ import (
 	"github.com/cjbramble/botchat/game/internal/xp"
 )
 
+// flushTimeout is well under the 10 s Compose and the 30 s Kubernetes allow a
+// container to stop.
+const flushTimeout = 3 * time.Second
+
 func main() {
 	token := os.Getenv("GAME_INTERNAL_TOKEN")
 	if token == "" {
@@ -34,6 +40,19 @@ func main() {
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+
+	shutdownTracing, err := setupTracing(ctx)
+	if err != nil {
+		slog.Error("tracing", "err", err)
+		os.Exit(1)
+	}
+	// Flushes buffered spans; a failed flush at exit has no useful handling.
+	// Bounded, so an unreachable collector can't hold up the exit.
+	defer func() {
+		flushCtx, cancel := context.WithTimeout(context.Background(), flushTimeout)
+		defer cancel()
+		_ = shutdownTracing(flushCtx)
+	}()
 
 	pub, err := newPublisher(ctx)
 	if err != nil {
@@ -72,6 +91,7 @@ func main() {
 	}
 	s := grpc.NewServer(
 		creds,
+		grpc.StatsHandler(otelgrpc.NewServerHandler()), // a span per call, parented to the caller's traceparent
 		grpc.UnaryInterceptor(unaryAuth(token)),
 		grpc.StreamInterceptor(streamAuth(token)),
 	)
