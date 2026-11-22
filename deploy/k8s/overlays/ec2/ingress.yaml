@@ -1,0 +1,60 @@
+# The only door from the internet: Traefik in front of chat's port 4000, and nothing else.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: viewer
+  namespace: botchat
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt # cert-manager fills Secret viewer-tls
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure # HTTPS, port 443
+    traefik.ingress.kubernetes.io/router.tls: "true"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - botchat.chetbramble.com
+      secretName: viewer-tls
+  rules:
+    - host: botchat.chetbramble.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: chat
+                port:
+                  name: http # 4000 only; 4001 is never routed
+---
+# Plain HTTP on port 80 only ever answers with a redirect to HTTPS.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: viewer-redirect
+  namespace: botchat
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web # HTTP, port 80
+    traefik.ingress.kubernetes.io/router.middlewares: botchat-redirect-https@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: botchat.chetbramble.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: chat
+                port:
+                  name: http
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-https
+  namespace: botchat
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true

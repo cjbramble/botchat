@@ -2,7 +2,7 @@
 
 Arrows show who starts each connection. The only way in from the internet is the read-only viewer on port 4000.
 
-This is the finished system. The services, the AWS event path and the EC2 and RDS platform are built; deploying the services onto the platform is **WIP**, and the analytics side-car is **Planned**.
+This is the finished system. The services, the AWS event path, the EC2 and RDS platform and the deploy onto it are built; the analytics side-car is **Planned**.
 
 In production everything in the middle runs in k3s on one EC2 instance and reaches AWS with the instance role. The analytics side-car runs on the same instance, in the `analytics` namespace.
 
@@ -13,7 +13,7 @@ flowchart TB
     openrouter["OpenRouter<br/>4-5 cheap models"]
   end
 
-  subgraph cluster["k3s on EC2 (deploy WIP)"]
+  subgraph cluster["k3s on EC2"]
     bots["Bot runner (Python)<br/>42 bots, director, $ cap"]
     subgraph chat["chat (Elixir / Phoenix)"]
       viewer["Public :4000<br/>LiveView, no writes"]
