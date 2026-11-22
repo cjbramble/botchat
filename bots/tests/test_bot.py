@@ -114,12 +114,12 @@ async def test_turn_charges_the_budget(bot, monkeypatch):
 async def test_speak_posts_one_line_and_returns_cost(bot, monkeypatch):
     async def complete(model, system, lines, max_tokens):
         assert "#python" in system
-        return llm.Reply(text="asyncio.TaskGroup is great\nsecond line dropped", cost_usd=0.002, tokens=50)
+        return llm.Reply(text="Well.\n\nasyncio.TaskGroup is great", cost_usd=0.002, tokens=50)
 
     monkeypatch.setattr(llm, "complete", complete)
     cost = await bot.speak("python")
     assert cost == 0.002
-    assert bot.client.pushed == [("room:python", "new_msg", {"body": "asyncio.TaskGroup is great"})]
+    assert bot.client.pushed == [("room:python", "new_msg", {"body": "Well. asyncio.TaskGroup is great"})]
 
 
 async def test_speak_tells_the_model_the_channel_topic_comes_first(bot, monkeypatch):
@@ -136,6 +136,10 @@ async def test_speak_tells_the_model_the_channel_topic_comes_first(bot, monkeypa
     assert character == bot.persona
     assert where == "You are in #python. Its topic: Python, packaging, async"
     assert "The channel decides WHAT you talk about" in rules
+    assert "a sentence or two, never more than 400 characters" in rules
+    assert "safe for work" in rules
+    assert "Your character is background, not a script" in rules
+    assert "no sarcasm, no mocking, no put-downs or bullying" in rules
 
 
 @pytest.mark.parametrize(
@@ -181,10 +185,29 @@ async def test_speak_falls_back_to_the_channel_name_without_a_topic(bot, monkeyp
     assert "You are in #python. Its topic: python\n" in seen["system"]
 
 
-async def test_speak_caps_a_line_at_300_chars(bot, monkeypatch):
-    monkeypatch.setattr(llm, "complete", fake_llm("x" * 5000))
+@pytest.mark.parametrize(
+    ("text", "posted"),
+    [
+        ("x" * 5000, "x" * 400),  # no space to cut at
+        ("word " * 1000, ("word " * 80).strip()),  # exactly 399 characters fit
+        ("x" * 396 + " yyyyyy zz", "x" * 396),  # the word that crosses 400 is dropped whole
+        ("x" * 400, "x" * 400),
+    ],
+)
+async def test_speak_caps_a_line_at_400_chars_between_words(bot, monkeypatch, text, posted):
+    monkeypatch.setattr(llm, "complete", fake_llm(text))
     await bot.speak("python")
-    assert bot.client.pushed[-1][2] == {"body": "x" * 300}
+    assert bot.client.pushed[-1][2] == {"body": posted}
+
+
+async def test_speak_logs_why_the_model_stopped(bot, monkeypatch, caplog):
+    async def complete(model, system, lines, max_tokens):
+        return llm.Reply(text="cut sh", cost_usd=0.0, tokens=300, finish_reason="length")
+
+    monkeypatch.setattr(llm, "complete", complete)
+    with caplog.at_level("INFO", logger="bots.bot"):
+        await bot.speak("python")
+    assert "finish=length" in caplog.text
 
 
 async def test_speak_posts_nothing_for_an_empty_reply(bot, monkeypatch):

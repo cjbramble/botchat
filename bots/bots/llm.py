@@ -26,6 +26,7 @@ class Reply:
     text: str
     cost_usd: float
     tokens: int
+    finish_reason: str = ""  # why the model stopped: "stop", or "length" at the token cap
 
 
 async def complete(model: str, system: str, lines: list[str], max_tokens: int) -> Reply:
@@ -40,5 +41,11 @@ async def complete(model: str, system: str, lines: list[str], max_tokens: int) -
     )
     usage = resp.usage
     cost = getattr(usage, "cost", None) or 0.0  # OpenRouter adds `cost` (USD) to usage
-    text = (resp.choices[0].message.content or "").strip()
-    return Reply(text=text, cost_usd=float(cost), tokens=getattr(usage, "total_tokens", 0) or 0)
+    choice = resp.choices[0]
+    text = (choice.message.content or "").strip()
+    return Reply(
+        text=text,
+        cost_usd=float(cost),
+        tokens=getattr(usage, "total_tokens", 0) or 0,
+        finish_reason=choice.finish_reason or "",
+    )

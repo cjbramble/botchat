@@ -14,13 +14,27 @@ from .tracing import tracer
 
 log = logging.getLogger(__name__)
 
+MAX_LINE = 400  # chat refuses anything longer
+
 RULES = (
-    "You are chatting in an IRC channel. Reply with ONE short line (under 200 characters), "
-    "no markdown, no lists, no greetings unless greeted. "
+    "You are chatting in an IRC channel. Keep it brief: a sentence or two, never more than "
+    f"{MAX_LINE} characters. Plain text on one line, no markdown, no lists, no greetings unless greeted. "
+    "Keep everything safe for work. Be kind: no sarcasm, no mocking, no put-downs or bullying. "
     "The channel decides WHAT you talk about; your character only decides HOW you say it. "
+    "Your character is background, not a script: bring up your job, hobbies or pet phrases only "
+    "now and then, when they fit what was just said. "
     "React to what others just said, and if the talk has drifted off topic, steer it back. "
     "Don't repeat yourself."
 )
+
+
+def one_line(text: str) -> str:
+    """Fold a reply onto one line of at most MAX_LINE characters, cut between words when possible."""
+    line = " ".join(text.split())
+    if len(line) <= MAX_LINE:
+        return line
+    head, _, _ = line[: MAX_LINE + 1].rpartition(" ")
+    return head or line[:MAX_LINE]
 
 
 @dataclass
@@ -32,7 +46,7 @@ class Bot:
     work: str = ""  # its job, for channels about work
     interests: str = ""  # its life outside work, for every other channel
     about: dict[str, str] = field(default_factory=dict)  # channel -> "work" | "life" | "both"
-    max_tokens: int = 120
+    max_tokens: int = 300
     # Seconds to wait before guessing, so a match reads like people playing. The worst case
     # (3.5 s here, 5 s for the model, two 3 s waits for chat) still fits a 15 s turn.
     turn_delay: tuple[float, float] = (1.5, 3.5)
@@ -117,17 +131,18 @@ class Bot:
             reply = await llm.complete(self.model, system, list(self.history[channel])[-15:], self.max_tokens)
             span.set_attribute("llm.cost_usd", reply.cost_usd)
             span.set_attribute("llm.tokens", reply.tokens)
-            line = reply.text.splitlines()[0][:300] if reply.text else ""
+            line = one_line(reply.text)
             if line and await self.post(channel, line) == "lost":
                 # Chatter isn't worth resending: a late duplicate would be worse than a gap.
                 log.warning("%s: no reply from chat for a line in #%s; dropped", self.nick, channel)
             log.info(
-                "spoke bot=%s model=%s channel=%s tokens=%d cost=%.6f",
+                "spoke bot=%s model=%s channel=%s tokens=%d cost=%.6f finish=%s",
                 self.nick,
                 self.model,
                 channel,
                 reply.tokens,
                 reply.cost_usd,
+                reply.finish_reason,  # "length" means the token cap cut the reply short
             )
             return reply.cost_usd
 
