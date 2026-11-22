@@ -20,10 +20,12 @@ defmodule Chat.LevelConsumer do
 
   @impl true
   def handle_message(_processor, %Message{data: data} = message, _context) do
-    case apply_event(data) do
-      :ok -> message
-      {:error, reason} -> Message.failed(message, reason)
-    end
+    Chat.Tracing.with_message_span("level_consumer.handle", message, fn ->
+      case apply_event(data) do
+        :ok -> message
+        {:error, reason} -> Message.failed(message, reason)
+      end
+    end)
   end
 
   @doc """

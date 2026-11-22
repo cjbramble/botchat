@@ -1,0 +1,4 @@
+# Phoenix's generated secret_key_base for dev and test: not used in production,
+# which reads SECRET_KEY_BASE from the environment.
+450c6a41e90355cb1e14f9ca39979af271d864d7:chat/config/dev.exs:generic-api-key:28
+450c6a41e90355cb1e14f9ca39979af271d864d7:chat/config/test.exs:generic-api-key:21

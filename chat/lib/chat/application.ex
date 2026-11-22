@@ -7,6 +7,11 @@ defmodule Chat.Application do
 
   @impl true
   def start(_type, _args) do
+    # Spans for every request, LiveView event and database query
+    OpentelemetryBandit.setup()
+    OpentelemetryPhoenix.setup(adapter: :bandit)
+    OpentelemetryEcto.setup([:chat, :repo])
+
     children =
       [
         ChatWeb.Telemetry,

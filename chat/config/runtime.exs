@@ -48,15 +48,27 @@ config :ex_aws,
   # Req is already a dependency; ExAws defaults to hackney otherwise.
   http_client: ExAws.Request.Req
 
+# Outside any `if` block. The exporter reads OTEL_EXPORTER_OTLP_ENDPOINT itself;
+# without it, nothing is exported.
+config :opentelemetry,
+  resource: [service: [name: System.get_env("OTEL_SERVICE_NAME", "chat")]],
+  traces_exporter: if(System.get_env("OTEL_EXPORTER_OTLP_ENDPOINT"), do: :otlp, else: :none)
+
+config :opentelemetry_exporter, otlp_protocol: :grpc
+
 # Without a queue URL a consumer doesn't start, so chat boots without AWS.
 # Never in test: a queue URL left in the shell must not point tests at real SQS.
+# message_attribute_names asks SQS for message attributes, so consumers can
+# read "traceparent".
 if config_env() != :test do
   if queue_url = System.get_env("LEVEL_QUEUE_URL") do
-    config :chat, level_producer: {BroadwaySQS.Producer, queue_url: queue_url}
+    config :chat,
+      level_producer: {BroadwaySQS.Producer, queue_url: queue_url, message_attribute_names: :all}
   end
 
   if queue_url = System.get_env("NOTICES_QUEUE_URL") do
-    config :chat, notice_producer: {BroadwaySQS.Producer, queue_url: queue_url}
+    config :chat,
+      notice_producer: {BroadwaySQS.Producer, queue_url: queue_url, message_attribute_names: :all}
   end
 end
 

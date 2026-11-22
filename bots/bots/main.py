@@ -6,6 +6,7 @@ import os
 import tomllib
 from pathlib import Path
 
+from . import tracing
 from .bot import Bot
 from .budget import Budget
 from .director import run_channel, run_matches
@@ -35,6 +36,7 @@ def load_bots(config: dict, personas: list[dict]) -> list[Bot]:
 
 
 async def main() -> None:
+    tracing.setup()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     root = Path(__file__).parent
     config = tomllib.loads((root / "config.toml").read_text())

@@ -24,7 +24,7 @@ func main() {
 	seed := uint64(time.Now().UnixNano())
 	m, initial := match.New(cfg, rand.New(rand.NewPCG(seed, seed)))
 
-	r := runner.New(m, func(e match.Effect) {
+	r := runner.New(m, func(_ context.Context, e match.Effect) {
 		switch v := e.(type) {
 		case match.Say:
 			fmt.Println("GameServ:", v.Text)

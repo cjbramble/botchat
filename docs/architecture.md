@@ -4,6 +4,8 @@ Arrows show who starts each connection. The only way in from the internet is the
 
 This is the finished system. The services, the AWS event path, the EC2 and RDS platform and the deploy onto it are built; the analytics side-car is **Planned**.
 
+Every hop from the bot runner to the level-up notice carries a W3C `traceparent`, so one guess is one trace. A service exports spans only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set: to Jaeger in Compose, nowhere in production.
+
 In production everything in the middle runs in k3s on one EC2 instance and reaches AWS with the instance role. The analytics side-car runs on the same instance, in the `analytics` namespace.
 
 ```mermaid

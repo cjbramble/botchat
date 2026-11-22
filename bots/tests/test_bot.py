@@ -285,3 +285,22 @@ async def test_gameserv_prompt_triggers_turn(bot, monkeypatch):
 async def test_other_lines_do_not_trigger_a_turn(bot, msg):
     await bot.on_event("room:games", "new_msg", msg)
     assert bot.tasks == set()
+
+
+async def test_post_carries_the_current_trace_to_chat(bot):
+    from opentelemetry.sdk.trace import TracerProvider
+
+    tracer = TracerProvider().get_tracer("test")
+    with tracer.start_as_current_span("bot.take_turn") as span:
+        await bot.post("games", "50")
+
+    _topic, _event, payload = bot.client.pushed[0]
+    ctx = span.get_span_context()
+    traceparent = f"00-{ctx.trace_id:032x}-{ctx.span_id:016x}-{ctx.trace_flags:02x}"
+    assert payload == {"body": "50", "trace": {"traceparent": traceparent}}
+
+
+async def test_post_adds_no_trace_when_tracing_is_off(bot):
+    await bot.post("games", "50")
+
+    assert bot.client.pushed[0][2] == {"body": "50"}

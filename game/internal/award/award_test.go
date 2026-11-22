@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"go.opentelemetry.io/otel/trace"
+
 	"github.com/cjbramble/botchat/game/internal/events"
 	"github.com/cjbramble/botchat/game/internal/xp"
 )
@@ -67,8 +69,8 @@ func expectNoEvent(t *testing.T, pub spyPublisher) {
 
 func TestPublishesOncePerLevelCrossed(t *testing.T) { // GAME-I-03
 	a, pub := run(t, &fakeStore{xp: map[string]int64{}}, nil)
-	a.Give("pim", 20) // 20 XP: still level 1
-	a.Give("pim", 30) // 50 XP: level 2
+	a.Give(context.Background(), "pim", 20) // 20 XP: still level 1
+	a.Give(context.Background(), "pim", 30) // 50 XP: level 2
 
 	expectEvent(t, pub, "pim", 1, 2)
 	expectNoEvent(t, pub)
@@ -77,14 +79,14 @@ func TestPublishesOncePerLevelCrossed(t *testing.T) { // GAME-I-03
 func TestStoreErrorsAreLoggedNotFatal(t *testing.T) {
 	store := &fakeStore{fail: true}
 	a, pub := run(t, store, nil)
-	a.Give("pim", 500)
+	a.Give(context.Background(), "pim", 500)
 	expectNoEvent(t, pub)
 }
 
 func TestPublishErrorsDontStopTheAwarder(t *testing.T) {
 	a, pub := run(t, &fakeStore{xp: map[string]int64{}}, errors.New("sns down"))
-	a.Give("pim", 50)  // level 2
-	a.Give("pim", 150) // level 3
+	a.Give(context.Background(), "pim", 50)  // level 2
+	a.Give(context.Background(), "pim", 150) // level 3
 
 	expectEvent(t, pub, "pim", 1, 2)
 	expectEvent(t, pub, "pim", 2, 3)
@@ -95,7 +97,7 @@ func TestGiveNeverBlocks(t *testing.T) {
 	done := make(chan struct{})
 	go func() {
 		for range 1000 {
-			a.Give("pim", 1)
+			a.Give(context.Background(), "pim", 1)
 		}
 		close(done)
 	}()
@@ -106,5 +108,49 @@ func TestGiveNeverBlocks(t *testing.T) {
 	}
 	if len(a.grants) != queueSize {
 		t.Fatalf("queued %d awards, want %d", len(a.grants), queueSize)
+	}
+}
+
+// ctxPublisher hands back the context each event was published with.
+type ctxPublisher struct{ got chan context.Context }
+
+func (p ctxPublisher) Publish(ctx context.Context, _ events.LevelUp) error {
+	p.got <- ctx
+	return nil
+}
+
+func TestLevelUpContinuesTheTraceThatEarnedIt(t *testing.T) {
+	cause := trace.NewSpanContext(trace.SpanContextConfig{
+		TraceID:    trace.TraceID{1, 2, 3},
+		SpanID:     trace.SpanID{4, 5, 6},
+		TraceFlags: trace.FlagsSampled,
+	})
+	cases := []struct {
+		name string
+		ctx  context.Context
+		want trace.TraceID // zero: the publish context has no trace
+	}{
+		{"a traced award", trace.ContextWithSpanContext(context.Background(), cause), cause.TraceID()},
+		{"an untraced award", context.Background(), trace.TraceID{}},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			pub := ctxPublisher{got: make(chan context.Context, 1)}
+			a := New(&fakeStore{xp: map[string]int64{}}, pub)
+			ctx, cancel := context.WithCancel(context.Background())
+			t.Cleanup(cancel)
+			go a.Run(ctx)
+
+			a.Give(tc.ctx, "pim", 50) // level 2
+
+			select {
+			case published := <-pub.got:
+				if got := trace.SpanContextFromContext(published).TraceID(); got != tc.want {
+					t.Fatalf("published under trace %s, want %s", got, tc.want)
+				}
+			case <-time.After(time.Second):
+				t.Fatal("no level-up published")
+			}
+		})
 	}
 }

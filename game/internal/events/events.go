@@ -12,6 +12,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sns"
 	"github.com/aws/aws-sdk-go-v2/service/sns/types"
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 // LevelUp is version 1 of player.leveled_up (see proto/events.md).
@@ -46,7 +48,8 @@ func (LogPublisher) Publish(_ context.Context, e LevelUp) error {
 }
 
 // SNSPublisher sends events to a real topic. The "type" message attribute
-// lets subscriptions filter without reading the body.
+// lets subscriptions filter without reading the body; "traceparent" carries
+// the trace to whoever reads the event.
 type SNSPublisher struct {
 	Client   *sns.Client
 	TopicARN string
@@ -58,10 +61,21 @@ func (p SNSPublisher) Publish(ctx context.Context, e LevelUp) error {
 	if err != nil {
 		return err
 	}
+	addTraceContext(ctx, in)
 	if _, err := p.Client.Publish(ctx, in); err != nil {
 		return fmt.Errorf("publish %s: %w", e.Type, err)
 	}
 	return nil
+}
+
+// addTraceContext copies the trace in ctx into the request's message
+// attributes ("traceparent", and "tracestate" when there is one).
+func addTraceContext(ctx context.Context, in *sns.PublishInput) {
+	carrier := propagation.MapCarrier{}
+	otel.GetTextMapPropagator().Inject(ctx, carrier)
+	for k, v := range carrier {
+		in.MessageAttributes[k] = types.MessageAttributeValue{DataType: aws.String("String"), StringValue: aws.String(v)}
+	}
 }
 
 // publishInput builds the SNS request for an event.

@@ -110,4 +110,23 @@ defmodule Chat.GameTest do
 
     assert log =~ "game input 42 dropped"
   end
+
+  test "the forwarding task continues the caller's trace" do
+    test = self()
+
+    expect(MockClient, :submit_input, fn _request ->
+      send(test, {:headers, Chat.Tracing.headers()})
+      :ok
+    end)
+
+    traceparent = "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+
+    Chat.Tracing.with_remote_span("test", %{"traceparent" => traceparent}, fn ->
+      assert :ok = Chat.Game.forward(@payload, @bot)
+    end)
+
+    await_forwarding()
+
+    assert_received {:headers, [{"traceparent", "00-0af7651916cd43dd8448eb211c80319c-" <> _}]}
+  end
 end

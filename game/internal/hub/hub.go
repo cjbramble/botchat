@@ -16,9 +16,10 @@ import (
 	"github.com/cjbramble/botchat/game/internal/xp"
 )
 
-// Awards receives XP for players. *award.Awarder implements it.
+// Awards receives XP for players. *award.Awarder implements it. ctx carries
+// the trace of the input that earned the XP.
 type Awards interface {
-	Give(player string, delta int64)
+	Give(ctx context.Context, player string, delta int64)
 }
 
 // Hub is safe for concurrent use.
@@ -90,7 +91,7 @@ func (h *Hub) startMatch(ch string, st *channelState) {
 	seed := uint64(time.Now().UnixNano())
 	m, initial := match.New(h.cfg, rand.New(rand.NewPCG(seed, seed>>1)))
 	// The callback runs on the runner goroutine, so reading m inside it is safe.
-	r := runner.New(m, func(e match.Effect) { h.handleEffect(ch, m, e) })
+	r := runner.New(m, func(ctx context.Context, e match.Effect) { h.handleEffect(ctx, ch, m, e) })
 	st.runner = r
 	go func() {
 		r.Run(context.Background(), initial)
@@ -101,7 +102,7 @@ func (h *Hub) startMatch(ch string, st *channelState) {
 }
 
 // handleEffect is the runner's output callback. It runs on the runner goroutine.
-func (h *Hub) handleEffect(ch string, m *match.Match, e match.Effect) {
+func (h *Hub) handleEffect(ctx context.Context, ch string, m *match.Match, e match.Effect) {
 	switch e := e.(type) {
 	case match.StartTimer:
 		h.mu.Lock()
@@ -114,16 +115,16 @@ func (h *Hub) handleEffect(ch string, m *match.Match, e match.Effect) {
 		if e.Exact {
 			delta += xp.ExactHit
 		}
-		h.give(e.Player, delta)
+		h.give(ctx, e.Player, delta)
 	case match.MatchWon:
-		h.give(e.Player, xp.MatchWin)
+		h.give(ctx, e.Player, xp.MatchWin)
 	}
 }
 
 // give hands XP to the awarder without waiting for it.
-func (h *Hub) give(p match.PlayerID, delta int64) {
+func (h *Hub) give(ctx context.Context, p match.PlayerID, delta int64) {
 	if h.awards != nil {
-		h.awards.Give(string(p), delta)
+		h.awards.Give(ctx, string(p), delta)
 	}
 }
 

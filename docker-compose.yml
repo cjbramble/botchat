@@ -11,14 +11,22 @@ services:
       interval: 2s
       retries: 20
 
+  jaeger:
+    image: jaegertracing/jaeger:2.23.0
+    ports:
+      - "127.0.0.1:16686:16686"          # UI: http://localhost:16686. It has no login, so this machine only
+
   game:
     build: ./game
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/game?sslmode=disable
       GAME_INTERNAL_TOKEN: dev-token
       EVENTS: log                       # print events instead of publishing to SNS
+      OTEL_SERVICE_NAME: game
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
     depends_on:
       db: { condition: service_healthy }
+      jaeger: { condition: service_started }   # stopped after game, so the last spans can be flushed
 
   chat:
     build: ./chat
@@ -28,6 +36,8 @@ services:
       PHX_HOST: localhost
       GAME_ADDR: game:50051
       GAME_INTERNAL_TOKEN: dev-token
+      OTEL_SERVICE_NAME: chat
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
     command: ["sh", "-c", "bin/migrate && bin/chat eval 'Chat.Release.seed()' && bin/server"]
     volumes:
       - ./bots/bots/personas.toml:/app/personas.toml:ro   # for seed_bots (12.3)
@@ -36,6 +46,7 @@ services:
     depends_on:
       db: { condition: service_healthy }
       game: { condition: service_started }
+      jaeger: { condition: service_started }
     healthcheck:
       test: ["CMD-SHELL", "curl -fs http://localhost:4001/healthz || exit 1"]
       interval: 3s
@@ -46,8 +57,11 @@ services:
     env_file: bots/.env                 # OPENROUTER_API_KEY and BOT_TOKEN_* lines
     environment:
       CHAT_URL: ws://chat:4001          # private: reachable only inside Compose's network
+      OTEL_SERVICE_NAME: bots
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
     depends_on:
       chat: { condition: service_healthy }
+      jaeger: { condition: service_started }
 
 volumes:
   pgdata:

@@ -1,0 +1,8 @@
+version: 2
+updates:
+  - { package-ecosystem: github-actions, directory: "/", schedule: { interval: weekly } }
+  - { package-ecosystem: mix, directory: "/chat", schedule: { interval: weekly } }
+  - { package-ecosystem: gomod, directory: "/game", schedule: { interval: weekly } }
+  - { package-ecosystem: gomod, directory: "/lambdas/announcer", schedule: { interval: weekly } }
+  - { package-ecosystem: uv, directory: "/bots", schedule: { interval: weekly } }
+  - { package-ecosystem: terraform, directory: "/infra", schedule: { interval: monthly } }

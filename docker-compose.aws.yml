@@ -1,0 +1,25 @@
+# Adds the real AWS event path to the local stack, so a level-up trace runs
+# through SNS, SQS and the Lambda. Use it on top of docker-compose.yml:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.aws.yml up --build
+#
+# Every variable comes from your shell (see "Trace a level-up through AWS" in
+# the README); nothing here is a secret.
+services:
+  game:
+    environment:
+      EVENTS: sns
+      GAME_EVENTS_TOPIC_ARN: ${GAME_EVENTS_TOPIC_ARN:?set it from terraform output}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:?export your AWS credentials first}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:?export your AWS credentials first}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
+
+  chat:
+    environment:
+      LEVEL_QUEUE_URL: ${LEVEL_QUEUE_URL:?set it from terraform output}
+      NOTICES_QUEUE_URL: ${NOTICES_QUEUE_URL:?set it from terraform output}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:?export your AWS credentials first}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:?export your AWS credentials first}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
