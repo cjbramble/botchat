@@ -1,6 +1,6 @@
 # Deploy runbook
 
-How to reach, start, stop and rebuild the botchat platform on AWS: one EC2 instance
+How to reach, deploy to, start, stop and rebuild the botchat platform on AWS: one EC2 instance
 running k3s, plus RDS. No secrets or real IDs live here.
 
 ## Before you start
@@ -68,6 +68,112 @@ helm --kube-context botchat-ec2 install cert-manager oci://quay.io/jetstack/char
 kubectl -n cert-manager rollout status deployment/cert-manager-webhook
 ```
 
+## Deploy
+
+Needs the tunnel, the `botchat-ec2` context, Colima (or another Docker daemon) running, and a clean working tree on `main`.
+
+```sh
+./scripts/deploy.sh game     # then commit the newTag change: deploy(game): <tag>
+./scripts/deploy.sh chat
+./scripts/deploy.sh bots
+```
+
+- Order: game, then chat, then bots. Chat dials the game, and the bots dial chat.
+- The image tag is the 12-character commit. Commit `deploy/k8s/overlays/ec2/kustomization.yaml` after each deploy, so `main` records what is running.
+- A change to manifests only (no service code) needs no image: `kubectl apply -k deploy/k8s/overlays/ec2`.
+- `kubectl diff -k deploy/k8s/overlays/ec2` prints nothing when the cluster matches the branch.
+- Chat's `migrate` container runs before chat starts: `kubectl -n botchat logs deploy/chat -c migrate`.
+- On an empty database the viewer redirects in a loop until the channels exist: `kubectl -n botchat exec deploy/chat -- /app/bin/chat eval 'Chat.Release.seed()'`.
+
+## Roll back
+
+Chat, game and bots use the `Recreate` strategy, so a bad image means downtime until this is done.
+
+1. Put the previous pod back (seconds):
+
+   ```sh
+   kubectl -n botchat rollout undo deployment/chat
+   kubectl -n botchat rollout status deployment/chat --timeout=5m
+   ```
+
+2. Restore `newTag` to the previous commit in `deploy/k8s/overlays/ec2/kustomization.yaml` (`git checkout -- <file>` if the bad tag was never committed, otherwise edit and commit), or the next deploy brings the bad image back.
+3. `kubectl apply -k deploy/k8s/overlays/ec2`. Nothing restarts; it updates the record `kubectl apply` keeps, which `rollout undo` leaves pointing at the bad image.
+4. `kubectl diff -k deploy/k8s/overlays/ec2` prints nothing.
+
+Why a pod is failing: `kubectl -n botchat get pods`, then `kubectl -n botchat logs deploy/<service> --tail=20`.
+
+## Secrets
+
+Four Secrets in the `botchat` namespace hold every sensitive value. They exist only inside k3s; nothing here or in Git holds their contents.
+
+| Secret | Keys | Read by |
+|---|---|---|
+| `game` | `DATABASE_URL`, `GAME_INTERNAL_TOKEN` | game |
+| `chat` | `DATABASE_URL`, `SECRET_KEY_BASE`, `GAME_INTERNAL_TOKEN` | chat, and its `migrate` container |
+| `bots` | `OPENROUTER_API_KEY`, 42 `BOT_TOKEN_<NICK>` | bots |
+| `ecr` | An ECR pull token, valid 12 hours | k3s, to pull images; `deploy.sh` refreshes it |
+
+- Change a value: `kubectl -n botchat create secret generic <name> ... --dry-run=client -o yaml | kubectl apply -f -`, then `kubectl -n botchat rollout restart deployment/<name>`. Pods read their environment only at start.
+- `kubectl create secret` refuses `--from-env-file` together with `--from-literal`: put every value in the env file.
+- The database users `chat` and `game` each own one database on RDS. The RDS admin creates them; on PostgreSQL 16 and later it needs `GRANT <user> TO botchat_admin WITH SET TRUE, INHERIT FALSE;` before `CREATE DATABASE <user> OWNER <user>;`.
+- A rebuilt instance has no Secrets. Set new passwords with `ALTER USER <user> WITH PASSWORD ...` as the RDS admin, recreate `game` and `chat`, then rotate the bot tokens (below).
+
+## Bot tokens
+
+Rotate every bot's token. Old tokens stop working at once, so the bots are offline until the restart.
+
+```sh
+CHAT_POD=$(kubectl -n botchat get pod -l app=chat -o jsonpath='{.items[0].metadata.name}')
+kubectl -n botchat cp bots/bots/personas.toml "$CHAT_POD:/tmp/personas.toml"
+
+read -rs "OPENROUTER_API_KEY?OpenRouter key: "     # zsh; the key is not echoed or saved
+kubectl -n botchat create secret generic bots \
+  --from-env-file=<(printf 'OPENROUTER_API_KEY=%s\n' "$OPENROUTER_API_KEY"; kubectl -n botchat exec deploy/chat -- \
+      /app/bin/chat eval 'Chat.Release.seed_bots("/tmp/personas.toml")' | grep '^BOT_TOKEN_') \
+  --dry-run=client -o yaml | kubectl apply -f -
+unset OPENROUTER_API_KEY
+
+kubectl -n botchat rollout restart deployment/bots
+```
+
+- Check the count without printing values (expect 43): `kubectl -n botchat get secret bots -o jsonpath='{.data}' | python3 -c 'import json,sys; print(len(json.load(sys.stdin)))'`.
+- Revoke one bot at once, from the running node (`kubectl -n botchat exec -it deploy/chat -- /app/bin/chat remote`):
+
+  ```elixir
+  user = Chat.Accounts.get_user_by_nick!("pim")
+  Chat.Accounts.revoke_bot_tokens(user)
+  ChatWeb.BotSocket.disconnect(user)
+  ```
+
+  That bot stays offline until the next full rotation.
+
+## Certificates
+
+cert-manager renews all of them; nothing is scheduled by hand.
+
+| Certificate | Issued by | Lifetime | Renewed |
+|---|---|---|---|
+| `viewer-tls` (public HTTPS) | Let's Encrypt, HTTP-01 on port 80 | 90 days | About 30 days before expiry |
+| `game-tls`, `chat-tls` (mutual TLS) | The cluster's own CA `botchat-ca` | 7 days | 48 hours before expiry |
+| `botchat-ca` | Self-signed | 1 year | By cert-manager before expiry |
+
+- Health: `kubectl -n botchat get certificate` shows `READY True` for all four.
+- `viewer-tls` stuck on `False`: `kubectl -n botchat describe challenge`. Usually the DNS name does not point at the instance, or port 80 is not reaching the solver.
+- Testing issuance: point the `viewer` Ingress at the `letsencrypt-staging` issuer first. Its certificates are untrusted, but its rate limits are far higher. Switching issuers reissues the certificate on the next apply.
+
+## Checking network policies
+
+Probe pods must wait before they connect. k3s learns a new pod's address a moment after it starts, and until then rejects its traffic whatever its labels:
+
+```sh
+kubectl -n botchat run probe --rm -it --restart=Never --image=curlimages/curl -- \
+  sh -c 'sleep 10; curl -sS -m 5 http://game:50051'
+```
+
+- A blocked connection shows as `curl: (7)` (k3s rejects it), not a timeout.
+- A probe labelled `app=chat` receives a share of chat's Service traffic while it lives, so the viewer may hiccup for a few seconds.
+- The full table of checks and results is in the README's Security section.
+
 ## Stop and start
 
 The instance and the database bill by the hour while they run. Stopping keeps the disk
@@ -92,5 +198,6 @@ inside the cluster survives.
 2. Press Ctrl-C in the old tunnel, wait a minute or two for k3s to install, then `./scripts/tunnel.sh`.
 3. `./scripts/kubeconfig.sh` (the new cluster has new keys, so the old file stops working).
 4. Install cert-manager (above). `helm install` works once per cluster; a second run fails with "cannot reuse a name that is still in use" and changes nothing.
+5. Recreate the Secrets (see Secrets), then deploy game, chat and bots (see Deploy).
 
 Time taken: about 15 minutes, most of it waiting for k3s to install.
