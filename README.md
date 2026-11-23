@@ -34,7 +34,7 @@ Diagram: [docs/architecture.md](docs/architecture.md). It shows the finished sys
 | AWS platform | One EC2 instance running k3s, plus RDS for Postgres: where chat, game and the bots run in production. |
 | CI | GitHub Actions runs each service's checks on every push and pull request. |
 | Tracing | OpenTelemetry carries one trace from a bot's guess through chat, game, SNS, SQS and the Lambda to the level-up notice. Jaeger shows it locally; production exports nothing. |
-| Analytics side-car (**Planned**) | Debezium streams every database change through Kafka into Iceberg tables on S3; Airflow schedules Spark jobs, and Grafana charts the result. |
+| Analytics side-car (**WIP**) | Debezium streams every database change through Kafka into Iceberg tables on S3; Airflow schedules Spark jobs, and Grafana charts the result. |
 
 How a message flows:
 
@@ -111,6 +111,47 @@ In Jaeger, pick the `bots` service and open a `bot.take_turn` trace that ends in
 
 - The Lambda passes the trace on but exports no span of its own, so it shows as a gap before `notice_consumer.handle`.
 - The exported credentials are temporary. When they expire, run the `eval` line again and restart.
+
+### Analytics side-car: change data capture
+
+A second Compose file adds Kafka and Debezium on Kafka Connect, which stream every change to `users`, `messages` (chat) and `players` (game) into `cdc.*` topics. The app's code and `docker-compose.yml` are untouched.
+
+```bash
+alias dca='docker compose -f docker-compose.yml -f analytics/compose.yaml'
+dca up -d --build
+```
+
+One-time setup, after chat and game have started once (their tables must exist):
+
+```bash
+dca exec -T db psql -U postgres -v ON_ERROR_STOP=1 -c "CREATE USER debezium WITH REPLICATION PASSWORD 'dev-cdc'"
+dca exec -T db psql -U postgres -d chat -v ON_ERROR_STOP=1 -v tables='users, messages' < analytics/cdc/grant.sql
+dca exec -T db psql -U postgres -d game -v ON_ERROR_STOP=1 -v tables='players' < analytics/cdc/grant.sql
+./scripts/connectors.sh        # both connectors: RUNNING, tasks RUNNING
+```
+
+| Command | What it does |
+| --- | --- |
+| `dca up -d --build` | Start the app and the side-car |
+| `./scripts/connectors.sh` | Create or update the connectors and show their state |
+| `dca exec kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list` | List topics |
+| `dca down` | Stop everything; the data and the connectors' positions are kept |
+
+- Once the connectors exist, always start with both files. Plain `docker compose up` fails on `db` with `logical replication slot ... exists, but "wal_level" < "logical"`: Postgres won't start while a replication slot needs a setting only the side-car file turns on.
+- Kafka Connect's REST API has no login, so port 8083 is published to this machine only.
+- `bot_tokens` is never captured, so token hashes stay in the database.
+
+To go back to the plain app, remove the connectors, their replication slots and Kafka's data:
+
+```bash
+dca up -d db kafka connect
+for db in chat game; do curl -fsS -X DELETE "localhost:8083/connectors/botchat-$db"; done
+dca exec -T db psql -U postgres -c "SELECT pg_drop_replication_slot(slot_name) FROM pg_replication_slots"
+dca down
+docker volume rm botchat_kafka
+```
+
+Returning to the side-car afterwards needs only `dca up -d --build` and `./scripts/connectors.sh`; the `debezium` user and the publications are still there.
 
 ## Run on local Kubernetes
 

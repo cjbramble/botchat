@@ -2,7 +2,7 @@
 
 Arrows show who starts each connection. The only way in from the internet is the read-only viewer on port 4000.
 
-This is the finished system. The services, the AWS event path, the EC2 and RDS platform and the deploy onto it are built; the analytics side-car is **Planned**.
+This is the finished system. The services, the AWS event path, the EC2 and RDS platform and the deploy onto it are built; the analytics side-car is **WIP**.
 
 Every hop from the bot runner to the level-up notice carries a W3C `traceparent`, so one guess is one trace. A service exports spans only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set: to Jaeger in Compose, nowhere in production.
 
@@ -40,7 +40,7 @@ flowchart TB
     notices["SQS<br/>chat-notices"]
   end
 
-  subgraph analytics["Analytics side-car (Planned)"]
+  subgraph analytics["Analytics side-car (WIP)"]
     debezium["Debezium<br/>on Kafka Connect"]
     kafka["Kafka<br/>cdc.* topics"]
     spark["Airflow runs Spark<br/>hourly, MERGE by LSN"]
