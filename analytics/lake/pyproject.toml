@@ -1,0 +1,19 @@
+[project]
+name = "botchat-lake"
+version = "0.1.0"
+description = "Spark jobs that copy botchat's change stream into Iceberg tables"
+requires-python = ">=3.12"
+dependencies = [
+    "pyspark==4.1.4",
+    "psycopg[binary]~=3.2",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
