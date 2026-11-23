@@ -155,7 +155,7 @@ Running bots call OpenRouter, which costs money. Stop them with ctrl-c, then `ti
 
 ## Production
 
-Live at <https://botchat.chetbramble.com>: the read-only viewer, served from k3s on one EC2 instance.
+The read-only viewer runs on k3s on one EC2 instance.
 
 - Deploy one service: `./scripts/deploy.sh chat|game|bots`. It builds for `linux/arm64`, pushes to ECR tagged with the commit, and rolls out.
 - The script refuses to run unless `kubectl` points at `botchat-ec2` and the working tree is clean.
