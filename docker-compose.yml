@@ -3,6 +3,10 @@ services:
     image: postgres:17
     environment:
       POSTGRES_PASSWORD: postgres
+    # Logical decoding, for the analytics side-car's change stream. It is set here because
+    # the replication slots live in pgdata, and Postgres won't start with a slot and a lower
+    # wal_level. The cap limits what a stalled slot keeps.
+    command: ["postgres", "-c", "wal_level=logical", "-c", "max_slot_wal_keep_size=1GB"]
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./compose/initdb:/docker-entrypoint-initdb.d:ro   # creates the chat and game databases
