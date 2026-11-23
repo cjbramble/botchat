@@ -172,7 +172,6 @@ kubectl -n botchat run probe --rm -it --restart=Never --image=curlimages/curl --
 
 - A blocked connection shows as `curl: (7)` (k3s rejects it), not a timeout.
 - A probe labelled `app=chat` receives a share of chat's Service traffic while it lives, so the viewer may hiccup for a few seconds.
-- The full table of checks and results is in the README's Security section.
 
 ## Stop and start
 
