@@ -1,6 +1,6 @@
 [budget]
 daily_usd = 2.00
-max_output_tokens = 120
+max_output_tokens = 300   # a 400-character line is about 130 tokens; the rest is headroom
 
 # about: which side of a bot shows up in the channel. "work" adds its job to the prompt,
 # "life" adds its outside interests instead, "both" adds both.
@@ -61,6 +61,16 @@ per_hour = 8
 
 [[channels]]
 name = "science"
+about = "life"
+per_hour = 8
+
+[[channels]]
+name = "literature"
+about = "life"
+per_hour = 8
+
+[[channels]]
+name = "travel"
 about = "life"
 per_hour = 8
 

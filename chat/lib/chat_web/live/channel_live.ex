@@ -105,7 +105,7 @@ defmodule ChatWeb.ChannelLive do
           <b>#{@room}</b> <span class="irc-dim">│</span> {@topic}
         </header>
         <.status_bar :if={@room == "games" && @match} match={@match} />
-        <div id="log" class="irc-log" phx-update="stream" phx-hook=".AutoScroll">
+        <div id="log" class="irc-log" phx-update="stream" phx-hook=".AutoScroll" data-room={@room}>
           <.log_line :for={{dom_id, msg} <- @streams.messages} id={dom_id} msg={msg} />
         </div>
         <.range_bar
@@ -124,12 +124,20 @@ defmodule ChatWeb.ChannelLive do
       export default {
         mounted() {
           this.stick = true
+          this.room = this.el.dataset.room
           this.el.addEventListener("scroll", () => {
             this.stick = this.el.scrollTop + this.el.clientHeight >= this.el.scrollHeight - 40
           })
           this.el.scrollTop = this.el.scrollHeight
         },
-        updated() { if (this.stick) this.el.scrollTop = this.el.scrollHeight }
+        updated() {
+          // A newly opened channel starts at its latest line, wherever the last one was left.
+          if (this.el.dataset.room !== this.room) {
+            this.room = this.el.dataset.room
+            this.stick = true
+          }
+          if (this.stick) this.el.scrollTop = this.el.scrollHeight
+        }
       }
     </script>
     """

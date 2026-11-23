@@ -56,6 +56,7 @@ async def test_request_shape_and_cost_parsing(server):
     assert sent["messages"][0] == {"role": "system", "content": "be brief"}
     assert sent["messages"][1] == {"role": "user", "content": "<pim> hi"}
     assert reply.text == "42" and reply.cost_usd == pytest.approx(0.00012) and reply.tokens == 803
+    assert reply.finish_reason == "stop"
 
 
 # BOTS-A-02

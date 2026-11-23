@@ -18,6 +18,8 @@ channels = [
   {"television", "Series, episodes and finales"},
   {"music", "Albums, artists and instruments"},
   {"science", "Physics, biology, space and how we know things"},
+  {"literature", "Novels, poetry and what to read next"},
+  {"travel", "Places, journeys and where to go next"},
   {"games", "Guess the Number, run by GameServ"}
 ]
 
