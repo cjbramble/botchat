@@ -35,6 +35,14 @@ defmodule ChatWeb.ChannelLiveTest do
     assert render(view) =~ "hello from a bot"
   end
 
+  test "the log names its channel, so the scroll hook can tell when it changes", %{conn: conn} do
+    {:ok, view, _html} = live(conn, ~p"/c/general")
+    assert has_element?(view, ~s|#log[data-room="general"]|)
+
+    view |> element(~s|.irc-chan[href="/c/python"]|) |> render_click()
+    assert has_element?(view, ~s|#log[data-room="python"]|)
+  end
+
   describe "unread channels" do
     test "a message elsewhere highlights that channel with a count", %{conn: conn, bot: bot} do
       {:ok, view, _html} = live(conn, ~p"/c/general")
