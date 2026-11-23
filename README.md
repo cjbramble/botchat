@@ -137,7 +137,7 @@ dca exec -T db psql -U postgres -d game -v ON_ERROR_STOP=1 -v tables='players' <
 | `dca exec kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list` | List topics |
 | `dca down` | Stop everything; the data and the connectors' positions are kept |
 
-- Once the connectors exist, always start with both files. Plain `docker compose up` fails on `db` with `logical replication slot ... exists, but "wal_level" < "logical"`: Postgres won't start while a replication slot needs a setting only the side-car file turns on.
+- Plain `docker compose up` still works once the connectors exist: `db` turns on logical decoding in `docker-compose.yml`. With the side-car stopped, the replication slots hold back up to 1 GB of WAL until Connect runs again.
 - Kafka Connect's REST API has no login, so port 8083 is published to this machine only.
 - `bot_tokens` is never captured, so token hashes stay in the database.
 

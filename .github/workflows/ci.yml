@@ -23,6 +23,7 @@ jobs:
       lambda: ${{ steps.filter.outputs.lambda }}
       infra: ${{ steps.filter.outputs.infra }}
       deploy: ${{ steps.filter.outputs.deploy }}
+      lake: ${{ steps.filter.outputs.lake }}
     steps:
       - uses: actions/checkout@v6
       - uses: dorny/paths-filter@v4
@@ -54,6 +55,9 @@ jobs:
               - 'deploy/**'
               - 'scripts/**'
               - 'infra/k3s-init.sh'
+              - '.github/workflows/ci.yml'
+            lake:
+              - 'analytics/lake/**'
               - '.github/workflows/ci.yml'
 
   # Runs on every pull request, whatever changed.
@@ -206,10 +210,25 @@ jobs:
       - run: kubectl kustomize deploy/k8s/overlays/ec2 > /dev/null
       - run: for s in scripts/*.sh infra/k3s-init.sh; do bash -n "$s"; done
 
+  # The DAG test skips itself here (no Airflow); it runs inside the image.
+  lake:
+    needs: changes
+    if: needs.changes.outputs.lake == 'true'
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: analytics/lake } }
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with: { distribution: temurin, java-version: "21" }   # Spark runs on the JVM
+      - uses: astral-sh/setup-uv@v8.1.0   # v8 has no moving major tag: pin a full version
+      - run: uv sync --frozen
+      - run: uv run ruff check . && uv run ruff format --check .
+      - run: uv run pytest
+
   # The one check main requires. Skipped jobs count as passed;
   # failed or cancelled ones don't.
   ci-ok:
-    needs: [changes, secrets, chat, game, proto, bots, lambda, infra, deploy]
+    needs: [changes, secrets, chat, game, proto, bots, lambda, infra, deploy, lake]
     if: always()
     runs-on: ubuntu-latest
     steps:

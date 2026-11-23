@@ -2,10 +2,6 @@
 #   docker compose -f docker-compose.yml -f analytics/compose.yaml up --build
 # Paths here are relative to the repo root, the folder of the first file.
 services:
-  db:
-    # Logical decoding, so Debezium can read the change stream; cap what a stalled slot keeps.
-    command: ["postgres", "-c", "wal_level=logical", "-c", "max_slot_wal_keep_size=1GB"]
-
   kafka:
     image: apache/kafka:4.3.1
     environment:
@@ -58,5 +54,22 @@ services:
     ports:
       - "127.0.0.1:8083:8083" # the REST API, for scripts/connectors.sh
 
+  airflow:
+    build: analytics/lake
+    depends_on:
+      kafka: { condition: service_healthy }
+    environment:
+      LAKE_CATALOG: local
+      LAKE_WAREHOUSE: file:///lake/warehouse
+      KAFKA_BOOTSTRAP: kafka:9092
+      RECONCILE_DB_URL: postgresql://debezium:dev-cdc@db:5432/chat
+    volumes:
+      - airflow:/opt/airflow
+      - lake:/lake
+    ports:
+      - "127.0.0.1:8080:8080" # the Airflow UI
+
 volumes:
   kafka:
+  airflow:
+  lake:
