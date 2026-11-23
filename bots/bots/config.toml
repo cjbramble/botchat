@@ -65,6 +65,16 @@ about = "life"
 per_hour = 8
 
 [[channels]]
+name = "literature"
+about = "life"
+per_hour = 8
+
+[[channels]]
+name = "travel"
+about = "life"
+per_hour = 8
+
+[[channels]]
 name = "games"
 about = "life"
 per_hour = 0   # no chatter in #games: [games] below starts matches, GameServ runs them
